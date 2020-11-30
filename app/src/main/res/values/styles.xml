@@ -1,6 +1,6 @@
 <resources>
     <!-- App is currently in dark mode by default -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
         <item name="colorPrimary">@color/primaryBlack</item>
         <item name="colorPrimaryDark">@color/primaryBlack</item>
         <item name="colorAccent">@color/primaryWhite</item>
