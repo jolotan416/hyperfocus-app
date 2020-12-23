@@ -1,10 +1,11 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion 30
-    buildToolsVersion "29.0.3"
+    buildToolsVersion "30.0.2"
 
     defaultConfig {
         applicationId "com.spotlight.spotlightapp"
@@ -63,6 +64,12 @@ dependencies {
     implementation "androidx.compose.foundation:foundation:$composeVersion"
     implementation "androidx.compose.material:material:$composeVersion"
     implementation "androidx.compose.runtime:runtime-livedata:$composeVersion"
+
+    // Room Dependencies
+    def room_version = "2.2.6"
+    implementation "androidx.room:room-runtime:$room_version"
+    implementation "androidx.room:room-ktx:$room_version"
+    kapt "androidx.room:room-compiler:$room_version"
 
     // Local Testing Dependencies
     testImplementation 'junit:junit:4.13.1'
