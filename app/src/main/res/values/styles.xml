@@ -3,6 +3,24 @@
     <style name="AppTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
         <item name="colorPrimary">@color/primaryBlack</item>
         <item name="colorPrimaryDark">@color/primaryBlack</item>
-        <item name="colorAccent">@color/primaryWhite</item>
+        <item name="primaryTextColor">@color/primaryWhite</item>
+        <item name="taskBackgroundColor">@color/primaryWhite</item>
+        <item name="taskTextColor">@color/primaryBlack</item>
+    </style>
+
+    <style name="empty_state_text">
+        <item name="android:lineSpacingExtra">8dp</item>
+        <item name="android:textColor">?primaryTextColor</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <style name="empty_state_title_text" parent="empty_state_text">
+        <item name="android:fontFamily">@font/lato_semibold</item>
+        <item name="android:textSize">28sp</item>
+    </style>
+
+    <style name="empty_state_subtitle_text" parent="empty_state_text">
+        <item name="android:fontFamily">@font/lato_thin</item>
+        <item name="android:textSize">20sp</item>
     </style>
 </resources>

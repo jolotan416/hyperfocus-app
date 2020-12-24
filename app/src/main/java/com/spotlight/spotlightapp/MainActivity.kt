@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.commit
 import com.spotlight.spotlightapp.splash.SplashScreenFragment
+import com.spotlight.spotlightapp.task.DailyIntentListFragment
 
 class MainActivity : AppCompatActivity(R.layout.activity_main) {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,6 +31,9 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
     }
 
     private fun configureDailyIntentListFragment() {
-        // TODO: Add Daily Intent List Fragment
+        supportFragmentManager.commit {
+            setReorderingAllowed(true)
+            replace(R.id.fragmentContainer, DailyIntentListFragment::class.java, null)
+        }
     }
 }

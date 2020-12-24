@@ -1,6 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-parcelize'
 apply plugin: 'kotlin-kapt'
 
 android {
@@ -19,6 +19,7 @@ android {
 
     buildFeatures {
         compose true
+        viewBinding true
     }
 
     compileOptions {
@@ -59,8 +60,9 @@ dependencies {
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
 
     // Jetpack Compose Dependencies
+    def ui_tooling_version = "1.0.0-alpha07"
     implementation "androidx.compose.ui:ui:$composeVersion"
-    implementation "androidx.ui:ui-tooling:$composeVersion"
+    implementation "androidx.ui:ui-tooling:$ui_tooling_version"
     implementation "androidx.compose.foundation:foundation:$composeVersion"
     implementation "androidx.compose.material:material:$composeVersion"
     implementation "androidx.compose.runtime:runtime-livedata:$composeVersion"
@@ -78,5 +80,5 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
     // Compose Instrumented Testing Dependencies
-    androidTestImplementation "androidx.ui:ui-test:$composeVersion"
+    androidTestImplementation "androidx.ui:ui-test:$ui_tooling_version"
 }

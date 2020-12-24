@@ -33,7 +33,7 @@ class SplashScreenFragmentView {
         val alpha = animatedProgress.value
         val splashScreenImage = imageResource(R.drawable.spotlight_logo)
         Image(
-            asset = splashScreenImage,
+            bitmap = splashScreenImage,
             contentScale = ContentScale.Inside,
             modifier = Modifier.padding(60.dp),
             alpha = alpha

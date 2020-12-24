@@ -1,3 +1,17 @@
 <resources>
     <string name="app_name">Spotlight</string>
+
+    <string-array name="daily_intent_empty_state_title">
+        <item>You can do it!</item>
+        <item>Taking the first step is the hardest part.</item>
+        <item>Having a hard time managing your tasks?</item>
+        <item>Juggling multiple thoughts at once is hard.</item>
+    </string-array>
+
+    <string-array name="daily_intent_empty_state_subtitle">
+        <item>Start your day right by adding new things to do.</item>
+        <item>Why not scratch that off your list today?</item>
+        <item>Listing them down here might help!</item>
+        <item>Why not lay them down here for a while?</item>
+    </string-array>
 </resources>
