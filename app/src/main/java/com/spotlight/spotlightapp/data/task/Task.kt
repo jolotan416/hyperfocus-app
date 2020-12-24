@@ -15,8 +15,8 @@ data class Task(
     @ColumnInfo(name = "description")
     var description: String,
 
-    @ColumnInfo(name = "priority")
-    var priority: Int,
+    @ColumnInfo(name = "priority", defaultValue = "0")
+    var priority: Int = 0,
 
     @ColumnInfo(name = "category_id")
     var categoryId: Int,

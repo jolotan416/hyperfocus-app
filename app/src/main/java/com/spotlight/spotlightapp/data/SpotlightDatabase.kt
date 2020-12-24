@@ -9,7 +9,7 @@ import com.spotlight.spotlightapp.data.dao.TaskDao
 import com.spotlight.spotlightapp.data.task.Category
 import com.spotlight.spotlightapp.data.task.Task
 
-object SpotlightDatabaseFactory {
+object SpotlightDatabaseHolder {
     fun createInstance(context: Context) {
         instance = Room.databaseBuilder(
             context,

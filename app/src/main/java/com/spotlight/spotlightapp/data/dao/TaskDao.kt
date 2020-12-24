@@ -6,7 +6,13 @@ import com.spotlight.spotlightapp.data.task.Task
 @Dao
 interface TaskDao {
     @Query("SELECT * FROM task")
-    fun getTaskList(): List<Task>
+    fun getTasks(): List<Task>
+
+    @Query("SELECT * FROM task WHERE is_finished = :isFinished")
+    fun getTasks(isFinished: Boolean): List<Task>
+
+    @Query("SELECT * FROM task WHERE priority != 0")
+    fun getDailyIntentList(): List<Task>
 
     @Insert
     fun insertTask(task: Task)
