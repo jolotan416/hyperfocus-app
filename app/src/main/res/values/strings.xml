@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Spotlight</string>
 
+    <!-- Daily Intent List Copies -->
     <string-array name="daily_intent_empty_state_title">
         <item>You can do it!</item>
         <item>Taking the first step is the hardest part.</item>
@@ -14,4 +15,6 @@
         <item>Listing them down here might help!</item>
         <item>Why not lay them down here for a while?</item>
     </string-array>
+
+    <string name="daily_intent_list_title">Here are your tasks today:</string>
 </resources>

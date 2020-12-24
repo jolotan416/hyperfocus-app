@@ -10,6 +10,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
+// TODO: Add save state to ViewModel
 class DailyIntentListViewModel : ViewModel() {
     private val mutableTasks: MutableLiveData<List<Task>> by lazy {
         MutableLiveData<List<Task>>()

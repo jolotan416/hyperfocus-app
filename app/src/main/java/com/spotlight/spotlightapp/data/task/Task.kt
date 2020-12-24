@@ -1,13 +1,14 @@
 package com.spotlight.spotlightapp.data.task
 
 import androidx.room.ColumnInfo
+import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity
 data class Task(
     @PrimaryKey(autoGenerate = true)
-    val id: Int,
+    val id: Int = 0,
 
     @ColumnInfo(name = "title")
     var title: String,
@@ -18,8 +19,8 @@ data class Task(
     @ColumnInfo(name = "priority", defaultValue = "0")
     var priority: Int = 0,
 
-    @ColumnInfo(name = "category_id")
-    var categoryId: Int,
+    @Embedded
+    var category: Category,
 
     @ColumnInfo(name = "is_finished", defaultValue = "false")
     var isFinished: Boolean = false

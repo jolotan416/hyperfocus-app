@@ -8,19 +8,24 @@
         <item name="taskTextColor">@color/primaryBlack</item>
     </style>
 
-    <style name="empty_state_text">
-        <item name="android:lineSpacingExtra">8dp</item>
+    <style name="overlay_text" parent="TextAppearance.AppCompat">
+        <item name="android:lineSpacingExtra">4dp</item>
         <item name="android:textColor">?primaryTextColor</item>
         <item name="android:gravity">center</item>
     </style>
 
-    <style name="empty_state_title_text" parent="empty_state_text">
+    <style name="bold_overlay_text" parent="overlay_text">
         <item name="android:fontFamily">@font/lato_semibold</item>
-        <item name="android:textSize">28sp</item>
     </style>
 
-    <style name="empty_state_subtitle_text" parent="empty_state_text">
+    <style name="thin_overlay_text" parent="overlay_text">
         <item name="android:fontFamily">@font/lato_thin</item>
+    </style>
+
+    <style name="task_title_text" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/lato_semibold</item>
+        <item name="android:textColor">?taskTextColor</item>
+        <item name="android:lineSpacingExtra">8dp</item>
         <item name="android:textSize">20sp</item>
     </style>
 </resources>

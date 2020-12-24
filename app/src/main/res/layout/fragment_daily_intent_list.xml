@@ -7,7 +7,7 @@
     <data>
 
         <variable
-            name="isEmpty"
+            name="hasTasks"
             type="Boolean" />
 
     </data>
@@ -25,38 +25,44 @@
                 android:id="@+id/taskRecyclerView"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
+                android:clipToPadding="false"
+                android:paddingHorizontal="20dp"
+                android:paddingTop="28dp"
+                android:paddingBottom="20dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                spotlight:willShow="@{!isEmpty}" />
+                spotlight:willShow="@{hasTasks}" />
 
             <TextView
                 android:id="@+id/emptyStateTitle"
-                style="@style/empty_state_title_text"
+                style="@style/bold_overlay_text"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="20dp"
+                android:textSize="28sp"
                 app:layout_constraintBottom_toTopOf="@id/emptyStateSubtitle"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_chainStyle="packed"
-                spotlight:willShow="@{isEmpty}"
+                spotlight:willShow="@{!hasTasks}"
                 tools:text="You can do it!" />
 
             <TextView
                 android:id="@+id/emptyStateSubtitle"
-                style="@style/empty_state_subtitle_text"
+                style="@style/thin_overlay_text"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="20dp"
                 android:layout_marginTop="16dp"
+                android:textSize="20sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/emptyStateTitle"
-                spotlight:willShow="@{isEmpty}"
+                spotlight:willShow="@{!hasTasks}"
                 tools:text="Start your day right by adding new things to do." />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
