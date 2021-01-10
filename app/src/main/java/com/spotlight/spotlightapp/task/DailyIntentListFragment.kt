@@ -12,11 +12,9 @@ import com.spotlight.spotlightapp.R
 import com.spotlight.spotlightapp.data.task.Task
 import com.spotlight.spotlightapp.databinding.FragmentDailyIntentListBinding
 
-class DailyIntentListFragment : Fragment(R.layout.fragment_daily_intent_list) {
-    companion object {
-        private const val TASK_ITEM_PADDING = 16f
-    }
-
+class DailyIntentListFragment(
+    private val dailyIntentListCallback: DailyIntentListAdapter.DailyIntentListCallback)
+    : Fragment(R.layout.fragment_daily_intent_list) {
     private val viewModel: DailyIntentListViewModel by viewModels()
     private lateinit var viewBinding: FragmentDailyIntentListBinding
     private lateinit var dailyIntentListAdapter: DailyIntentListAdapter
@@ -30,14 +28,15 @@ class DailyIntentListFragment : Fragment(R.layout.fragment_daily_intent_list) {
     }
 
     private fun configureTasksRecyclerView() {
-        dailyIntentListAdapter = DailyIntentListAdapter()
+        dailyIntentListAdapter = DailyIntentListAdapter(dailyIntentListCallback)
         val marginItemDecoration = object : RecyclerView.ItemDecoration() {
             override fun getItemOffsets(
                 outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
                 super.getItemOffsets(outRect, view, parent, state)
 
                 outRect.bottom = TypedValue.applyDimension(
-                    TypedValue.COMPLEX_UNIT_DIP, TASK_ITEM_PADDING, resources.displayMetrics)
+                    TypedValue.COMPLEX_UNIT_DIP, DailyIntentListAdapter.TASK_ITEM_PADDING,
+                    resources.displayMetrics)
                     .toInt()
             }
         }

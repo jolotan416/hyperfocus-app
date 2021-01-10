@@ -27,7 +27,7 @@
                 android:layout_height="0dp"
                 android:clipToPadding="false"
                 android:paddingHorizontal="20dp"
-                android:paddingTop="28dp"
+                android:paddingTop="32dp"
                 android:paddingBottom="20dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

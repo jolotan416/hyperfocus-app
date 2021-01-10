@@ -20,6 +20,7 @@ class DailyIntentListViewModel : ViewModel() {
 
     fun requestTasks() {
         viewModelScope.launch(context = Dispatchers.IO) {
+            // TODO: Transfer to Repository
             val tasks = SpotlightDatabaseHolder.getInstance()
                 .getTaskDao()
                 .getDailyIntentList()
