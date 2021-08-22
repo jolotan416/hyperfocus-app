@@ -21,7 +21,7 @@ class SplashScreenFragment : Fragment(R.layout.fragment_splash_screen) {
         super.onViewCreated(view, savedInstanceState)
 
         FragmentSplashScreenBinding.bind(view).composeView.setContent {
-            splashScreenFragmentView.createSplashScreen {
+            splashScreenFragmentView.CreateSplashScreen {
                 parentFragmentManager.setFragmentResult(
                     REQUEST_KEY, bundleOf(IS_FINISHED_SPLASH_ANIMATION to true)
                 )
