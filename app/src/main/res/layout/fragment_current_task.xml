@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="task"
+            type="com.spotlight.spotlightapp.data.task.Task" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/mainLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="?taskBackgroundColor">
+
+        <com.spotlight.spotlightapp.view.AppToolbar
+            android:layout_width="0dp"
+            android:layout_height="?android:attr/actionBarSize"
+            app:backButtonIcon="@{@drawable/ic_back_button}"
+            app:componentTint="@{@color/primaryWhite}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:titleText="@{task.category.name}"
+            app:toolbarBackgroundColor="@{task.category.colorInt}" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

@@ -1,11 +1,31 @@
 <resources>
-
-    <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+    <!-- App is currently in dark mode by default -->
+    <style name="AppTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/primaryBlack</item>
+        <item name="colorPrimaryDark">@color/primaryBlack</item>
+        <item name="primaryTextColor">@color/primaryWhite</item>
+        <item name="taskBackgroundColor">@color/primaryWhite</item>
+        <item name="taskTextColor">@color/primaryBlack</item>
     </style>
 
+    <style name="overlay_text" parent="TextAppearance.AppCompat">
+        <item name="android:lineSpacingExtra">4dp</item>
+        <item name="android:textColor">?primaryTextColor</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <style name="bold_overlay_text" parent="overlay_text">
+        <item name="android:fontFamily">@font/lato_semibold</item>
+    </style>
+
+    <style name="thin_overlay_text" parent="overlay_text">
+        <item name="android:fontFamily">@font/lato_thin</item>
+    </style>
+
+    <style name="task_title_text" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/lato_semibold</item>
+        <item name="android:textColor">?taskTextColor</item>
+        <item name="android:lineSpacingExtra">8dp</item>
+        <item name="android:textSize">20sp</item>
+    </style>
 </resources>
