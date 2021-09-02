@@ -6,6 +6,7 @@
         <item name="primaryTextColor">@color/primaryWhite</item>
         <item name="taskBackgroundColor">@color/primaryWhite</item>
         <item name="taskTextColor">@color/primaryBlack</item>
+        <item name="highlightColor">@color/primaryHighlight</item>
     </style>
 
     <style name="overlay_text" parent="TextAppearance.AppCompat">

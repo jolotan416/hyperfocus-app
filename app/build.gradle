@@ -5,7 +5,7 @@ apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion 31
-    buildToolsVersion "30.0.2"
+    buildToolsVersion "31.0.0"
 
     defaultConfig {
         applicationId "com.spotlight.spotlightapp"
@@ -60,6 +60,7 @@ dependencies {
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation "androidx.recyclerview:recyclerview:1.2.1"
     implementation "androidx.cardview:cardview:1.0.0"
+    implementation 'com.google.android.material:material:1.5.0-alpha03'
 
     // Jetpack Compose Dependencies
     def ui_tooling_version = "1.0.0-alpha07"

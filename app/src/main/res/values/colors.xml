@@ -2,4 +2,5 @@
 <resources>
     <color name="primaryBlack">#212121</color>
     <color name="primaryWhite">#FAFAFA</color>
+    <color name="primaryHighlight">#388E3C</color>
 </resources>

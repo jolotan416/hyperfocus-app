@@ -3,4 +3,5 @@
     <attr name="primaryTextColor" format="reference|color" />
     <attr name="taskBackgroundColor" format="reference|color" />
     <attr name="taskTextColor" format="reference|color" />
+    <attr name="highlightColor" format="reference|color" />
 </resources>
