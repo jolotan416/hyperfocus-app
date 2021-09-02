@@ -16,7 +16,12 @@ class DailyIntentListViewModel : ViewModel() {
         MutableLiveData<List<Task>>()
     }
 
+    private val mutableWillShowEmptyState: MutableLiveData<Boolean> by lazy {
+        MutableLiveData<Boolean>()
+    }
+
     val tasks: LiveData<List<Task>> = mutableTasks
+    val willShowEmptyState: LiveData<Boolean> = mutableWillShowEmptyState
 
     fun requestTasks() {
         viewModelScope.launch(context = Dispatchers.IO) {
@@ -26,7 +31,11 @@ class DailyIntentListViewModel : ViewModel() {
                 .getDailyIntentList()
 
             withContext(Dispatchers.Main) {
-                mutableTasks.value = tasks
+                if (tasks.isNotEmpty()) {
+                    mutableTasks.value = tasks
+                }
+
+                mutableWillShowEmptyState.value = tasks.isEmpty()
             }
         }
     }

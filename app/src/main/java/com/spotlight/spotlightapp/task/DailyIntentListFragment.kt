@@ -9,7 +9,6 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.spotlight.spotlightapp.R
-import com.spotlight.spotlightapp.data.task.Task
 import com.spotlight.spotlightapp.databinding.FragmentDailyIntentListBinding
 
 class DailyIntentListFragment(
@@ -23,8 +22,13 @@ class DailyIntentListFragment(
         super.onViewCreated(view, savedInstanceState)
 
         viewBinding = FragmentDailyIntentListBinding.bind(view)
-        configureTasksRecyclerView()
+        configureViews()
         initializeViewModel()
+    }
+
+    private fun configureViews() {
+        configureTasksRecyclerView()
+        configureAddButton()
     }
 
     private fun configureTasksRecyclerView() {
@@ -49,27 +53,27 @@ class DailyIntentListFragment(
         }
     }
 
+    private fun configureAddButton() {
+        viewBinding.addButton.setOnClickListener {
+            // TODO: Redirect to task list fragment
+        }
+    }
+
     private fun initializeViewModel() {
         viewModel.apply {
             tasks.observe(viewLifecycleOwner) { tasks ->
-                configureTasks(tasks)
+                dailyIntentListAdapter.setItems(tasks)
+            }
+
+            willShowEmptyState.observe(viewLifecycleOwner) { willShowEmptyState ->
+                viewBinding.willShowEmptyState = willShowEmptyState
+                if (willShowEmptyState) {
+                    configureEmptyState()
+                }
             }
 
             requestTasks()
         }
-    }
-
-    private fun configureTasks(tasks: List<Task>) {
-        val hasTasks = tasks.isNotEmpty()
-        viewBinding.hasTasks = hasTasks
-
-        if (!hasTasks) {
-            configureEmptyState()
-
-            return
-        }
-
-        dailyIntentListAdapter.setItems(tasks)
     }
 
     private fun configureEmptyState() {
