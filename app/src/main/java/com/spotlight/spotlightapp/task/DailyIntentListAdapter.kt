@@ -14,7 +14,7 @@ import com.spotlight.spotlightapp.R
 import com.spotlight.spotlightapp.data.task.Task
 import com.spotlight.spotlightapp.databinding.DailyIntentListItemBinding
 
-class DailyIntentListAdapter(private val callback: DailyIntentListCallback)
+class DailyIntentListAdapter(private val callback: Callback)
     : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     companion object {
         const val TASK_ITEM_PADDING = 12f
@@ -90,7 +90,7 @@ class DailyIntentListAdapter(private val callback: DailyIntentListCallback)
         }
     }
 
-    interface DailyIntentListCallback {
+    interface Callback {
         fun onTaskSelected(view: View, task: Task)
     }
 }

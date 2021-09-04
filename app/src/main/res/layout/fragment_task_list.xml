@@ -3,30 +3,21 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:spotlight="http://schemas.android.com/apk/res-auto">
 
-    <data>
-
-        <variable
-            name="task"
-            type="com.spotlight.spotlightapp.data.task.Task" />
-
-    </data>
-
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/mainLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="?taskBackgroundColor">
+        android:background="?attr/colorPrimary">
 
         <com.spotlight.spotlightapp.view.AppToolbar
+            android:id="@+id/appToolbar"
             android:layout_width="0dp"
             android:layout_height="?android:attr/actionBarSize"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            spotlight:backButtonIcon="@{@drawable/ic_back_button}"
+            spotlight:backButtonIcon="@{@drawable/ic_close_button}"
             spotlight:componentTint="@{@color/primaryWhite}"
-            spotlight:titleText="@{task.category.name}"
-            spotlight:toolbarBackgroundColor="@{task.category.colorInt}" />
+            spotlight:toolbarBackgroundColor="@{@color/primaryBlack}" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

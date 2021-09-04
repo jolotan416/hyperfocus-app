@@ -9,11 +9,12 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.spotlight.spotlightapp.R
+import com.spotlight.spotlightapp.data.task.Task
 import com.spotlight.spotlightapp.databinding.FragmentDailyIntentListBinding
 
 class DailyIntentListFragment(
-    private val dailyIntentListCallback: DailyIntentListAdapter.DailyIntentListCallback)
-    : Fragment(R.layout.fragment_daily_intent_list) {
+    private val callback: Callback)
+    : Fragment(R.layout.fragment_daily_intent_list), DailyIntentListAdapter.Callback {
     private val viewModel: DailyIntentListViewModel by viewModels()
     private lateinit var viewBinding: FragmentDailyIntentListBinding
     private lateinit var dailyIntentListAdapter: DailyIntentListAdapter
@@ -26,13 +27,17 @@ class DailyIntentListFragment(
         initializeViewModel()
     }
 
+    override fun onTaskSelected(view: View, task: Task) {
+        callback.openTaskPage(view, task)
+    }
+
     private fun configureViews() {
         configureTasksRecyclerView()
         configureAddButton()
     }
 
     private fun configureTasksRecyclerView() {
-        dailyIntentListAdapter = DailyIntentListAdapter(dailyIntentListCallback)
+        dailyIntentListAdapter = DailyIntentListAdapter(this)
         val marginItemDecoration = object : RecyclerView.ItemDecoration() {
             override fun getItemOffsets(
                 outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
@@ -55,7 +60,7 @@ class DailyIntentListFragment(
 
     private fun configureAddButton() {
         viewBinding.addButton.setOnClickListener {
-            // TODO: Redirect to task list fragment
+            callback.openTaskList()
         }
     }
 
@@ -89,5 +94,10 @@ class DailyIntentListFragment(
                     R.array.daily_intent_empty_state_subtitle)[randomEmptyStateTextIndex]
             }
         }
+    }
+
+    interface Callback {
+        fun openTaskPage(view: View, task: Task)
+        fun openTaskList()
     }
 }
