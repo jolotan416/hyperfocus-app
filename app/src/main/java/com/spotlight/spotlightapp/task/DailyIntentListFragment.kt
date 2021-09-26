@@ -5,7 +5,7 @@ import android.os.Bundle
 import android.util.TypedValue
 import android.view.View
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.spotlight.spotlightapp.R
@@ -15,16 +15,22 @@ import com.spotlight.spotlightapp.databinding.FragmentDailyIntentListBinding
 class DailyIntentListFragment(
     private val callback: Callback)
     : Fragment(R.layout.fragment_daily_intent_list), DailyIntentListAdapter.Callback {
-    private val viewModel: DailyIntentListViewModel by viewModels()
+    private val viewModel: TaskListViewModel by activityViewModels()
     private lateinit var viewBinding: FragmentDailyIntentListBinding
     private lateinit var dailyIntentListAdapter: DailyIntentListAdapter
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        viewModel.requestTasks()
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         viewBinding = FragmentDailyIntentListBinding.bind(view)
         configureViews()
-        initializeViewModel()
+        observeViewModel()
     }
 
     override fun onTaskSelected(view: View, task: Task) {
@@ -64,20 +70,15 @@ class DailyIntentListFragment(
         }
     }
 
-    private fun initializeViewModel() {
-        viewModel.apply {
-            tasks.observe(viewLifecycleOwner) { tasks ->
-                dailyIntentListAdapter.setItems(tasks)
+    private fun observeViewModel() {
+        viewModel.dailyIntentList.observe(viewLifecycleOwner) { dailyIntentList ->
+            val willShowEmptyState = dailyIntentList.isNullOrEmpty()
+            viewBinding.willShowEmptyState = willShowEmptyState
+            if (willShowEmptyState) {
+                configureEmptyState()
+            } else {
+                dailyIntentListAdapter.setItems(dailyIntentList)
             }
-
-            willShowEmptyState.observe(viewLifecycleOwner) { willShowEmptyState ->
-                viewBinding.willShowEmptyState = willShowEmptyState
-                if (willShowEmptyState) {
-                    configureEmptyState()
-                }
-            }
-
-            requestTasks()
         }
     }
 
