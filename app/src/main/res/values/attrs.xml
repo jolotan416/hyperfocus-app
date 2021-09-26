@@ -4,4 +4,8 @@
     <attr name="taskBackgroundColor" format="reference|color" />
     <attr name="taskTextColor" format="reference|color" />
     <attr name="highlightColor" format="reference|color" />
+
+    <declare-styleable name="TaskCardView">
+        <attr name="backgroundColor" format="color" />
+    </declare-styleable>
 </resources>

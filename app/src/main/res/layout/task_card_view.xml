@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?taskBackgroundColor"
+    android:orientation="vertical">
+
+    <View
+        android:id="@+id/categoryColorStrip"
+        android:layout_width="match_parent"
+        android:layout_height="4dp"
+        tools:background="#42A5F5" />
+
+    <FrameLayout
+        android:id="@+id/taskContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>
