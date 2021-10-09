@@ -1,4 +1,4 @@
-package com.spotlight.spotlightapp.task
+package com.spotlight.spotlightapp.task.adapters
 
 import android.util.TypedValue
 import android.view.LayoutInflater
@@ -40,14 +40,9 @@ class DailyIntentListAdapter(private val callback: Callback)
         if (viewType == TITLE_VIEW_TYPE) {
             TitleViewHolder(TextView(parent.context))
         } else {
-            val context = parent.context
-            val taskBinding = DailyIntentListItemBinding.inflate(
-                LayoutInflater.from(context), parent, false)
-            val taskCardView = TaskCardView(context).apply {
-                addTaskView(taskBinding.root)
-            }
-
-            ItemViewHolder(taskCardView, taskBinding)
+            ItemViewHolder(
+                DailyIntentListItemBinding.inflate(
+                    LayoutInflater.from(parent.context), parent, false))
         }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
@@ -79,12 +74,9 @@ class DailyIntentListAdapter(private val callback: Callback)
         }
     }
 
-    inner class ItemViewHolder(
-        private val cardView: TaskCardView,
-        private val taskBinding: DailyIntentListItemBinding)
-        : RecyclerView.ViewHolder(cardView) {
+    inner class ItemViewHolder(private val taskBinding: DailyIntentListItemBinding)
+        : RecyclerView.ViewHolder(taskBinding.root) {
         fun bindData(task: Task) {
-            cardView.cardViewStripColor = task.category.getColorInt()
             taskBinding.apply {
                 this.task = task
 

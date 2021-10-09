@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.spotlight.spotlightapp.R
 import com.spotlight.spotlightapp.data.task.Task
 import com.spotlight.spotlightapp.databinding.FragmentDailyIntentListBinding
+import com.spotlight.spotlightapp.task.adapters.DailyIntentListAdapter
 
 class DailyIntentListFragment(
     private val callback: Callback)
