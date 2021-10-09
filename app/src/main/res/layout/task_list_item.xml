@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:spotlight="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="task"
+            type="com.spotlight.spotlightapp.data.task.Task" />
+
+    </data>
+
+    <com.spotlight.spotlightapp.view.TaskCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        spotlight:cardStripColor="@{task.category.colorInt}">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="12dp">
+
+            <TextView
+                style="@style/task_title_text"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="@{task.title}"
+                tools:text="This is a very long text over here that spans two lines." />
+
+        </LinearLayout>
+
+    </com.spotlight.spotlightapp.view.TaskCardView>
+
+</layout>

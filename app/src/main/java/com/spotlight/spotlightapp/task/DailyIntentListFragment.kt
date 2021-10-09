@@ -23,7 +23,7 @@ class DailyIntentListFragment(
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        viewModel.requestTasks()
+        viewModel.requestDailyIntentList()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
