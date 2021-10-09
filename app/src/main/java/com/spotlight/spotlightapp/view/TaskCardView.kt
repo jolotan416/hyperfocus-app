@@ -5,6 +5,7 @@ import android.util.AttributeSet
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.annotation.ColorInt
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
@@ -20,35 +21,26 @@ class TaskCardView @JvmOverloads constructor(
     }
 
     init {
-        initialize(attributeSet)
+        initialize()
     }
 
     @ColorInt
-    var cardViewStripColor: Int = ContextCompat.getColor(context, R.color.primaryWhite)
+    private var cardViewStripColor: Int = ContextCompat.getColor(context, R.color.primaryWhite)
         set(value) {
             viewBinding?.categoryColorStrip?.setBackgroundColor(value)
         }
 
     private var viewBinding: TaskCardViewBinding? = null
 
-    fun addTaskView(view: View) {
-        viewBinding?.taskContainer?.addView(view)
+    override fun addView(child: View?, params: ViewGroup.LayoutParams?) {
+        viewBinding?.taskContainer?.addView(child)
     }
 
-    private fun initialize(attributeSet: AttributeSet?) {
-        retrieveStyleAttributes(attributeSet)
-        configureViews()
+    fun setCardStripColor(@ColorInt cardStripColor: Int) {
+        cardViewStripColor = cardStripColor
     }
 
-    private fun retrieveStyleAttributes(attributeSet: AttributeSet?) {
-        context.obtainStyledAttributes(attributeSet, R.styleable.TaskCardView).apply {
-            cardViewStripColor = getColor(
-                R.styleable.TaskCardView_backgroundColor, cardViewStripColor)
-            recycle()
-        }
-    }
-
-    private fun configureViews() {
+    private fun initialize() {
         val inflater = LayoutInflater.from(context)
         viewBinding = TaskCardViewBinding.inflate(inflater, this, true).apply {
             categoryColorStrip.setBackgroundColor(cardViewStripColor)
