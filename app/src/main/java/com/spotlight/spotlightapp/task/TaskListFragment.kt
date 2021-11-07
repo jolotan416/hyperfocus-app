@@ -52,7 +52,11 @@ class TaskListFragment : Fragment(R.layout.fragment_task_list) {
     private fun initializeViewModel() {
         viewModel.apply {
             pendingTaskList.observe(viewLifecycleOwner) { tasks ->
-                taskListAdapter.setItems(tasks)
+                viewBinding.taskRecyclerView.layoutManager?.apply {
+                    val savedState = onSaveInstanceState()
+                    taskListAdapter.setItems(tasks)
+                    onRestoreInstanceState(savedState)
+                }
             }
 
             requestPendingTasks()

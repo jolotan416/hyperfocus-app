@@ -6,11 +6,15 @@ import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.spotlight.spotlightapp.data.task.Task
+import com.spotlight.spotlightapp.databinding.NewTaskItemBinding
 import com.spotlight.spotlightapp.databinding.TaskListItemBinding
 
-class TaskListAdapter : RecyclerView.Adapter<TaskListAdapter.ItemViewHolder>() {
+class TaskListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     companion object {
         const val TASK_ITEM_PADDING = 12f
+
+        private const val TASK_ITEM_TYPE = 0
+        private const val NEW_TASK_CTA_ITEM_TYPE = 1
     }
 
     private val asyncListDiffer = AsyncListDiffer(this, object : DiffUtil.ItemCallback<Task>() {
@@ -21,26 +25,42 @@ class TaskListAdapter : RecyclerView.Adapter<TaskListAdapter.ItemViewHolder>() {
             oldItem == newItem
     })
 
-    // TODO: Add support for creating new tasks within the list
-    override fun getItemCount() = asyncListDiffer.currentList.size
+    override fun getItemCount() = asyncListDiffer.currentList.size + 1
+
+    override fun getItemViewType(position: Int) =
+        if (position in asyncListDiffer.currentList.indices) TASK_ITEM_TYPE
+        else NEW_TASK_CTA_ITEM_TYPE
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
-        ItemViewHolder(
-            TaskListItemBinding.inflate(
-                LayoutInflater.from(parent.context), parent, false))
+        if (viewType == TASK_ITEM_TYPE) TaskItemViewHolder(
+            TaskListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+        else NewTaskItemViewHolder(
+            NewTaskItemBinding.inflate(LayoutInflater.from(parent.context), parent, false))
 
-    override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
-        holder.bind(asyncListDiffer.currentList[position])
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        when (holder) {
+            is TaskItemViewHolder -> holder.bind(asyncListDiffer.currentList[position])
+            is NewTaskItemViewHolder -> holder.bind()
+        }
     }
 
     fun setItems(tasks: List<Task>) {
         asyncListDiffer.submitList(tasks)
     }
 
-    class ItemViewHolder(private val binding: TaskListItemBinding)
+    class TaskItemViewHolder(private val binding: TaskListItemBinding)
         : RecyclerView.ViewHolder(binding.root) {
         fun bind(task: Task) {
             binding.task = task
+        }
+    }
+
+    class NewTaskItemViewHolder(private val binding: NewTaskItemBinding)
+        : RecyclerView.ViewHolder(binding.root) {
+        fun bind() {
+            binding.root.setOnClickListener {
+                // TODO: Add callback to perform action
+            }
         }
     }
 }
