@@ -27,8 +27,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:ellipsize="end"
                 android:maxLines="1"
+                android:ellipsize="end"
                 android:text="@{task.title}"
                 tools:text="This is a very long text over here that spans two lines." />
 
