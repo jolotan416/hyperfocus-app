@@ -14,7 +14,7 @@ import com.spotlight.spotlightapp.data.task.Task
 import com.spotlight.spotlightapp.splash.SplashScreenFragment
 import com.spotlight.spotlightapp.task.CurrentTaskFragment
 import com.spotlight.spotlightapp.task.DailyIntentListFragment
-import com.spotlight.spotlightapp.task.TaskListFragment
+import com.spotlight.spotlightapp.task.TasksFragment
 
 class MainActivity : AppCompatActivity(R.layout.activity_main),
     DailyIntentListFragment.Callback {
@@ -62,8 +62,8 @@ class MainActivity : AppCompatActivity(R.layout.activity_main),
         supportFragmentManager.commit {
             setReorderingAllowed(true)
             replace(
-                R.id.fragmentContainer, TaskListFragment::class.java, null, TaskListFragment.TAG)
-            addToBackStack(TaskListFragment.TAG)
+                R.id.fragmentContainer, TasksFragment::class.java, null, TasksFragment.TAG)
+            addToBackStack(TasksFragment.TAG)
         }
     }
 

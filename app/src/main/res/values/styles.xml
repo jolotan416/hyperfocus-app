@@ -29,4 +29,10 @@
         <item name="android:lineSpacingExtra">8dp</item>
         <item name="android:textSize">20sp</item>
     </style>
+
+    <style name="tasks_tab_text_appearance" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/lato_semibold</item>
+        <item name="android:textColor">?primaryTextColor</item>
+        <item name="android:textSize">20sp</item>
+    </style>
 </resources>

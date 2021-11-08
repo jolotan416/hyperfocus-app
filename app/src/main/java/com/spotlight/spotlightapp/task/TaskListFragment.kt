@@ -11,11 +11,8 @@ import com.spotlight.spotlightapp.R
 import com.spotlight.spotlightapp.databinding.FragmentTaskListBinding
 import com.spotlight.spotlightapp.task.adapters.TaskListAdapter
 
+// TODO: Make TaskListFragment a template for pending and completed task lists
 class TaskListFragment : Fragment(R.layout.fragment_task_list) {
-    companion object {
-        const val TAG = "TaskListFragment"
-    }
-
     private lateinit var viewBinding: FragmentTaskListBinding
     private val viewModel: TaskListViewModel by activityViewModels()
     private val taskListAdapter = TaskListAdapter()
