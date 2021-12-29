@@ -2,17 +2,12 @@ package com.spotlight.spotlightapp.data.dao
 
 import androidx.room.*
 import com.spotlight.spotlightapp.data.task.Task
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface TaskDao {
     @Query("SELECT * FROM task")
-    fun getTasks(): List<Task>
-
-    @Query("SELECT * FROM task WHERE is_finished = :isFinished")
-    fun getTasks(isFinished: Boolean): List<Task>
-
-    @Query("SELECT * FROM task WHERE priority != 0")
-    fun getDailyIntentList(): List<Task>
+    fun getTasks(): Flow<List<Task>>
 
     @Insert
     fun insertTask(task: Task)

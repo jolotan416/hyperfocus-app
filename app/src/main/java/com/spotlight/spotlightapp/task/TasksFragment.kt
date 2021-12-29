@@ -7,7 +7,9 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.spotlight.spotlightapp.R
 import com.spotlight.spotlightapp.databinding.FragmentTasksBinding
 import com.spotlight.spotlightapp.task.adapters.TasksAdapter
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class TasksFragment : Fragment(R.layout.fragment_tasks) {
     companion object {
         const val TAG = "TasksFragment"

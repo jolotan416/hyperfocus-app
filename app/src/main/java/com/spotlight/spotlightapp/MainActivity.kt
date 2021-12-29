@@ -15,7 +15,9 @@ import com.spotlight.spotlightapp.splash.SplashScreenFragment
 import com.spotlight.spotlightapp.task.CurrentTaskFragment
 import com.spotlight.spotlightapp.task.DailyIntentListFragment
 import com.spotlight.spotlightapp.task.TasksFragment
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity(R.layout.activity_main),
     DailyIntentListFragment.Callback {
     private val fragmentFactory = object : FragmentFactory() {

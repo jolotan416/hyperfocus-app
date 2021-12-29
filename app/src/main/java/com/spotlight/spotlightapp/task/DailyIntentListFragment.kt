@@ -5,26 +5,22 @@ import android.os.Bundle
 import android.util.TypedValue
 import android.view.View
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.spotlight.spotlightapp.R
 import com.spotlight.spotlightapp.data.task.Task
 import com.spotlight.spotlightapp.databinding.FragmentDailyIntentListBinding
 import com.spotlight.spotlightapp.task.adapters.DailyIntentListAdapter
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class DailyIntentListFragment(
     private val callback: Callback)
     : Fragment(R.layout.fragment_daily_intent_list), DailyIntentListAdapter.Callback {
-    private val viewModel: TaskListViewModel by activityViewModels()
+    private val viewModel: DailyIntentListViewModel by viewModels()
     private lateinit var viewBinding: FragmentDailyIntentListBinding
     private lateinit var dailyIntentListAdapter: DailyIntentListAdapter
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        viewModel.requestDailyIntentList()
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
