@@ -1,13 +1,16 @@
 package com.spotlight.spotlightapp.task.adapters
 
+import android.content.res.ColorStateList
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.spotlight.spotlightapp.R
 import com.spotlight.spotlightapp.data.task.Task
 import com.spotlight.spotlightapp.databinding.NewTaskItemBinding
-import com.spotlight.spotlightapp.databinding.TaskListItemBinding
+import com.spotlight.spotlightapp.databinding.PendingTaskListItemBinding
 
 class PendingTaskListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     companion object {
@@ -33,7 +36,7 @@ class PendingTaskListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         if (viewType == TASK_ITEM_TYPE) TaskItemViewHolder(
-            TaskListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+            PendingTaskListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false))
         else NewTaskItemViewHolder(
             NewTaskItemBinding.inflate(LayoutInflater.from(parent.context), parent, false))
 
@@ -48,10 +51,18 @@ class PendingTaskListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         asyncListDiffer.submitList(tasks)
     }
 
-    class TaskItemViewHolder(private val binding: TaskListItemBinding)
+    class TaskItemViewHolder(private val binding: PendingTaskListItemBinding)
         : RecyclerView.ViewHolder(binding.root) {
         fun bind(task: Task) {
-            binding.task = task
+            binding.apply {
+                val context = itemView.context
+                this.task = task
+
+                if (task.isInDailyIntentList) {
+                    taskPriorityTextView.backgroundTintList = ColorStateList.valueOf(
+                        ContextCompat.getColor(context, R.color.primaryHighlight))
+                }
+            }
         }
     }
 

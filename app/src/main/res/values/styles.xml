@@ -35,4 +35,10 @@
         <item name="android:textColor">?primaryTextColor</item>
         <item name="android:textSize">20sp</item>
     </style>
+
+    <style name="task_priority" parent="TextAppearance.AppCompat">
+        <item name="fontFamily">@font/lato_semibold</item>
+        <item name="android:textColor">?primaryTextColor</item>
+        <item name="android:textSize">12sp</item>
+    </style>
 </resources>

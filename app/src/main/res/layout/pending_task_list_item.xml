@@ -19,16 +19,29 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="center"
             android:orientation="horizontal"
             android:padding="12dp">
+
+            <TextView
+                android:id="@+id/taskPriorityTextView"
+                style="@style/task_priority"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:background="@drawable/shape_circular_background"
+                android:gravity="center"
+                android:text="@{String.valueOf(task.priority)}"
+                tools:backgroundTint="@color/primaryHighlight"
+                tools:text="1" />
 
             <TextView
                 style="@style/task_title_text"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
                 android:layout_weight="1"
-                android:maxLines="1"
                 android:ellipsize="end"
+                android:maxLines="1"
                 android:text="@{task.title}"
                 tools:text="This is a very long text over here that spans two lines." />
 
