@@ -10,7 +10,7 @@ import javax.inject.Inject
 
 // TODO: Add save state to ViewModel
 @HiltViewModel
-class TaskListViewModel @Inject constructor(private val tasksRepository: TasksRepository)
+class PendingTaskListViewModel @Inject constructor(private val tasksRepository: TasksRepository)
     : ViewModel() {
     val pendingTaskList: LiveData<List<Task>>
         get() = tasksRepository.pendingTasks.asLiveData()

@@ -9,7 +9,7 @@ import com.spotlight.spotlightapp.data.task.Task
 import com.spotlight.spotlightapp.databinding.NewTaskItemBinding
 import com.spotlight.spotlightapp.databinding.TaskListItemBinding
 
-class TaskListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class PendingTaskListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     companion object {
         const val TASK_ITEM_PADDING = 12f
 

@@ -8,6 +8,7 @@ import kotlin.reflect.KClass
 enum class TaskListType(
     @StringRes val titleRes: Int,
     val fragmentClass: KClass<out Fragment>) {
-    PENDING(R.string.pending, TaskListFragment::class),
-    COMPLETED(R.string.completed, TaskListFragment::class)
+    PENDING(R.string.pending, PendingTaskListFragment::class),
+    // TODO: Create CompletedTaskListFragment
+    COMPLETED(R.string.completed, PendingTaskListFragment::class)
 }
