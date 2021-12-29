@@ -27,4 +27,7 @@ data class Task(
 
     @ColumnInfo(name = "is_finished", defaultValue = "false")
     var isFinished: Boolean = false
-) : Parcelable
+) : Parcelable {
+    val isInDailyIntentList: Boolean
+        get() = priority != 0
+}
