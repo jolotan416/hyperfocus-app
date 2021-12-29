@@ -8,10 +8,9 @@ import com.spotlight.spotlightapp.task.repo.TasksRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
-// TODO: Add save state to ViewModel
 @HiltViewModel
-class TaskListViewModel @Inject constructor(private val tasksRepository: TasksRepository)
+class DailyIntentListViewModel @Inject constructor(private val tasksRepository: TasksRepository)
     : ViewModel() {
-    val pendingTaskList: LiveData<List<Task>>
-        get() = tasksRepository.pendingTasks.asLiveData()
+    val dailyIntentList: LiveData<List<Task>>
+        get() = tasksRepository.dailyIntentList.asLiveData()
 }

@@ -5,16 +5,18 @@ import android.os.Bundle
 import android.util.TypedValue
 import android.view.View
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.RecyclerView
 import com.spotlight.spotlightapp.R
 import com.spotlight.spotlightapp.databinding.FragmentTaskListBinding
 import com.spotlight.spotlightapp.task.adapters.TaskListAdapter
+import dagger.hilt.android.AndroidEntryPoint
 
 // TODO: Make TaskListFragment a template for pending and completed task lists
+@AndroidEntryPoint
 class TaskListFragment : Fragment(R.layout.fragment_task_list) {
     private lateinit var viewBinding: FragmentTaskListBinding
-    private val viewModel: TaskListViewModel by activityViewModels()
+    private val viewModel: TaskListViewModel by viewModels()
     private val taskListAdapter = TaskListAdapter()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -55,8 +57,6 @@ class TaskListFragment : Fragment(R.layout.fragment_task_list) {
                     onRestoreInstanceState(savedState)
                 }
             }
-
-            requestPendingTasks()
         }
     }
 }
