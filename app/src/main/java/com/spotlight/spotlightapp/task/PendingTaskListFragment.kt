@@ -8,21 +8,20 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.RecyclerView
 import com.spotlight.spotlightapp.R
-import com.spotlight.spotlightapp.databinding.FragmentTaskListBinding
-import com.spotlight.spotlightapp.task.adapters.TaskListAdapter
+import com.spotlight.spotlightapp.databinding.FragmentPendingTaskListBinding
+import com.spotlight.spotlightapp.task.adapters.PendingTaskListAdapter
 import dagger.hilt.android.AndroidEntryPoint
 
-// TODO: Make TaskListFragment a template for pending and completed task lists
 @AndroidEntryPoint
-class TaskListFragment : Fragment(R.layout.fragment_task_list) {
-    private lateinit var viewBinding: FragmentTaskListBinding
-    private val viewModel: TaskListViewModel by viewModels()
-    private val taskListAdapter = TaskListAdapter()
+class PendingTaskListFragment : Fragment(R.layout.fragment_pending_task_list) {
+    private lateinit var viewBinding: FragmentPendingTaskListBinding
+    private val viewModel: PendingTaskListViewModel by viewModels()
+    private val pendingTaskListAdapter = PendingTaskListAdapter()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewBinding = FragmentTaskListBinding.bind(view)
+        viewBinding = FragmentPendingTaskListBinding.bind(view)
         configureViews()
         initializeViewModel()
     }
@@ -32,8 +31,8 @@ class TaskListFragment : Fragment(R.layout.fragment_task_list) {
     }
 
     private fun configureTaskRecyclerView() {
-        viewBinding.taskRecyclerView.apply {
-            adapter = taskListAdapter
+        viewBinding.tasksRecyclerView.apply {
+            adapter = pendingTaskListAdapter
             setHasFixedSize(true)
             addItemDecoration(object : RecyclerView.ItemDecoration() {
                 override fun getItemOffsets(
@@ -42,7 +41,7 @@ class TaskListFragment : Fragment(R.layout.fragment_task_list) {
 
                     outRect.bottom = TypedValue.applyDimension(
                         TypedValue.COMPLEX_UNIT_DIP,
-                        TaskListAdapter.TASK_ITEM_PADDING, resources.displayMetrics).toInt()
+                        PendingTaskListAdapter.TASK_ITEM_PADDING, resources.displayMetrics).toInt()
                 }
             })
         }
@@ -51,9 +50,9 @@ class TaskListFragment : Fragment(R.layout.fragment_task_list) {
     private fun initializeViewModel() {
         viewModel.apply {
             pendingTaskList.observe(viewLifecycleOwner) { tasks ->
-                viewBinding.taskRecyclerView.layoutManager?.apply {
+                viewBinding.tasksRecyclerView.layoutManager?.apply {
                     val savedState = onSaveInstanceState()
-                    taskListAdapter.setItems(tasks)
+                    pendingTaskListAdapter.setItems(tasks)
                     onRestoreInstanceState(savedState)
                 }
             }

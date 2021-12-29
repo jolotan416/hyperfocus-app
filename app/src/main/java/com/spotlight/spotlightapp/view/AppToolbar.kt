@@ -11,6 +11,7 @@ import androidx.annotation.ColorInt
 import androidx.appcompat.app.AppCompatActivity
 import com.spotlight.spotlightapp.databinding.AppToolbarBinding
 import com.spotlight.spotlightapp.utilities.BindingAdapters
+import dagger.hilt.android.internal.managers.ViewComponentManager
 
 class AppToolbar @JvmOverloads constructor(
     context: Context, attributeSet: AttributeSet? = null,
@@ -49,7 +50,11 @@ class AppToolbar @JvmOverloads constructor(
 
         viewBinding = AppToolbarBinding.inflate(LayoutInflater.from(context), this)
         viewBinding.backButton.setOnClickListener {
-            (context as? AppCompatActivity)?.onBackPressed()
+            when (val retrievedContext = context) {
+                is AppCompatActivity -> retrievedContext.onBackPressed()
+                is ViewComponentManager.FragmentContextWrapper ->
+                    (retrievedContext.baseContext as? AppCompatActivity)?.onBackPressed()
+            }
         }
     }
 }
