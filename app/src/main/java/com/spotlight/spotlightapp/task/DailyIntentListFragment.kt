@@ -68,13 +68,16 @@ class DailyIntentListFragment(
     }
 
     private fun observeViewModel() {
-        viewModel.dailyIntentList.observe(viewLifecycleOwner) { dailyIntentList ->
-            val willShowEmptyState = dailyIntentList.isNullOrEmpty()
-            viewBinding.willShowEmptyState = willShowEmptyState
-            if (willShowEmptyState) {
-                configureEmptyState()
-            } else {
+        viewModel.apply {
+            dailyIntentList.observe(viewLifecycleOwner) { dailyIntentList ->
                 dailyIntentListAdapter.setItems(dailyIntentList)
+            }
+
+            willShowEmptyState.observe(viewLifecycleOwner) { willShowEmptyState ->
+                viewBinding.willShowEmptyState = willShowEmptyState
+                if (!willShowEmptyState) return@observe
+
+                configureEmptyState()
             }
         }
     }
