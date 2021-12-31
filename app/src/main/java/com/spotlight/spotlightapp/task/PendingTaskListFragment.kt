@@ -8,15 +8,17 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.RecyclerView
 import com.spotlight.spotlightapp.R
+import com.spotlight.spotlightapp.data.task.Task
 import com.spotlight.spotlightapp.databinding.FragmentPendingTaskListBinding
 import com.spotlight.spotlightapp.task.adapters.PendingTaskListAdapter
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class PendingTaskListFragment : Fragment(R.layout.fragment_pending_task_list) {
+class PendingTaskListFragment : Fragment(R.layout.fragment_pending_task_list),
+    PendingTaskListAdapter.PendingTaskListCallback {
     private lateinit var viewBinding: FragmentPendingTaskListBinding
     private val viewModel: PendingTaskListViewModel by viewModels()
-    private val pendingTaskListAdapter = PendingTaskListAdapter()
+    private val pendingTaskListAdapter = PendingTaskListAdapter(this)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -24,6 +26,10 @@ class PendingTaskListFragment : Fragment(R.layout.fragment_pending_task_list) {
         viewBinding = FragmentPendingTaskListBinding.bind(view)
         configureViews()
         initializeViewModel()
+    }
+
+    override fun selectPendingTask(task: Task) {
+        viewModel.selectPendingTask(task)
     }
 
     private fun configureViews() {

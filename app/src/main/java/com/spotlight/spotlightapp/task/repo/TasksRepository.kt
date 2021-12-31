@@ -25,6 +25,10 @@ class TasksRepository @Inject constructor(private val localDataSource: TaskLocal
         localDataSource.insertTask(task)
     }
 
+    fun updateTask(task: Task) {
+        localDataSource.updateTask(task)
+    }
+
     private fun sortTasks(tasks: List<Task>) =
         tasks.filter { it.priority != 0 }.sortedBy { it.priority } +
                 tasks.filter { it.priority == 0 }

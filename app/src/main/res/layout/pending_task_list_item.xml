@@ -20,25 +20,34 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:orientation="horizontal"
-            android:padding="12dp">
+            android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/taskPriorityTextView"
-                style="@style/task_priority"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:background="@drawable/shape_circular_background"
-                android:gravity="center"
-                android:text="@{String.valueOf(task.priority)}"
-                tools:backgroundTint="@color/primaryHighlight"
-                tools:text="1" />
+            <FrameLayout
+                android:id="@+id/taskPriorityButton"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="@android:color/transparent">
+
+                <TextView
+                    style="@style/task_priority"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/shape_circular_background"
+                    android:backgroundTint="@{task.inDailyIntentList ? @color/primaryHighlight : @android:color/transparent}"
+                    android:backgroundTintMode="src_over"
+                    android:gravity="center"
+                    android:text="@{String.valueOf(task.priority)}"
+                    tools:backgroundTint="@color/primaryHighlight"
+                    tools:text="1" />
+
+            </FrameLayout>
 
             <TextView
                 style="@style/task_title_text"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="12dp"
+                android:layout_marginEnd="12dp"
                 android:layout_weight="1"
                 android:ellipsize="end"
                 android:maxLines="1"

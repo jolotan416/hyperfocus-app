@@ -12,4 +12,8 @@ class TaskLocalDataSource @Inject constructor(private val taskDao: TaskDao) {
     fun insertTask(task: Task) {
         taskDao.insertTask(task)
     }
+
+    fun updateTask(task: Task) {
+        taskDao.updateTask(task)
+    }
 }
