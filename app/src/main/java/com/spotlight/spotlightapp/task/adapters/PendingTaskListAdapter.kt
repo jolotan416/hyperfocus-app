@@ -1,18 +1,16 @@
 package com.spotlight.spotlightapp.task.adapters
 
-import android.content.res.ColorStateList
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.spotlight.spotlightapp.R
 import com.spotlight.spotlightapp.data.task.Task
 import com.spotlight.spotlightapp.databinding.NewTaskItemBinding
 import com.spotlight.spotlightapp.databinding.PendingTaskListItemBinding
 
-class PendingTaskListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class PendingTaskListAdapter(private val callback: PendingTaskListCallback)
+    : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     companion object {
         const val TASK_ITEM_PADDING = 12f
 
@@ -25,7 +23,11 @@ class PendingTaskListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             oldItem.id == newItem.id
 
         override fun areContentsTheSame(oldItem: Task, newItem: Task) =
-            oldItem == newItem
+            oldItem.title == newItem.title &&
+                    oldItem.description == newItem.description &&
+                    oldItem.priority == newItem.priority &&
+                    oldItem.category == newItem.category &&
+                    oldItem.isFinished == newItem.isFinished
     })
 
     override fun getItemCount() = asyncListDiffer.currentList.size + 1
@@ -51,17 +53,12 @@ class PendingTaskListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         asyncListDiffer.submitList(tasks)
     }
 
-    class TaskItemViewHolder(private val binding: PendingTaskListItemBinding)
+    inner class TaskItemViewHolder(private val binding: PendingTaskListItemBinding)
         : RecyclerView.ViewHolder(binding.root) {
         fun bind(task: Task) {
             binding.apply {
-                val context = itemView.context
                 this.task = task
-
-                if (task.isInDailyIntentList) {
-                    taskPriorityTextView.backgroundTintList = ColorStateList.valueOf(
-                        ContextCompat.getColor(context, R.color.primaryHighlight))
-                }
+                taskPriorityButton.setOnClickListener { callback.selectPendingTask(task) }
             }
         }
     }
@@ -73,5 +70,9 @@ class PendingTaskListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                 // TODO: Add callback to perform action
             }
         }
+    }
+
+    interface PendingTaskListCallback {
+        fun selectPendingTask(task: Task)
     }
 }
