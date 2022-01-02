@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.spotlight.spotlightapp.R
 import com.spotlight.spotlightapp.data.task.Task
 import com.spotlight.spotlightapp.databinding.DailyIntentListItemBinding
-import com.spotlight.spotlightapp.view.TaskCardView
 
 class DailyIntentListAdapter(private val callback: Callback)
     : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -23,8 +22,8 @@ class DailyIntentListAdapter(private val callback: Callback)
         private const val ITEM_VIEW_TYPE = 0
         private const val TITLE_VIEW_TYPE = 1
 
-        private const val TITLE_TEXT_SIZE = 20f
-        private const val TITLE_BOTTOM_PADDING = 16f
+        private const val TITLE_TEXT_SIZE = 16f
+        private const val TITLE_BOTTOM_PADDING = 8f
     }
 
     private val asyncListDiffer = AsyncListDiffer(this, object : DiffUtil.ItemCallback<Task>() {
