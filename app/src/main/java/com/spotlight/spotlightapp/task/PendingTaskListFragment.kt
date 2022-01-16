@@ -14,7 +14,8 @@ import com.spotlight.spotlightapp.task.adapters.PendingTaskListAdapter
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class PendingTaskListFragment : Fragment(R.layout.fragment_pending_task_list),
+class PendingTaskListFragment(private val callback: Callback)
+    : Fragment(R.layout.fragment_pending_task_list),
     PendingTaskListAdapter.PendingTaskListCallback {
     private lateinit var viewBinding: FragmentPendingTaskListBinding
     private val viewModel: PendingTaskListViewModel by viewModels()
@@ -26,6 +27,14 @@ class PendingTaskListFragment : Fragment(R.layout.fragment_pending_task_list),
         viewBinding = FragmentPendingTaskListBinding.bind(view)
         configureViews()
         initializeViewModel()
+    }
+
+    override fun createTask() {
+        callback.openTaskForm()
+    }
+
+    override fun editTask(task: Task) {
+        callback.openTaskForm(task)
     }
 
     override fun selectPendingTask(task: Task) {
@@ -63,5 +72,9 @@ class PendingTaskListFragment : Fragment(R.layout.fragment_pending_task_list),
                 }
             }
         }
+    }
+
+    interface Callback {
+        fun openTaskForm(task: Task? = null)
     }
 }

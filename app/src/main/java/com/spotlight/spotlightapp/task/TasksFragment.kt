@@ -10,7 +10,7 @@ import com.spotlight.spotlightapp.task.adapters.TasksAdapter
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class TasksFragment : Fragment(R.layout.fragment_tasks) {
+class TasksFragment(private val callback: Callback) : Fragment(R.layout.fragment_tasks) {
     companion object {
         const val TAG = "TasksFragment"
     }
@@ -26,7 +26,7 @@ class TasksFragment : Fragment(R.layout.fragment_tasks) {
 
     private fun configureViewPager() {
         viewBinding.viewPager.apply {
-            adapter = TasksAdapter(this@TasksFragment)
+            adapter = TasksAdapter(this@TasksFragment, callback)
             isUserInputEnabled = false
 
             TabLayoutMediator(viewBinding.tabLayout, this) { tab, position ->
@@ -34,4 +34,7 @@ class TasksFragment : Fragment(R.layout.fragment_tasks) {
             }.attach()
         }
     }
+
+    // Abstracts child fragment callbacks from other classes dependent to TasksFragment
+    interface Callback : PendingTaskListFragment.Callback
 }
