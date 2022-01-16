@@ -4,28 +4,27 @@
     xmlns:spotlight="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/primaryWhite"
+        android:orientation="vertical"
         tools:context=".task.TaskFormFragment">
 
         <com.spotlight.spotlightapp.view.AppToolbar
             android:id="@+id/toolbar"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="?android:attr/actionBarSize"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
             spotlight:backButtonIcon="@{@drawable/ic_back_button}"
             spotlight:componentTint="@{@color/primaryBlack}"
             spotlight:titleText="@{@string/new_task}"
             spotlight:toolbarBackgroundColor="@{@color/primaryWhite}" />
 
+        <!-- TODO: Configure proper input type and validation for EditTexts -->
         <EditText
             android:id="@+id/taskTitleEditText"
             style="@style/task_title_text"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="20dp"
             android:layout_marginTop="16dp"
@@ -33,11 +32,67 @@
             android:fontFamily="@font/lato_semibold"
             android:hint="@string/task_title_hint"
             android:textColor="@color/primaryBlack"
-            android:textColorHint="@color/functionGrey"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/toolbar" />
+            android:textColorHint="@color/functionGrey" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        <!-- TODO: Add data to category dropdown -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/categoryDropdown"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="8dp"
+            android:elevation="0dp"
+            app:cardBackgroundColor="@color/functionGrey"
+            app:cardCornerRadius="10dp">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:padding="8dp">
+
+                <View
+                    android:layout_width="12sp"
+                    android:layout_height="12sp"
+                    android:layout_marginEnd="8dp"
+                    tools:background="@color/primaryWhite" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:fontFamily="@font/lato_regular"
+                    android:lines="1"
+                    android:textColor="@color/primaryWhite"
+                    android:textSize="14sp"
+                    tools:text="Select a category" />
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="16dp"
+                    android:src="@drawable/ic_dropdown"
+                    app:tint="@color/primaryWhite"
+                    tools:ignore="contentDescription" />
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <EditText
+            android:id="@+id/taskDescriptionEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="16dp"
+            android:background="@android:color/transparent"
+            android:fontFamily="@font/lato_regular"
+            android:hint="@string/task_description_hint"
+            android:textColor="@color/primaryBlack"
+            android:textColorHint="@color/functionGrey"
+            android:textSize="16sp" />
+
+    </LinearLayout>
 
 </layout>

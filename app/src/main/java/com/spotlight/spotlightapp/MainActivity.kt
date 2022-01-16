@@ -65,7 +65,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main),
         }
 
         attachFragment(
-            TaskFormFragment::class.java, TasksFragment.TAG,
+            TaskFormFragment::class.java, TaskFormFragment.TAG,
             willAddToBackStack = true, arguments = bundle)
     }
 
