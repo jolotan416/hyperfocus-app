@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:spotlight="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/primaryWhite"
+        tools:context=".task.TaskFormFragment">
+
+        <com.spotlight.spotlightapp.view.AppToolbar
+            android:id="@+id/toolbar"
+            android:layout_width="0dp"
+            android:layout_height="?android:attr/actionBarSize"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            spotlight:backButtonIcon="@{@drawable/ic_back_button}"
+            spotlight:componentTint="@{@color/primaryBlack}"
+            spotlight:titleText="@{@string/new_task}"
+            spotlight:toolbarBackgroundColor="@{@color/primaryWhite}" />
+
+        <EditText
+            android:id="@+id/taskTitleEditText"
+            style="@style/task_title_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="16dp"
+            android:background="@android:color/transparent"
+            android:fontFamily="@font/lato_semibold"
+            android:hint="@string/task_title_hint"
+            android:textColor="@color/primaryBlack"
+            android:textColorHint="@color/functionGrey"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/toolbar" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>
