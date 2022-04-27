@@ -30,51 +30,67 @@
             spotlight:titleText="@{@string/new_task}"
             spotlight:toolbarBackgroundColor="@{@color/primaryWhite}" />
 
-        <EditText
-            android:id="@+id/taskTitleEditText"
-            style="@style/task_title_text"
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="20dp"
-            android:layout_marginTop="16dp"
-            android:background="@android:color/transparent"
-            android:fontFamily="@font/lato_semibold"
-            android:hint="@string/task_title_hint"
-            android:importantForAutofill="no"
-            android:inputType="textMultiLine"
-            android:maxLength="@{taskFormViewModel.titleCharacterCountData.maxCharacterCount}"
-            android:text="@{taskFormViewModel.initialTask.title}"
-            android:textColor="@color/primaryBlack"
-            android:textColorHint="@color/functionGrey" />
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:clipToPadding="false"
+            android:paddingBottom="40dp">
 
-        <TextView
-            style="@style/overlay_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="20dp"
-            android:layout_marginTop="2dp"
-            android:gravity="start"
-            android:text="@{@plurals/characters_remaining(taskFormViewModel.titleCharacterCountData.charactersRemaining, taskFormViewModel.titleCharacterCountData.charactersRemaining)}"
-            android:textColor="@color/functionGrey"
-            android:textSize="12sp"
-            spotlight:willShow="@{taskFormViewModel.titleCharacterCountData.willShowCharactersRemaining}"
-            tools:text="140 characters remaining" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
-        <EditText
-            android:id="@+id/taskDescriptionEditText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="20dp"
-            android:layout_marginTop="16dp"
-            android:background="@android:color/transparent"
-            android:fontFamily="@font/lato_regular"
-            android:hint="@string/task_description_hint"
-            android:importantForAutofill="no"
-            android:inputType="textMultiLine|textCapSentences"
-            android:text="@{taskFormViewModel.initialTask.description}"
-            android:textColor="@color/primaryBlack"
-            android:textColorHint="@color/functionGrey"
-            android:textSize="16sp" />
+                <EditText
+                    android:id="@+id/taskTitleEditText"
+                    style="@style/task_title_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="20dp"
+                    android:layout_marginTop="16dp"
+                    android:background="@android:color/transparent"
+                    android:fontFamily="@font/lato_semibold"
+                    android:hint="@string/task_title_hint"
+                    android:importantForAutofill="no"
+                    android:inputType="textMultiLine"
+                    android:maxLength="@{taskFormViewModel.titleCharacterCountData.maxCharacterCount}"
+                    android:text="@{taskFormViewModel.initialTask.title}"
+                    android:textColor="@color/primaryBlack"
+                    android:textColorHint="@color/functionGrey" />
+
+                <TextView
+                    style="@style/overlay_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="20dp"
+                    android:layout_marginTop="2dp"
+                    android:gravity="start"
+                    android:text="@{@plurals/characters_remaining(taskFormViewModel.titleCharacterCountData.charactersRemaining, taskFormViewModel.titleCharacterCountData.charactersRemaining)}"
+                    android:textColor="@color/functionGrey"
+                    android:textSize="12sp"
+                    spotlight:willShow="@{taskFormViewModel.titleCharacterCountData.willShowCharactersRemaining}"
+                    tools:text="140 characters remaining" />
+
+                <EditText
+                    android:id="@+id/taskDescriptionEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="20dp"
+                    android:layout_marginTop="16dp"
+                    android:background="@android:color/transparent"
+                    android:fontFamily="@font/lato_regular"
+                    android:hint="@string/task_description_hint"
+                    android:importantForAutofill="no"
+                    android:inputType="textMultiLine|textCapSentences"
+                    android:text="@{taskFormViewModel.initialTask.description}"
+                    android:textColor="@color/primaryBlack"
+                    android:textColorHint="@color/functionGrey"
+                    android:textSize="16sp" />
+
+            </LinearLayout>
+
+        </ScrollView>
 
     </LinearLayout>
 
