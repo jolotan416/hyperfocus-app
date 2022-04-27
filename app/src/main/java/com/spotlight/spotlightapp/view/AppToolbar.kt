@@ -6,6 +6,7 @@ import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.view.LayoutInflater
+import android.view.View
 import androidx.annotation.ColorInt
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -47,6 +48,21 @@ class AppToolbar @JvmOverloads constructor(
 
     fun setHasDivider(hasDivider: Boolean) {
         BindingAdapters.toggleVisibility(viewBinding.divider, hasDivider)
+    }
+
+    fun setActionButtonText(actionButtonText: String) {
+        viewBinding.actionButton.apply {
+            BindingAdapters.toggleVisibility(this, true)
+            text = actionButtonText
+        }
+    }
+
+    fun setActionButtonEnabled(isActionButtonEnabled: Boolean) {
+        viewBinding.actionButton.isEnabled = isActionButtonEnabled
+    }
+
+    fun setActionButtonTextClickListener(listener: View.OnClickListener) {
+        viewBinding.actionButton.setOnClickListener(listener)
     }
 
     private fun initialize() {
