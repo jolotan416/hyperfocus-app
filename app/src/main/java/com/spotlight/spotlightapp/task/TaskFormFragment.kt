@@ -9,7 +9,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.spotlight.spotlightapp.R
 import com.spotlight.spotlightapp.databinding.FragmentTaskFormBinding
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class TaskFormFragment : Fragment(R.layout.fragment_task_form) {
     companion object {
         const val TAG = "TaskFormFragment"
@@ -35,6 +37,7 @@ class TaskFormFragment : Fragment(R.layout.fragment_task_form) {
             taskFormViewModel = this@TaskFormFragment.taskFormViewModel
         }
         configureViews()
+        observeViewModel()
     }
 
     private fun configureViews() {
@@ -61,6 +64,12 @@ class TaskFormFragment : Fragment(R.layout.fragment_task_form) {
             toolbar.setActionButtonTextClickListener {
                 viewModel.saveTask()
             }
+        }
+    }
+
+    private fun observeViewModel() {
+        taskFormViewModel.isFormSubmitted.observe(viewLifecycleOwner) {
+            parentFragmentManager.popBackStack()
         }
     }
 }

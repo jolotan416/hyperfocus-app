@@ -1,13 +1,18 @@
 package com.spotlight.spotlightapp.task
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
 import com.spotlight.spotlightapp.data.CharacterCountData
 import com.spotlight.spotlightapp.data.task.Task
+import com.spotlight.spotlightapp.task.repo.TasksRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class TaskFormViewModel : ViewModel() {
+@HiltViewModel
+class TaskFormViewModel @Inject constructor(private val tasksRepository: TasksRepository) :
+    ViewModel() {
     companion object {
         private const val MAX_TASK_TITLE_CHARACTERS = 140
     }
@@ -27,6 +32,10 @@ class TaskFormViewModel : ViewModel() {
         MutableLiveData<Boolean>()
     }
 
+    private val mutableIsFormSubmitted: MutableLiveData<Boolean> by lazy {
+        MutableLiveData<Boolean>()
+    }
+
     private var title: String = ""
     private var description: String = ""
 
@@ -39,6 +48,7 @@ class TaskFormViewModel : ViewModel() {
         addSource(mutableTitleCharacterCountData) { onChangedListener() }
         addSource(mutableHasDescription) { onChangedListener() }
     }
+    val isFormSubmitted: LiveData<Boolean> = mutableIsFormSubmitted
 
     fun setTask(task: Task?) {
         task?.let {
@@ -73,6 +83,12 @@ class TaskFormViewModel : ViewModel() {
     }
 
     fun saveTask() {
-        // TODO: Handle saving of task in repository
+        viewModelScope.launch(Dispatchers.IO) {
+            tasksRepository.insertTask(Task(title = title, description = description))
+
+            withContext(Dispatchers.Main) {
+                mutableIsFormSubmitted.value = true
+            }
+        }
     }
 }
