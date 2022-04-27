@@ -17,6 +17,7 @@
             android:layout_height="?android:attr/actionBarSize"
             spotlight:backButtonIcon="@{@drawable/ic_back_button}"
             spotlight:componentTint="@{@color/primaryBlack}"
+            spotlight:hasDivider="@{true}"
             spotlight:titleText="@{@string/new_task}"
             spotlight:toolbarBackgroundColor="@{@color/primaryWhite}" />
 

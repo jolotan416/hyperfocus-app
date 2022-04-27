@@ -26,7 +26,6 @@ class PendingTaskListAdapter(private val callback: PendingTaskListCallback)
             oldItem.title == newItem.title &&
                     oldItem.description == newItem.description &&
                     oldItem.priority == newItem.priority &&
-                    oldItem.category == newItem.category &&
                     oldItem.isFinished == newItem.isFinished
     })
 
