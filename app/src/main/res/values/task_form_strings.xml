@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="task_title_hint">What do you want to do?</string>
+    <string name="task_description_hint">Anything you want to note?</string>
+    <plurals name="characters_remaining">
+        <item quantity="one">%d character remaining</item>
+        <item quantity="other">%d characters remaining</item>
+    </plurals>
+    <string name="save">Save</string>
+</resources>

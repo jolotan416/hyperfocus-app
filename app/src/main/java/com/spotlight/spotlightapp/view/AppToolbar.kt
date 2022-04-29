@@ -6,9 +6,10 @@ import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.view.LayoutInflater
-import android.widget.LinearLayout
+import android.view.View
 import androidx.annotation.ColorInt
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
 import com.spotlight.spotlightapp.databinding.AppToolbarBinding
 import com.spotlight.spotlightapp.utilities.BindingAdapters
 import dagger.hilt.android.internal.managers.ViewComponentManager
@@ -16,7 +17,7 @@ import dagger.hilt.android.internal.managers.ViewComponentManager
 class AppToolbar @JvmOverloads constructor(
     context: Context, attributeSet: AttributeSet? = null,
     defStyleAttr: Int = 0, defStyleRes: Int = 0) :
-    LinearLayout(context, attributeSet, defStyleAttr, defStyleRes) {
+    ConstraintLayout(context, attributeSet, defStyleAttr, defStyleRes) {
     private lateinit var viewBinding: AppToolbarBinding
 
     init {
@@ -45,9 +46,26 @@ class AppToolbar @JvmOverloads constructor(
         viewBinding.titleTextView.text = titleText
     }
 
-    private fun initialize() {
-        orientation = HORIZONTAL
+    fun setHasDivider(hasDivider: Boolean) {
+        BindingAdapters.toggleVisibility(viewBinding.divider, hasDivider)
+    }
 
+    fun setActionButtonText(actionButtonText: String) {
+        viewBinding.actionButton.apply {
+            BindingAdapters.toggleVisibility(this, true)
+            text = actionButtonText
+        }
+    }
+
+    fun setActionButtonEnabled(isActionButtonEnabled: Boolean) {
+        viewBinding.actionButton.isEnabled = isActionButtonEnabled
+    }
+
+    fun setActionButtonTextClickListener(listener: View.OnClickListener) {
+        viewBinding.actionButton.setOnClickListener(listener)
+    }
+
+    private fun initialize() {
         viewBinding = AppToolbarBinding.inflate(LayoutInflater.from(context), this)
         viewBinding.backButton.setOnClickListener {
             when (val retrievedContext = context) {

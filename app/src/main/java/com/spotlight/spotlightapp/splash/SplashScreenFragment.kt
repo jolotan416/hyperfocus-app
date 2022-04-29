@@ -9,6 +9,7 @@ import com.spotlight.spotlightapp.databinding.FragmentSplashScreenBinding
 
 class SplashScreenFragment : Fragment(R.layout.fragment_splash_screen) {
     companion object {
+        const val TAG = "SplashScreenFragment"
         const val REQUEST_KEY = "SplashScreenFragmentRequest"
         const val IS_FINISHED_SPLASH_ANIMATION = "is_finished_splash_animation"
     }

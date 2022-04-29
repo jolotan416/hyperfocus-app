@@ -12,14 +12,12 @@ import androidx.fragment.app.FragmentFactory
 import androidx.fragment.app.commit
 import com.spotlight.spotlightapp.data.task.Task
 import com.spotlight.spotlightapp.splash.SplashScreenFragment
-import com.spotlight.spotlightapp.task.CurrentTaskFragment
-import com.spotlight.spotlightapp.task.DailyIntentListFragment
-import com.spotlight.spotlightapp.task.TasksFragment
+import com.spotlight.spotlightapp.task.*
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity(R.layout.activity_main),
-    DailyIntentListFragment.Callback {
+    DailyIntentListFragment.Callback, TasksFragment.Callback {
     private val fragmentFactory = object : FragmentFactory() {
         override fun instantiate(classLoader: ClassLoader, className: String): Fragment {
             return when (loadFragmentClass(classLoader, className)) {
@@ -33,6 +31,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main),
                     returnTransition = Fade()
                     postponeEnterTransition()
                 }
+                TasksFragment::class.java -> TasksFragment(this@MainActivity)
                 else -> super.instantiate(classLoader, className)
             }
         }
@@ -50,23 +49,24 @@ class MainActivity : AppCompatActivity(R.layout.activity_main),
             putParcelable(CurrentTaskFragment.TASK, task)
         }
 
-        supportFragmentManager.commit {
-            setReorderingAllowed(true)
-            addSharedElement(view, view.transitionName)
-            replace(
-                R.id.fragmentContainer, CurrentTaskFragment::class.java, bundle,
-                CurrentTaskFragment.TAG)
-            addToBackStack(CurrentTaskFragment.TAG)
-        }
+        attachFragment(
+            CurrentTaskFragment::class.java, CurrentTaskFragment.TAG,
+            willAddToBackStack = true, arguments = bundle,
+            sharedElements = mapOf(Pair(view, view.transitionName)))
     }
 
     override fun openTaskList() {
-        supportFragmentManager.commit {
-            setReorderingAllowed(true)
-            replace(
-                R.id.fragmentContainer, TasksFragment::class.java, null, TasksFragment.TAG)
-            addToBackStack(TasksFragment.TAG)
+        attachFragment(TasksFragment::class.java, TasksFragment.TAG, willAddToBackStack = true)
+    }
+
+    override fun openTaskForm(task: Task?) {
+        val bundle = task?.let {
+            Bundle().apply { putParcelable(TaskFormFragment.TASK, it) }
         }
+
+        attachFragment(
+            TaskFormFragment::class.java, TaskFormFragment.TAG,
+            willAddToBackStack = true, arguments = bundle)
     }
 
     private fun configureSplashScreenFragment() {
@@ -79,10 +79,8 @@ class MainActivity : AppCompatActivity(R.layout.activity_main),
                     configureDailyIntentListFragment()
                 }
             }
-            commit {
-                setReorderingAllowed(true)
-                replace(R.id.fragmentContainer, SplashScreenFragment::class.java, null)
-            }
+
+            attachFragment(SplashScreenFragment::class.java, SplashScreenFragment.TAG)
         }
     }
 
@@ -90,6 +88,22 @@ class MainActivity : AppCompatActivity(R.layout.activity_main),
         supportFragmentManager.commit {
             setReorderingAllowed(true)
             replace(R.id.fragmentContainer, DailyIntentListFragment::class.java, null)
+        }
+    }
+
+    private fun attachFragment(
+        fragmentClass: Class<out Fragment>, tag: String, willAddToBackStack: Boolean = false,
+        arguments: Bundle? = null, sharedElements: Map<View, String> = mapOf()) {
+        supportFragmentManager.commit {
+            setReorderingAllowed(true)
+            sharedElements.forEach {
+                addSharedElement(it.key, it.value)
+            }
+            replace(R.id.fragmentContainer, fragmentClass, arguments, tag)
+
+            if (willAddToBackStack) {
+                addToBackStack(tag)
+            }
         }
     }
 }

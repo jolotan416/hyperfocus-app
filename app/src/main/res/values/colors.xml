@@ -3,4 +3,5 @@
     <color name="primaryBlack">#212121</color>
     <color name="primaryWhite">#FAFAFA</color>
     <color name="primaryHighlight">#388E3C</color>
+    <color name="functionGrey">#9E9E9E</color>
 </resources>

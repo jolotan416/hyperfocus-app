@@ -25,8 +25,7 @@
             app:layout_constraintTop_toTopOf="parent"
             spotlight:backButtonIcon="@{@drawable/ic_back_button}"
             spotlight:componentTint="@{@color/primaryWhite}"
-            spotlight:titleText="@{task.category.name}"
-            spotlight:toolbarBackgroundColor="@{task.category.colorInt}" />
+            spotlight:hasDivider="@{true}" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

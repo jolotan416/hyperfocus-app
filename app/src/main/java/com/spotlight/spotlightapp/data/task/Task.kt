@@ -22,9 +22,6 @@ data class Task(
     @ColumnInfo(name = "priority", defaultValue = "0")
     var priority: Int = 0,
 
-    @Embedded
-    var category: Category,
-
     @ColumnInfo(name = "is_finished", defaultValue = "false")
     var isFinished: Boolean = false
 ) : Parcelable {

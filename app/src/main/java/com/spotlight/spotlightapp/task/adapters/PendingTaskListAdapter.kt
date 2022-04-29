@@ -26,7 +26,6 @@ class PendingTaskListAdapter(private val callback: PendingTaskListCallback)
             oldItem.title == newItem.title &&
                     oldItem.description == newItem.description &&
                     oldItem.priority == newItem.priority &&
-                    oldItem.category == newItem.category &&
                     oldItem.isFinished == newItem.isFinished
     })
 
@@ -59,20 +58,23 @@ class PendingTaskListAdapter(private val callback: PendingTaskListCallback)
             binding.apply {
                 this.task = task
                 taskPriorityButton.setOnClickListener { callback.selectPendingTask(task) }
+                root.setOnClickListener { callback.editTask(task) }
             }
         }
     }
 
-    class NewTaskItemViewHolder(private val binding: NewTaskItemBinding)
+    inner class NewTaskItemViewHolder(private val binding: NewTaskItemBinding)
         : RecyclerView.ViewHolder(binding.root) {
         fun bind() {
             binding.root.setOnClickListener {
-                // TODO: Add callback to perform action
+                callback.createTask()
             }
         }
     }
 
     interface PendingTaskListCallback {
+        fun createTask()
+        fun editTask(task: Task)
         fun selectPendingTask(task: Task)
     }
 }
