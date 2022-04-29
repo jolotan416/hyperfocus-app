@@ -84,7 +84,14 @@ class TaskFormViewModel @Inject constructor(private val tasksRepository: TasksRe
 
     fun saveTask() {
         viewModelScope.launch(Dispatchers.IO) {
-            tasksRepository.insertTask(Task(title = title, description = description))
+            if (initialTask.value == null) {
+                tasksRepository.insertTask(Task(title = title, description = description))
+            } else {
+                tasksRepository.updateTask(initialTask.value!!.also {
+                    it.title = title
+                    it.description = description
+                })
+            }
 
             withContext(Dispatchers.Main) {
                 mutableIsFormSubmitted.value = true
