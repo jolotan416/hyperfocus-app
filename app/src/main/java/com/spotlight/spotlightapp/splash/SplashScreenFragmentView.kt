@@ -13,8 +13,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.ui.tooling.preview.Preview
 import com.spotlight.spotlightapp.R
 
 class SplashScreenFragmentView {
@@ -29,7 +29,7 @@ class SplashScreenFragmentView {
 
     @Preview
     @Composable
-    fun CreateSplashScreen(onAnimationFinish: () -> Unit) {
+    fun CreateSplashScreen(onAnimationFinish: () -> Unit = {}) {
         val animatedAlpha = remember { Animatable(INITIAL_ALPHA) }
         LaunchedEffect(key1 = VISIBILITY_TRANSITION_KEY, block = {
             animatedAlpha.animateTo(
