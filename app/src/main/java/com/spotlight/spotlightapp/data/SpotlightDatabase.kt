@@ -1,25 +1,9 @@
 package com.spotlight.spotlightapp.data
 
-import android.content.Context
 import androidx.room.Database
-import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.spotlight.spotlightapp.data.dao.TaskDao
 import com.spotlight.spotlightapp.data.task.Task
-
-object SpotlightDatabaseHolder {
-    fun createInstance(context: Context) {
-        instance = Room.databaseBuilder(
-            context,
-            SpotlightDatabase::class.java, DATABASE_NAME)
-            .build()
-    }
-
-    fun getInstance() = instance
-
-    private const val DATABASE_NAME = "spotlight_database"
-    private lateinit var instance: SpotlightDatabase
-}
 
 @Database(entities = [Task::class], version = 1)
 abstract class SpotlightDatabase : RoomDatabase() {
