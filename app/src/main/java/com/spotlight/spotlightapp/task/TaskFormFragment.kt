@@ -9,10 +9,13 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.spotlight.spotlightapp.R
 import com.spotlight.spotlightapp.databinding.FragmentTaskFormBinding
+import com.spotlight.spotlightapp.utilities.BaseViewModel
+import com.spotlight.spotlightapp.utilities.ViewModelErrorListener
+import com.spotlight.spotlightapp.utilities.observeErrors
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class TaskFormFragment : Fragment(R.layout.fragment_task_form) {
+class TaskFormFragment : Fragment(R.layout.fragment_task_form), ViewModelErrorListener {
     companion object {
         const val TAG = "TaskFormFragment"
 
@@ -38,7 +41,14 @@ class TaskFormFragment : Fragment(R.layout.fragment_task_form) {
         }
         configureViews()
         observeViewModel()
+        observeErrors()
     }
+
+    override val baseViewModel: BaseViewModel
+        get() = taskFormViewModel
+
+    override val snackbarLayout: View
+        get() = binding.root
 
     private fun configureViews() {
         val viewModel = taskFormViewModel

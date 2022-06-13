@@ -12,12 +12,16 @@ import com.spotlight.spotlightapp.R
 import com.spotlight.spotlightapp.data.task.Task
 import com.spotlight.spotlightapp.databinding.FragmentDailyIntentListBinding
 import com.spotlight.spotlightapp.task.adapters.DailyIntentListAdapter
+import com.spotlight.spotlightapp.utilities.BaseViewModel
+import com.spotlight.spotlightapp.utilities.ViewModelErrorListener
+import com.spotlight.spotlightapp.utilities.observeErrors
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class DailyIntentListFragment(
     private val callback: Callback)
-    : Fragment(R.layout.fragment_daily_intent_list), DailyIntentListAdapter.Callback {
+    : Fragment(R.layout.fragment_daily_intent_list), ViewModelErrorListener,
+    DailyIntentListAdapter.Callback {
     private val viewModel: DailyIntentListViewModel by viewModels()
     private lateinit var viewBinding: FragmentDailyIntentListBinding
     private lateinit var dailyIntentListAdapter: DailyIntentListAdapter
@@ -28,7 +32,14 @@ class DailyIntentListFragment(
         viewBinding = FragmentDailyIntentListBinding.bind(view)
         configureViews()
         observeViewModel()
+        observeErrors()
     }
+
+    override val baseViewModel: BaseViewModel
+        get() = viewModel
+
+    override val snackbarLayout: View
+        get() = viewBinding.root
 
     override fun onTaskSelected(view: View, task: Task) {
         callback.openTaskPage(view, task)

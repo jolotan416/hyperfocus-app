@@ -10,7 +10,7 @@ import com.spotlight.spotlightapp.task.TasksFragment
 class TasksAdapter(fragment: Fragment, private val callback: TasksFragment.Callback)
     : FragmentStateAdapter(fragment) {
     override fun getItemCount() = TaskListType.values().size
-    override fun createFragment(position: Int) =
+    override fun createFragment(position: Int): Fragment =
         when (TaskListType.values()[position]) {
             TaskListType.PENDING -> PendingTaskListFragment(callback)
             TaskListType.COMPLETED -> CompletedTaskListFragment()
