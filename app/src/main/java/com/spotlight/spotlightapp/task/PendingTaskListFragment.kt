@@ -11,11 +11,14 @@ import com.spotlight.spotlightapp.R
 import com.spotlight.spotlightapp.data.task.Task
 import com.spotlight.spotlightapp.databinding.FragmentPendingTaskListBinding
 import com.spotlight.spotlightapp.task.adapters.PendingTaskListAdapter
+import com.spotlight.spotlightapp.utilities.BaseViewModel
+import com.spotlight.spotlightapp.utilities.ViewModelErrorListener
+import com.spotlight.spotlightapp.utilities.observeErrors
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class PendingTaskListFragment(private val callback: Callback)
-    : Fragment(R.layout.fragment_pending_task_list),
+    : Fragment(R.layout.fragment_pending_task_list), ViewModelErrorListener,
     PendingTaskListAdapter.PendingTaskListCallback {
     private lateinit var viewBinding: FragmentPendingTaskListBinding
     private val viewModel: PendingTaskListViewModel by viewModels()
@@ -27,7 +30,14 @@ class PendingTaskListFragment(private val callback: Callback)
         viewBinding = FragmentPendingTaskListBinding.bind(view)
         configureViews()
         initializeViewModel()
+        observeErrors()
     }
+
+    override val baseViewModel: BaseViewModel
+        get() = viewModel
+
+    override val snackbarLayout: View
+        get() = viewBinding.root
 
     override fun createTask() {
         callback.openTaskForm()

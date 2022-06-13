@@ -6,13 +6,15 @@ import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class TaskLocalDataSource @Inject constructor(private val taskDao: TaskDao) {
-    val tasks: Flow<List<Task>> = taskDao.getTasks()
+    fun observeTasks(): Flow<List<Task>> = taskDao.observeTasks()
 
-    fun insertTask(task: Task) {
+    suspend fun getTasks(): List<Task> = taskDao.getTasks()
+
+    suspend fun insertTask(task: Task) {
         taskDao.insertTask(task)
     }
 
-    fun updateTask(task: Task) {
+    suspend fun updateTask(task: Task) {
         taskDao.updateTask(task)
     }
 }

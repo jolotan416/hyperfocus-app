@@ -7,14 +7,17 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface TaskDao {
     @Query("SELECT * FROM task")
-    fun getTasks(): Flow<List<Task>>
+    fun observeTasks(): Flow<List<Task>>
+
+    @Query("SELECT * FROM task")
+    suspend fun getTasks(): List<Task>
 
     @Insert
-    fun insertTask(task: Task)
+    suspend fun insertTask(task: Task)
 
     @Update
-    fun updateTask(task: Task)
+    suspend fun updateTask(task: Task)
 
     @Delete
-    fun deleteTask(task: Task)
+    suspend fun deleteTask(task: Task)
 }

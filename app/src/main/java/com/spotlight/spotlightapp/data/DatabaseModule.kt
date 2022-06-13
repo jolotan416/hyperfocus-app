@@ -12,7 +12,7 @@ import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
 @Module
-object TaskModule {
+object DatabaseModule {
     private const val DATABASE_NAME = "spotlight_database"
 
     @Singleton

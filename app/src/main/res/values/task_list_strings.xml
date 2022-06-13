@@ -7,4 +7,6 @@
 
     <string name="completed_task_list_empty_state_title">You haven\'t finished any tasks yet.</string>
     <string name="completed_task_list_empty_state_subtitle">Why not start now?</string>
+
+    <string name="maximum_daily_intent_task_error_message">To keep you focused, let\'s limit your daily tasks to 5.</string>
 </resources>

@@ -26,10 +26,14 @@ import androidx.fragment.app.viewModels
 import com.spotlight.spotlightapp.R
 import com.spotlight.spotlightapp.data.task.Task
 import com.spotlight.spotlightapp.databinding.FragmentCompletedTaskListBinding
+import com.spotlight.spotlightapp.utilities.BaseViewModel
+import com.spotlight.spotlightapp.utilities.ViewModelErrorListener
+import com.spotlight.spotlightapp.utilities.observeErrors
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class CompletedTaskListFragment : Fragment(R.layout.fragment_completed_task_list) {
+class CompletedTaskListFragment : Fragment(R.layout.fragment_completed_task_list),
+    ViewModelErrorListener {
     private lateinit var viewBinding: FragmentCompletedTaskListBinding
     private val completedTaskListViewModel: CompletedTaskListViewModel by viewModels()
 
@@ -40,7 +44,14 @@ class CompletedTaskListFragment : Fragment(R.layout.fragment_completed_task_list
         viewBinding.root.setContent {
             CompletedTaskListLayout()
         }
+        observeErrors()
     }
+
+    override val baseViewModel: BaseViewModel
+        get() = completedTaskListViewModel
+
+    override val snackbarLayout: View
+        get() = viewBinding.root
 
     @Composable
     fun CompletedTaskListLayout() {
@@ -61,14 +72,14 @@ class CompletedTaskListFragment : Fragment(R.layout.fragment_completed_task_list
             horizontalAlignment = Alignment.CenterHorizontally) {
             Text(
                 text = stringResource(id = R.string.completed_task_list_empty_state_title),
-                color = colorResource(id = R.color.primaryWhite), fontSize = 28.sp,
-                fontFamily = FontFamily(Font(R.font.lato_semibold)), lineHeight = 32.sp,
+                color = colorResource(id = R.color.primaryWhite), fontSize = 20.sp,
+                fontFamily = FontFamily(Font(R.font.lato_semibold)), lineHeight = 24.sp,
                 textAlign = TextAlign.Center)
             Spacer(modifier = Modifier.height(16.dp))
             Text(
                 text = stringResource(id = R.string.completed_task_list_empty_state_subtitle),
-                color = colorResource(id = R.color.primaryWhite), fontSize = 20.sp,
-                fontFamily = FontFamily(Font(R.font.lato_thin)), lineHeight = 32.sp,
+                color = colorResource(id = R.color.primaryWhite), fontSize = 16.sp,
+                fontFamily = FontFamily(Font(R.font.lato_thin)), lineHeight = 20.sp,
                 textAlign = TextAlign.Center)
         }
     }
