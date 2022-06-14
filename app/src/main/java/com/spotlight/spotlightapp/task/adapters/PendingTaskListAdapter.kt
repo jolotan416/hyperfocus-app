@@ -1,6 +1,7 @@
 package com.spotlight.spotlightapp.task.adapters
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
@@ -58,7 +59,8 @@ class PendingTaskListAdapter(private val callback: PendingTaskListCallback)
             binding.apply {
                 this.task = task
                 taskPriorityButton.setOnClickListener { callback.selectPendingTask(task) }
-                root.setOnClickListener { callback.editTask(task) }
+                root.transitionName = Task::class.java.simpleName + task.id
+                root.setOnClickListener { callback.editTask(root, task) }
             }
         }
     }
@@ -66,15 +68,18 @@ class PendingTaskListAdapter(private val callback: PendingTaskListCallback)
     inner class NewTaskItemViewHolder(private val binding: NewTaskItemBinding)
         : RecyclerView.ViewHolder(binding.root) {
         fun bind() {
-            binding.root.setOnClickListener {
-                callback.createTask()
+            binding.root.apply {
+                transitionName = Task::class.java.simpleName
+                setOnClickListener {
+                    callback.createTask(this)
+                }
             }
         }
     }
 
     interface PendingTaskListCallback {
-        fun createTask()
-        fun editTask(task: Task)
+        fun createTask(view: View)
+        fun editTask(view: View, task: Task)
         fun selectPendingTask(task: Task)
     }
 }

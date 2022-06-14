@@ -74,7 +74,7 @@ class DailyIntentListFragment(
 
     private fun configureAddButton() {
         viewBinding.addButton.setOnClickListener {
-            callback.openTaskList()
+            callback.openTaskList(viewBinding.addButton)
         }
     }
 
@@ -110,6 +110,6 @@ class DailyIntentListFragment(
 
     interface Callback {
         fun openTaskPage(view: View, task: Task)
-        fun openTaskList()
+        fun openTaskList(view: View)
     }
 }

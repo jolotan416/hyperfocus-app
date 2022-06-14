@@ -70,6 +70,7 @@
             android:contentDescription="@string/add_task_button_content_description"
             android:src="@drawable/ic_add"
             android:tint="@color/primaryWhite"
+            android:transitionName="task_list"
             app:backgroundTint="?attr/highlightColor"
             app:fabSize="normal"
             app:layout_constraintBottom_toBottomOf="parent"
