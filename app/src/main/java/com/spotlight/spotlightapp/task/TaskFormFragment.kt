@@ -8,6 +8,7 @@ import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.spotlight.spotlightapp.R
+import com.spotlight.spotlightapp.data.task.Task
 import com.spotlight.spotlightapp.databinding.FragmentTaskFormBinding
 import com.spotlight.spotlightapp.utilities.BaseViewModel
 import com.spotlight.spotlightapp.utilities.ViewModelErrorListener
@@ -42,6 +43,7 @@ class TaskFormFragment : Fragment(R.layout.fragment_task_form), ViewModelErrorLi
         configureViews()
         observeViewModel()
         observeErrors()
+        startPostponedEnterTransition()
     }
 
     override val baseViewModel: BaseViewModel
@@ -54,6 +56,9 @@ class TaskFormFragment : Fragment(R.layout.fragment_task_form), ViewModelErrorLi
         val viewModel = taskFormViewModel
 
         binding.apply {
+            root.transitionName = Task::class.java.simpleName +
+                    (viewModel.initialTask.value?.id ?: "")
+
             taskTitleEditText.apply {
                 imeOptions = EditorInfo.IME_ACTION_NEXT
                 setRawInputType(InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_CAP_SENTENCES)

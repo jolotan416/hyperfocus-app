@@ -3,7 +3,8 @@
     <string name="your_tasks">Your Tasks</string>
     <string name="pending">Pending</string>
     <string name="completed">Completed</string>
-    <string name="new_task">New Task</string>
+    <string name="new_task">New Task</string>\
+    <string name="edit_task">Edit Task</string>
 
     <string name="completed_task_list_empty_state_title">You haven\'t finished any tasks yet.</string>
     <string name="completed_task_list_empty_state_subtitle">Why not start now?</string>

@@ -27,7 +27,7 @@
             spotlight:backButtonIcon="@{@drawable/ic_back_button}"
             spotlight:componentTint="@{@color/primaryBlack}"
             spotlight:hasDivider="@{true}"
-            spotlight:titleText="@{@string/new_task}"
+            spotlight:titleText="@{taskFormViewModel.initialTask == null ? @string/new_task : @string/edit_task}"
             spotlight:toolbarBackgroundColor="@{@color/primaryWhite}" />
 
         <ScrollView

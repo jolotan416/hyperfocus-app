@@ -39,12 +39,12 @@ class PendingTaskListFragment(private val callback: Callback)
     override val snackbarLayout: View
         get() = viewBinding.root
 
-    override fun createTask() {
-        callback.openTaskForm()
+    override fun createTask(view: View) {
+        callback.openTaskForm(view)
     }
 
-    override fun editTask(task: Task) {
-        callback.openTaskForm(task)
+    override fun editTask(view: View, task: Task) {
+        callback.openTaskForm(view, task)
     }
 
     override fun selectPendingTask(task: Task) {
@@ -85,6 +85,6 @@ class PendingTaskListFragment(private val callback: Callback)
     }
 
     interface Callback {
-        fun openTaskForm(task: Task? = null)
+        fun openTaskForm(view: View, task: Task? = null)
     }
 }

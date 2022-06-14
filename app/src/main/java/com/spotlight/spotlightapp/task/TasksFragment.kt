@@ -22,6 +22,7 @@ class TasksFragment(private val callback: Callback) : Fragment(R.layout.fragment
 
         viewBinding = FragmentTasksBinding.bind(view)
         configureViewPager()
+        startPostponedEnterTransition()
     }
 
     private fun configureViewPager() {

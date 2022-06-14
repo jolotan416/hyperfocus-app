@@ -12,7 +12,10 @@ import androidx.fragment.app.FragmentFactory
 import androidx.fragment.app.commit
 import com.spotlight.spotlightapp.data.task.Task
 import com.spotlight.spotlightapp.splash.SplashScreenFragment
-import com.spotlight.spotlightapp.task.*
+import com.spotlight.spotlightapp.task.CurrentTaskFragment
+import com.spotlight.spotlightapp.task.DailyIntentListFragment
+import com.spotlight.spotlightapp.task.TaskFormFragment
+import com.spotlight.spotlightapp.task.TasksFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -23,15 +26,14 @@ class MainActivity : AppCompatActivity(R.layout.activity_main),
             return when (loadFragmentClass(classLoader, className)) {
                 DailyIntentListFragment::class.java -> DailyIntentListFragment(this@MainActivity)
                 CurrentTaskFragment::class.java -> CurrentTaskFragment().apply {
-                    val sharedElementTransition = TransitionSet()
-                        .addTransition(ChangeTransform())
-                        .addTransition(ChangeBounds())
-
-                    sharedElementEnterTransition = sharedElementTransition
-                    returnTransition = Fade()
-                    postponeEnterTransition()
+                    addSharedElementTransition()
                 }
-                TasksFragment::class.java -> TasksFragment(this@MainActivity)
+                TasksFragment::class.java -> TasksFragment(this@MainActivity).apply {
+                    addSharedElementTransition()
+                }
+                TaskFormFragment::class.java -> TaskFormFragment().apply {
+                    addSharedElementTransition()
+                }
                 else -> super.instantiate(classLoader, className)
             }
         }
@@ -55,18 +57,21 @@ class MainActivity : AppCompatActivity(R.layout.activity_main),
             sharedElements = mapOf(Pair(view, view.transitionName)))
     }
 
-    override fun openTaskList() {
-        attachFragment(TasksFragment::class.java, TasksFragment.TAG, willAddToBackStack = true)
+    override fun openTaskList(view: View) {
+        attachFragment(
+            TasksFragment::class.java, TasksFragment.TAG, willAddToBackStack = true,
+            sharedElements = mapOf(Pair(view, view.transitionName)))
     }
 
-    override fun openTaskForm(task: Task?) {
+    override fun openTaskForm(view: View, task: Task?) {
         val bundle = task?.let {
             Bundle().apply { putParcelable(TaskFormFragment.TASK, it) }
         }
 
         attachFragment(
             TaskFormFragment::class.java, TaskFormFragment.TAG,
-            willAddToBackStack = true, arguments = bundle)
+            willAddToBackStack = true, arguments = bundle,
+            sharedElements = mapOf(Pair(view, view.transitionName)))
     }
 
     private fun configureSplashScreenFragment() {
@@ -105,5 +110,15 @@ class MainActivity : AppCompatActivity(R.layout.activity_main),
                 addToBackStack(tag)
             }
         }
+    }
+
+    private fun Fragment.addSharedElementTransition() {
+        val sharedElementTransition = TransitionSet()
+            .addTransition(ChangeTransform())
+            .addTransition(ChangeBounds())
+
+        sharedElementEnterTransition = sharedElementTransition
+        returnTransition = Fade()
+        postponeEnterTransition()
     }
 }
