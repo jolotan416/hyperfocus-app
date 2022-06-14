@@ -12,4 +12,11 @@ class ErrorEntity(@StringRes val errorMessageRes: Int) {
     companion object {
         val GENERAL_ERROR_ENTITY = ErrorEntity(R.string.general_error_message)
     }
+
+    var arguments: Array<Any?> = arrayOf()
+        private set
+
+    fun setArguments(vararg arguments: Any?) {
+        this.arguments = arguments.asList().toTypedArray()
+    }
 }

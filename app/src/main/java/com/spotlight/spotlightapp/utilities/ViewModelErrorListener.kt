@@ -20,8 +20,11 @@ fun ViewModelErrorListener.observeErrors() {
             "ViewModelErrorListener can only be either an instance of  AppCompatActivity or Fragment")
     }
 
-    baseViewModel.snackbarErrorMessageRes.observe(lifecycleOwner) {
-        Snackbar.make(snackbarLayout, it ?: return@observe, Snackbar.LENGTH_LONG)
+    baseViewModel.snackbarErrorMessageRes.observe(lifecycleOwner) { errorEntity ->
+        val snackbarErrorMessage = errorEntity?.let {
+            context.getString(it.errorMessageRes, *it.arguments)
+        } ?: return@observe
+        Snackbar.make(snackbarLayout, snackbarErrorMessage, Snackbar.LENGTH_LONG)
             .setBackgroundTint(ContextCompat.getColor(context, R.color.primaryWhite))
             .setTextColor(ContextCompat.getColor(context, R.color.primaryBlack))
             .show()
