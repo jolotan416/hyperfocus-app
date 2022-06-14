@@ -1,8 +1,9 @@
 package com.spotlight.spotlightapp.task.repo
 
+import com.spotlight.spotlightapp.R
+import com.spotlight.spotlightapp.data.ErrorEntity
 import com.spotlight.spotlightapp.data.Result
 import com.spotlight.spotlightapp.data.task.Task
-import com.spotlight.spotlightapp.task.TaskErrorEntity
 import com.spotlight.spotlightapp.utilities.RepositoryErrorHandler
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -65,7 +66,9 @@ class TasksRepository @Inject constructor(
                 Result.Success(null)
             }
             maxPendingTaskListPriority >= MAX_PRIORITY -> {
-                Result.Error(TaskErrorEntity.MAX_DAILY_INTENT_TASK_REACHED)
+                Result.Error(ErrorEntity(R.string.maximum_daily_intent_task_error_message).apply {
+                    setArguments(MAX_PRIORITY)
+                })
             }
             else -> {
                 updateTaskPriority(task, maxPendingTaskListPriority + 1)

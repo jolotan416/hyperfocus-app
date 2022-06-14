@@ -3,16 +3,17 @@ package com.spotlight.spotlightapp.utilities
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.spotlight.spotlightapp.data.ErrorEntity
 import com.spotlight.spotlightapp.data.Result
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 open class BaseViewModel : ViewModel() {
-    private val mSnackbarErrorMessageRes: MutableLiveData<Int?> by lazy {
-        MutableLiveData<Int?>(null)
+    private val mSnackbarErrorMessageRes: MutableLiveData<ErrorEntity?> by lazy {
+        MutableLiveData<ErrorEntity?>(null)
     }
 
-    val snackbarErrorMessageRes: LiveData<Int?> = mSnackbarErrorMessageRes
+    val snackbarErrorMessageRes: LiveData<ErrorEntity?> = mSnackbarErrorMessageRes
 
     fun notifySnackbarMessageShown() {
         mSnackbarErrorMessageRes.value = null
@@ -22,7 +23,7 @@ open class BaseViewModel : ViewModel() {
         result: Result<R>, successHandling: () -> Unit = {}) {
         withContext(Dispatchers.Main) {
             if (result is Result.Error) {
-                mSnackbarErrorMessageRes.value = result.errorEntity.errorMessageRes
+                mSnackbarErrorMessageRes.value = result.errorEntity
             } else {
                 successHandling()
             }
