@@ -11,22 +11,26 @@
 
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:id="@+id/mainLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="?taskBackgroundColor">
+        android:background="?taskBackgroundColor"
+        android:orientation="vertical">
 
         <com.spotlight.spotlightapp.view.AppToolbar
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="?android:attr/actionBarSize"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            spotlight:backButtonIcon="@{@drawable/ic_back_button}"
-            spotlight:componentTint="@{@color/primaryWhite}"
+            spotlight:backButtonIcon="@{@drawable/ic_close_button}"
+            spotlight:componentTint="@{@color/primaryBlack}"
             spotlight:hasDivider="@{true}" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        <androidx.compose.ui.platform.ComposeView
+            android:id="@+id/composeView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+    </LinearLayout>
 
 </layout>

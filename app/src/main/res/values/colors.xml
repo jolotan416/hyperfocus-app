@@ -4,4 +4,7 @@
     <color name="primaryWhite">#FAFAFA</color>
     <color name="primaryHighlight">#388E3C</color>
     <color name="functionGrey">#9E9E9E</color>
+    <color name="functionOrange">#F57C00</color>
+    <color name="functionBlue">#2196F3</color>
+    <color name="functionGreen">#4CAF50</color>
 </resources>
