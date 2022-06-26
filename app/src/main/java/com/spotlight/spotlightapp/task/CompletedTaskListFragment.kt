@@ -14,8 +14,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.Font
-import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -27,6 +26,7 @@ import com.spotlight.spotlightapp.R
 import com.spotlight.spotlightapp.data.task.Task
 import com.spotlight.spotlightapp.databinding.FragmentCompletedTaskListBinding
 import com.spotlight.spotlightapp.utilities.BaseViewModel
+import com.spotlight.spotlightapp.utilities.TextConfiguration
 import com.spotlight.spotlightapp.utilities.ViewModelErrorListener
 import com.spotlight.spotlightapp.utilities.observeErrors
 import dagger.hilt.android.AndroidEntryPoint
@@ -73,13 +73,15 @@ class CompletedTaskListFragment : Fragment(R.layout.fragment_completed_task_list
             Text(
                 text = stringResource(id = R.string.completed_task_list_empty_state_title),
                 color = colorResource(id = R.color.primaryWhite), fontSize = 20.sp,
-                fontFamily = FontFamily(Font(R.font.lato_semibold)), lineHeight = 24.sp,
+                fontFamily = TextConfiguration.fontFamily, fontWeight = FontWeight.SemiBold,
+                lineHeight = 24.sp,
                 textAlign = TextAlign.Center)
             Spacer(modifier = Modifier.height(16.dp))
             Text(
                 text = stringResource(id = R.string.completed_task_list_empty_state_subtitle),
                 color = colorResource(id = R.color.primaryWhite), fontSize = 16.sp,
-                fontFamily = FontFamily(Font(R.font.lato_thin)), lineHeight = 20.sp,
+                fontFamily = TextConfiguration.fontFamily, fontWeight = FontWeight.Thin,
+                lineHeight = 20.sp,
                 textAlign = TextAlign.Center)
         }
     }
@@ -105,7 +107,8 @@ class CompletedTaskListFragment : Fragment(R.layout.fragment_completed_task_list
             elevation = 0.dp) {
             Text(
                 text = task.title, color = colorResource(id = R.color.primaryBlack),
-                fontSize = 20.sp, fontFamily = FontFamily(Font(R.font.lato_semibold)),
+                fontSize = 20.sp, fontFamily = TextConfiguration.fontFamily,
+                fontWeight = FontWeight.SemiBold,
                 lineHeight = 32.sp, maxLines = 2, overflow = TextOverflow.Ellipsis,
                 modifier = Modifier.padding(12.dp))
         }

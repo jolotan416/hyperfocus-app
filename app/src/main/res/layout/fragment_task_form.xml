@@ -24,7 +24,7 @@
             android:layout_height="?android:attr/actionBarSize"
             spotlight:actionButtonEnabled="@{taskFormViewModel.isFormValid()}"
             spotlight:actionButtonText="@{@string/save}"
-            spotlight:backButtonIcon="@{@drawable/ic_back_button}"
+            spotlight:backButtonIcon="@{@drawable/ic_close_button}"
             spotlight:componentTint="@{@color/primaryBlack}"
             spotlight:hasDivider="@{true}"
             spotlight:titleText="@{taskFormViewModel.initialTask == null ? @string/new_task : @string/edit_task}"

@@ -64,7 +64,7 @@ class TaskFormViewModel @Inject constructor(private val tasksRepository: TasksRe
     fun updateTitle(title: String?) {
         title.let {
             this.title = it ?: ""
-            val charactersRemaining = MAX_TASK_TITLE_CHARACTERS - (this.title.length ?: 0)
+            val charactersRemaining = MAX_TASK_TITLE_CHARACTERS - this.title.length
             mutableTitleCharacterCountData.value = titleCharacterCountData.value!!.apply {
                 this.charactersRemaining = charactersRemaining
             }
