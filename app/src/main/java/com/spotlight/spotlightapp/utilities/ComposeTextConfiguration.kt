@@ -5,7 +5,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import com.spotlight.spotlightapp.R
 
-object TextConfiguration {
+object ComposeTextConfiguration {
     val fontFamily: FontFamily
         get() = FontFamily(
             listOf(

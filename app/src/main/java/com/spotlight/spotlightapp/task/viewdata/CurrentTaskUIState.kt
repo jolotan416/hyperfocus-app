@@ -5,5 +5,6 @@ import com.spotlight.spotlightapp.data.task.Task
 
 data class CurrentTaskUIState(
     val task: Task,
+    val willShowEditButtons: Boolean,
     val completeTaskResult: Result<Task>? = null
 )

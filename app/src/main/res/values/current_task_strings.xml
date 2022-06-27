@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <string name="start">Start</string>
     <string name="done">Done</string>
-
+    <string name="return_to_list">Return to List</string>
 </resources>

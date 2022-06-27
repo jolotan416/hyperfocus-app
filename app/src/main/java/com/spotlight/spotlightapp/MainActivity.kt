@@ -12,6 +12,7 @@ import androidx.fragment.app.FragmentFactory
 import androidx.fragment.app.commit
 import com.spotlight.spotlightapp.data.task.Task
 import com.spotlight.spotlightapp.splash.SplashScreenFragment
+import com.spotlight.spotlightapp.task.TaskPageRouter
 import com.spotlight.spotlightapp.task.views.CurrentTaskFragment
 import com.spotlight.spotlightapp.task.views.DailyIntentListFragment
 import com.spotlight.spotlightapp.task.views.TaskFormFragment
@@ -19,8 +20,7 @@ import com.spotlight.spotlightapp.task.views.TasksFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity(R.layout.activity_main),
-    DailyIntentListFragment.Callback, TasksFragment.Callback {
+class MainActivity : AppCompatActivity(R.layout.activity_main), TaskPageRouter {
     private val fragmentFactory = object : FragmentFactory() {
         override fun instantiate(classLoader: ClassLoader, className: String): Fragment {
             return when (loadFragmentClass(classLoader, className)) {
@@ -46,9 +46,10 @@ class MainActivity : AppCompatActivity(R.layout.activity_main),
         configureSplashScreenFragment()
     }
 
-    override fun openTaskPage(view: View, task: Task) {
+    override fun openTaskPage(view: View, task: Task, willAllowEdit: Boolean) {
         val bundle = Bundle().apply {
             putParcelable(CurrentTaskFragment.TASK, task)
+            putBoolean(CurrentTaskFragment.WILL_ALLOW_EDIT, willAllowEdit)
         }
 
         attachFragment(

@@ -21,15 +21,18 @@ class CurrentTaskViewModel @Inject constructor(private val tasksRepository: Task
 
     val currentTaskUIState: LiveData<CurrentTaskUIState> = mCurrentTaskUIState
 
-    fun setCurrentTask(task: Task) {
-        mCurrentTaskUIState.value = CurrentTaskUIState(task)
+    fun setCurrentTask(task: Task, willAllowEdit: Boolean) {
+        mCurrentTaskUIState.value = CurrentTaskUIState(task, willAllowEdit)
     }
 
     fun completeTask() {
+        val currentTaskUIState = mCurrentTaskUIState.value!!
+
         viewModelScope.launch(Dispatchers.IO) {
             handleRepositoryResult(
-                tasksRepository.completeTask(mCurrentTaskUIState.value!!.task.copy())) { result ->
-                mCurrentTaskUIState.value = CurrentTaskUIState(result.content, result)
+                tasksRepository.completeTask(currentTaskUIState.task.copy())) { result ->
+                mCurrentTaskUIState.value = CurrentTaskUIState(
+                    result.content, currentTaskUIState.willShowEditButtons, result)
             }
         }
     }
