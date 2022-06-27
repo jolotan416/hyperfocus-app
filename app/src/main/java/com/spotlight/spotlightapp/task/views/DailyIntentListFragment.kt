@@ -11,16 +11,16 @@ import androidx.recyclerview.widget.RecyclerView
 import com.spotlight.spotlightapp.R
 import com.spotlight.spotlightapp.data.task.Task
 import com.spotlight.spotlightapp.databinding.FragmentDailyIntentListBinding
-import com.spotlight.spotlightapp.task.viewmodels.DailyIntentListViewModel
+import com.spotlight.spotlightapp.task.TaskPageRouter
 import com.spotlight.spotlightapp.task.adapters.DailyIntentListAdapter
+import com.spotlight.spotlightapp.task.viewmodels.DailyIntentListViewModel
 import com.spotlight.spotlightapp.utilities.BaseViewModel
 import com.spotlight.spotlightapp.utilities.ViewModelErrorListener
 import com.spotlight.spotlightapp.utilities.observeErrors
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class DailyIntentListFragment(
-    private val callback: Callback)
+class DailyIntentListFragment(private val taskPageRouter: TaskPageRouter)
     : Fragment(R.layout.fragment_daily_intent_list), ViewModelErrorListener,
     DailyIntentListAdapter.Callback {
     private val viewModel: DailyIntentListViewModel by viewModels()
@@ -43,7 +43,7 @@ class DailyIntentListFragment(
         get() = viewBinding.root
 
     override fun onTaskSelected(view: View, task: Task) {
-        callback.openTaskPage(view, task)
+        taskPageRouter.openTaskPage(view, task, false)
     }
 
     private fun configureViews() {
@@ -75,7 +75,7 @@ class DailyIntentListFragment(
 
     private fun configureAddButton() {
         viewBinding.addButton.setOnClickListener {
-            callback.openTaskList(viewBinding.addButton)
+            taskPageRouter.openTaskList(viewBinding.addButton)
         }
     }
 
@@ -107,10 +107,5 @@ class DailyIntentListFragment(
                     R.array.daily_intent_empty_state_subtitle)[randomEmptyStateTextIndex]
             }
         }
-    }
-
-    interface Callback {
-        fun openTaskPage(view: View, task: Task)
-        fun openTaskList(view: View)
     }
 }

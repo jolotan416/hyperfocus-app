@@ -27,7 +27,7 @@ import com.spotlight.spotlightapp.data.task.Task
 import com.spotlight.spotlightapp.databinding.FragmentCompletedTaskListBinding
 import com.spotlight.spotlightapp.task.viewmodels.CompletedTaskListViewModel
 import com.spotlight.spotlightapp.utilities.BaseViewModel
-import com.spotlight.spotlightapp.utilities.TextConfiguration
+import com.spotlight.spotlightapp.utilities.ComposeTextConfiguration
 import com.spotlight.spotlightapp.utilities.ViewModelErrorListener
 import com.spotlight.spotlightapp.utilities.observeErrors
 import dagger.hilt.android.AndroidEntryPoint
@@ -74,14 +74,14 @@ class CompletedTaskListFragment : Fragment(R.layout.fragment_completed_task_list
             Text(
                 text = stringResource(id = R.string.completed_task_list_empty_state_title),
                 color = colorResource(id = R.color.primaryWhite), fontSize = 20.sp,
-                fontFamily = TextConfiguration.fontFamily, fontWeight = FontWeight.SemiBold,
+                fontFamily = ComposeTextConfiguration.fontFamily, fontWeight = FontWeight.SemiBold,
                 lineHeight = 24.sp,
                 textAlign = TextAlign.Center)
             Spacer(modifier = Modifier.height(16.dp))
             Text(
                 text = stringResource(id = R.string.completed_task_list_empty_state_subtitle),
                 color = colorResource(id = R.color.primaryWhite), fontSize = 16.sp,
-                fontFamily = TextConfiguration.fontFamily, fontWeight = FontWeight.Thin,
+                fontFamily = ComposeTextConfiguration.fontFamily, fontWeight = FontWeight.Thin,
                 lineHeight = 20.sp,
                 textAlign = TextAlign.Center)
         }
@@ -108,7 +108,7 @@ class CompletedTaskListFragment : Fragment(R.layout.fragment_completed_task_list
             elevation = 0.dp) {
             Text(
                 text = task.title, color = colorResource(id = R.color.primaryBlack),
-                fontSize = 20.sp, fontFamily = TextConfiguration.fontFamily,
+                fontSize = 20.sp, fontFamily = ComposeTextConfiguration.fontFamily,
                 fontWeight = FontWeight.SemiBold,
                 lineHeight = 32.sp, maxLines = 2, overflow = TextOverflow.Ellipsis,
                 modifier = Modifier.padding(12.dp))

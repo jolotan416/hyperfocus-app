@@ -10,15 +10,16 @@ import androidx.recyclerview.widget.RecyclerView
 import com.spotlight.spotlightapp.R
 import com.spotlight.spotlightapp.data.task.Task
 import com.spotlight.spotlightapp.databinding.FragmentPendingTaskListBinding
-import com.spotlight.spotlightapp.task.viewmodels.PendingTaskListViewModel
+import com.spotlight.spotlightapp.task.TaskPageRouter
 import com.spotlight.spotlightapp.task.adapters.PendingTaskListAdapter
+import com.spotlight.spotlightapp.task.viewmodels.PendingTaskListViewModel
 import com.spotlight.spotlightapp.utilities.BaseViewModel
 import com.spotlight.spotlightapp.utilities.ViewModelErrorListener
 import com.spotlight.spotlightapp.utilities.observeErrors
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class PendingTaskListFragment(private val callback: Callback)
+class PendingTaskListFragment(private val taskPageRouter: TaskPageRouter)
     : Fragment(R.layout.fragment_pending_task_list), ViewModelErrorListener,
     PendingTaskListAdapter.PendingTaskListCallback {
     private lateinit var viewBinding: FragmentPendingTaskListBinding
@@ -41,11 +42,11 @@ class PendingTaskListFragment(private val callback: Callback)
         get() = viewBinding.root
 
     override fun createTask(view: View) {
-        callback.openTaskForm(view)
+        taskPageRouter.openTaskForm(view)
     }
 
     override fun editTask(view: View, task: Task) {
-        callback.openTaskForm(view, task)
+        taskPageRouter.openTaskPage(view, task, true)
     }
 
     override fun selectPendingTask(task: Task) {
@@ -83,9 +84,5 @@ class PendingTaskListFragment(private val callback: Callback)
                 }
             }
         }
-    }
-
-    interface Callback {
-        fun openTaskForm(view: View, task: Task? = null)
     }
 }

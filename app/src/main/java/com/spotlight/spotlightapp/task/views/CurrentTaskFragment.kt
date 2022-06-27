@@ -2,21 +2,14 @@ package com.spotlight.spotlightapp.task.views
 
 import android.os.Bundle
 import android.view.View
-import androidx.annotation.DrawableRes
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonColors
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -29,16 +22,18 @@ import com.spotlight.spotlightapp.data.task.Task
 import com.spotlight.spotlightapp.databinding.FragmentCurrentTaskBinding
 import com.spotlight.spotlightapp.task.viewmodels.CurrentTaskViewModel
 import com.spotlight.spotlightapp.utilities.BaseViewModel
-import com.spotlight.spotlightapp.utilities.TextConfiguration
+import com.spotlight.spotlightapp.utilities.ComposeTextConfiguration
 import com.spotlight.spotlightapp.utilities.ViewModelErrorListener
 import com.spotlight.spotlightapp.utilities.observeErrors
+import com.spotlight.spotlightapp.view.CustomComposeViews
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class CurrentTaskFragment : Fragment(R.layout.fragment_current_task), ViewModelErrorListener {
+class CurrentTaskFragment() : Fragment(R.layout.fragment_current_task), ViewModelErrorListener {
     companion object {
         const val TAG = "CurrentTaskFragment"
         const val TASK = "task"
+        const val WILL_ALLOW_EDIT = "will_allow_edit"
     }
 
     private val currentTaskViewModel: CurrentTaskViewModel by viewModels()
@@ -62,7 +57,9 @@ class CurrentTaskFragment : Fragment(R.layout.fragment_current_task), ViewModelE
     private fun initializeViewModel() {
         observeErrors()
         currentTaskViewModel.apply {
-            setCurrentTask(requireArguments().getParcelable(TASK)!!)
+            requireArguments().let {
+                setCurrentTask(it.getParcelable(TASK)!!, it.getBoolean(WILL_ALLOW_EDIT))
+            }
 
             currentTaskUIState.observe(viewLifecycleOwner) { uiState ->
                 when {
@@ -82,16 +79,15 @@ class CurrentTaskFragment : Fragment(R.layout.fragment_current_task), ViewModelE
         }
     }
 
-    @Preview
     @Composable
     private fun CurrentTaskLayout() {
         val currentTask = currentTaskViewModel.currentTaskUIState.observeAsState()
 
-        currentTask.value?.also { uiState ->
+        currentTask.value?.apply {
             Column(modifier = Modifier.padding(20.dp), verticalArrangement = Arrangement.Center) {
-                CurrentTaskView(task = uiState.task)
+                CurrentTaskView(task = task)
                 Spacer(modifier = Modifier.height(56.dp))
-                CurrentTaskButtons()
+                CurrentTaskButtons(willShowEditButtons, task.isFinished)
             }
         }
     }
@@ -101,52 +97,82 @@ class CurrentTaskFragment : Fragment(R.layout.fragment_current_task), ViewModelE
         Column(modifier = Modifier.fillMaxWidth()) {
             Text(
                 text = task.title, color = colorResource(id = R.color.primaryBlack),
-                fontSize = 20.sp, fontFamily = TextConfiguration.fontFamily,
+                fontSize = 20.sp, fontFamily = ComposeTextConfiguration.fontFamily,
                 fontWeight = FontWeight.SemiBold,
                 lineHeight = 24.sp)
             Spacer(modifier = Modifier.height(12.dp))
             Text(
                 text = task.description, color = colorResource(id = R.color.primaryBlack),
-                fontSize = 16.sp, fontFamily = TextConfiguration.fontFamily,
+                fontSize = 16.sp, fontFamily = ComposeTextConfiguration.fontFamily,
                 fontWeight = FontWeight.Normal,
                 lineHeight = 20.sp)
         }
     }
 
-    @Preview
     @Composable
-    private fun CurrentTaskButtons() {
+    private fun CurrentTaskButtons(willShowEditButtons: Boolean, isTaskFinished: Boolean) {
         Row(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .height(IntrinsicSize.Min)
+                .fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically) {
-            Box(
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(end = 4.dp),
-                contentAlignment = Alignment.Center) {
-                CurrentTaskButton(
-                    imageRes = R.drawable.ic_bell, labelText = "1 hr",
-                    buttonColors = ButtonDefaults.buttonColors(
-                        backgroundColor = colorResource(id = R.color.functionOrange),
-                        contentColor = colorResource(id = R.color.primaryWhite))) {}
+            when {
+                willShowEditButtons -> {
+                    CustomComposeViews.Button(
+                        modifier = Modifier
+                            .padding(end = 4.dp)
+                            .fillMaxHeight(),
+                        imageRes = R.drawable.ic_edit, labelText = null,
+                        buttonColors = ButtonDefaults.buttonColors(
+                            backgroundColor = colorResource(id = R.color.functionBlue),
+                            contentColor = colorResource(id = R.color.primaryWhite))) {}
+                    CustomComposeViews.Button(
+                        modifier = Modifier
+                            .padding(horizontal = 2.dp)
+                            .fillMaxHeight(),
+                        imageRes = R.drawable.ic_delete, labelText = null,
+                        buttonColors = ButtonDefaults.buttonColors(
+                            backgroundColor = colorResource(id = R.color.functionRed),
+                            contentColor = colorResource(id = R.color.primaryWhite))) {}
+                }
+                !isTaskFinished -> {
+                    CustomComposeViews.Button(
+                        modifier = Modifier
+                            .weight(1f)
+                            .padding(end = 4.dp)
+                            .fillMaxWidth(),
+                        imageRes = 0, labelText = "1 hr",
+                        buttonColors = ButtonDefaults.buttonColors(
+                            backgroundColor = colorResource(id = R.color.functionBlue),
+                            contentColor = colorResource(id = R.color.primaryWhite))) {}
+                    CustomComposeViews.Button(
+                        modifier = Modifier
+                            .padding(start = 2.dp, end = 16.dp)
+                            .fillMaxHeight(),
+                        imageRes = R.drawable.ic_play, labelText = null,
+                        buttonColors = ButtonDefaults.buttonColors(
+                            backgroundColor = colorResource(id = R.color.functionBlue),
+                            contentColor = colorResource(id = R.color.primaryWhite))) {}
+                }
             }
-            Box(
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(horizontal = 2.dp),
-                contentAlignment = Alignment.Center) {
-                CurrentTaskButton(
-                    imageRes = R.drawable.ic_play, labelText = stringResource(id = R.string.start),
+
+            if (isTaskFinished) {
+                CustomComposeViews.Button(
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(start = 4.dp)
+                        .fillMaxWidth(),
+                    imageRes = 0, labelText = stringResource(id = R.string.return_to_list),
                     buttonColors = ButtonDefaults.buttonColors(
-                        backgroundColor = colorResource(id = R.color.functionBlue),
-                        contentColor = colorResource(id = R.color.primaryWhite))) {}
-            }
-            Box(
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(start = 4.dp),
-                contentAlignment = Alignment.Center) {
-                CurrentTaskButton(
+                        backgroundColor = colorResource(id = R.color.functionGreen),
+                        contentColor = colorResource(id = R.color.primaryWhite))) {
+                }
+            } else {
+                CustomComposeViews.Button(
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(start = 4.dp)
+                        .fillMaxWidth(),
                     imageRes = R.drawable.ic_check, labelText = stringResource(id = R.string.done),
                     buttonColors = ButtonDefaults.buttonColors(
                         backgroundColor = colorResource(id = R.color.functionGreen),
@@ -157,27 +183,6 @@ class CurrentTaskFragment : Fragment(R.layout.fragment_current_task), ViewModelE
         }
     }
 
-    @Composable
-    private fun CurrentTaskButton(
-        @DrawableRes imageRes: Int, labelText: String, buttonColors: ButtonColors,
-        onClickListener: () -> Unit) {
-        Button(
-            onClick = onClickListener,
-            modifier = Modifier.fillMaxWidth(),
-            shape = RoundedCornerShape(10.dp),
-            contentPadding = PaddingValues(horizontal = 12.dp, vertical = 8.dp),
-            colors = buttonColors) {
-            Image(
-                painter = painterResource(id = imageRes), modifier = Modifier.size(16.dp),
-                contentDescription = labelText, colorFilter = ColorFilter.tint(
-                    buttonColors.contentColor(enabled = true).value))
-            Spacer(modifier = Modifier.width(8.dp))
-            Text(
-                text = labelText, fontFamily = TextConfiguration.fontFamily,
-                fontWeight = FontWeight.SemiBold, fontSize = 20.sp)
-        }
-    }
-
     @Preview
     @Composable
     private fun CurrentTaskViewPreview() {
@@ -185,5 +190,23 @@ class CurrentTaskFragment : Fragment(R.layout.fragment_current_task), ViewModelE
             task = Task(
                 title = "This is a very long title to check task preview",
                 description = "This is a very long task description to check task preview"))
+    }
+
+    @Preview
+    @Composable
+    private fun CurrentTaskEditButtons() {
+        CurrentTaskButtons(willShowEditButtons = true, false)
+    }
+
+    @Preview
+    @Composable
+    private fun CurrentTaskNonEditButtons() {
+        CurrentTaskButtons(willShowEditButtons = false, false)
+    }
+
+    @Preview
+    @Composable
+    private fun CompletedTaskButtons() {
+        CurrentTaskButtons(willShowEditButtons = false, isTaskFinished = true)
     }
 }
