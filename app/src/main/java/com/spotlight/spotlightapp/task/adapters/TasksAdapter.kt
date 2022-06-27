@@ -2,10 +2,10 @@ package com.spotlight.spotlightapp.task.adapters
 
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.spotlight.spotlightapp.task.CompletedTaskListFragment
-import com.spotlight.spotlightapp.task.PendingTaskListFragment
-import com.spotlight.spotlightapp.task.TaskListType
-import com.spotlight.spotlightapp.task.TasksFragment
+import com.spotlight.spotlightapp.task.views.CompletedTaskListFragment
+import com.spotlight.spotlightapp.task.views.PendingTaskListFragment
+import com.spotlight.spotlightapp.task.views.TaskListType
+import com.spotlight.spotlightapp.task.views.TasksFragment
 
 class TasksAdapter(fragment: Fragment, private val callback: TasksFragment.Callback)
     : FragmentStateAdapter(fragment) {

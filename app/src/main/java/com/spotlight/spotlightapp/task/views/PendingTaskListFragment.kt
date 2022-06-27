@@ -1,4 +1,4 @@
-package com.spotlight.spotlightapp.task
+package com.spotlight.spotlightapp.task.views
 
 import android.graphics.Rect
 import android.os.Bundle
@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.spotlight.spotlightapp.R
 import com.spotlight.spotlightapp.data.task.Task
 import com.spotlight.spotlightapp.databinding.FragmentPendingTaskListBinding
+import com.spotlight.spotlightapp.task.viewmodels.PendingTaskListViewModel
 import com.spotlight.spotlightapp.task.adapters.PendingTaskListAdapter
 import com.spotlight.spotlightapp.utilities.BaseViewModel
 import com.spotlight.spotlightapp.utilities.ViewModelErrorListener

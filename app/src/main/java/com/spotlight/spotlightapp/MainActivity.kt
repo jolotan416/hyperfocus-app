@@ -12,10 +12,10 @@ import androidx.fragment.app.FragmentFactory
 import androidx.fragment.app.commit
 import com.spotlight.spotlightapp.data.task.Task
 import com.spotlight.spotlightapp.splash.SplashScreenFragment
-import com.spotlight.spotlightapp.task.CurrentTaskFragment
-import com.spotlight.spotlightapp.task.DailyIntentListFragment
-import com.spotlight.spotlightapp.task.TaskFormFragment
-import com.spotlight.spotlightapp.task.TasksFragment
+import com.spotlight.spotlightapp.task.views.CurrentTaskFragment
+import com.spotlight.spotlightapp.task.views.DailyIntentListFragment
+import com.spotlight.spotlightapp.task.views.TaskFormFragment
+import com.spotlight.spotlightapp.task.views.TasksFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

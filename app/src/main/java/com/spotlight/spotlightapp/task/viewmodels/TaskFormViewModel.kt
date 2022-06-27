@@ -1,4 +1,4 @@
-package com.spotlight.spotlightapp.task
+package com.spotlight.spotlightapp.task.viewmodels
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
