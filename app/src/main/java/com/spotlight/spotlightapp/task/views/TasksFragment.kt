@@ -1,4 +1,4 @@
-package com.spotlight.spotlightapp.task
+package com.spotlight.spotlightapp.task.views
 
 import android.os.Bundle
 import android.view.View

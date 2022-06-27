@@ -20,12 +20,11 @@ open class BaseViewModel : ViewModel() {
     }
 
     protected suspend fun <R> handleRepositoryResult(
-        result: Result<R>, successHandling: () -> Unit = {}) {
+        result: Result<R>, successHandling: (Result.Success<R>) -> Unit = {}) {
         withContext(Dispatchers.Main) {
-            if (result is Result.Error) {
-                mSnackbarErrorMessageRes.value = result.errorEntity
-            } else {
-                successHandling()
+            when (result) {
+                is Result.Error -> mSnackbarErrorMessageRes.value = result.errorEntity
+                is Result.Success -> successHandling(result)
             }
         }
     }

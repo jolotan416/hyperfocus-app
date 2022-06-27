@@ -1,4 +1,4 @@
-package com.spotlight.spotlightapp.task
+package com.spotlight.spotlightapp.task.views
 
 import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment

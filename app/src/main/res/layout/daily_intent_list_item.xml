@@ -20,7 +20,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="?taskBackgroundColor"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:padding="12dp">
 
             <TextView
                 android:id="@+id/taskTextView"
@@ -28,7 +29,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_margin="12dp"
+                android:layout_marginEnd="12dp"
                 android:layout_weight="1"
                 android:ellipsize="end"
                 android:maxLines="2"
@@ -38,10 +39,9 @@
             <ImageView
                 android:id="@+id/completedTaskIndicator"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_gravity="center"
-                android:layout_marginVertical="20dp"
-                android:layout_marginEnd="12dp"
+                android:maxHeight="20dp"
                 android:scaleType="fitCenter"
                 android:src="@drawable/ic_check_circle"
                 spotlight:willShow="@{task.finished}" />

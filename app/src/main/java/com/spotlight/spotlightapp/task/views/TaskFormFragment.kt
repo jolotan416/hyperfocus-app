@@ -1,4 +1,4 @@
-package com.spotlight.spotlightapp.task
+package com.spotlight.spotlightapp.task.views
 
 import android.os.Bundle
 import android.text.InputType
@@ -10,6 +10,7 @@ import androidx.fragment.app.viewModels
 import com.spotlight.spotlightapp.R
 import com.spotlight.spotlightapp.data.task.Task
 import com.spotlight.spotlightapp.databinding.FragmentTaskFormBinding
+import com.spotlight.spotlightapp.task.viewmodels.TaskFormViewModel
 import com.spotlight.spotlightapp.utilities.BaseViewModel
 import com.spotlight.spotlightapp.utilities.ViewModelErrorListener
 import com.spotlight.spotlightapp.utilities.observeErrors

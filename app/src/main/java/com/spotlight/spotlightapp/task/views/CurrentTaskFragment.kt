@@ -1,4 +1,4 @@
-package com.spotlight.spotlightapp.task
+package com.spotlight.spotlightapp.task.views
 
 import android.os.Bundle
 import android.view.View
@@ -27,9 +27,15 @@ import androidx.fragment.app.viewModels
 import com.spotlight.spotlightapp.R
 import com.spotlight.spotlightapp.data.task.Task
 import com.spotlight.spotlightapp.databinding.FragmentCurrentTaskBinding
+import com.spotlight.spotlightapp.task.viewmodels.CurrentTaskViewModel
+import com.spotlight.spotlightapp.utilities.BaseViewModel
 import com.spotlight.spotlightapp.utilities.TextConfiguration
+import com.spotlight.spotlightapp.utilities.ViewModelErrorListener
+import com.spotlight.spotlightapp.utilities.observeErrors
+import dagger.hilt.android.AndroidEntryPoint
 
-class CurrentTaskFragment : Fragment(R.layout.fragment_current_task) {
+@AndroidEntryPoint
+class CurrentTaskFragment : Fragment(R.layout.fragment_current_task), ViewModelErrorListener {
     companion object {
         const val TAG = "CurrentTaskFragment"
         const val TASK = "task"
@@ -47,14 +53,24 @@ class CurrentTaskFragment : Fragment(R.layout.fragment_current_task) {
         startPostponedEnterTransition()
     }
 
+    override val baseViewModel: BaseViewModel
+        get() = currentTaskViewModel
+
+    override val snackbarLayout: View
+        get() = viewBinding.mainLayout
+
     private fun initializeViewModel() {
+        observeErrors()
         currentTaskViewModel.apply {
             setCurrentTask(requireArguments().getParcelable(TASK)!!)
 
-            currentTask.observe(viewLifecycleOwner) { currentTask ->
-                viewBinding.apply {
-                    this.task = task
-                    mainLayout.transitionName = Task::class.java.simpleName + currentTask.id
+            currentTaskUIState.observe(viewLifecycleOwner) { uiState ->
+                when {
+                    uiState.completeTaskResult != null -> parentFragmentManager.popBackStack()
+                    else -> viewBinding.apply {
+                        this.task = task
+                        mainLayout.transitionName = Task::class.java.simpleName + uiState.task.id
+                    }
                 }
             }
         }
@@ -69,11 +85,11 @@ class CurrentTaskFragment : Fragment(R.layout.fragment_current_task) {
     @Preview
     @Composable
     private fun CurrentTaskLayout() {
-        val currentTask = currentTaskViewModel.currentTask.observeAsState()
+        val currentTask = currentTaskViewModel.currentTaskUIState.observeAsState()
 
-        currentTask.value?.also {
+        currentTask.value?.also { uiState ->
             Column(modifier = Modifier.padding(20.dp), verticalArrangement = Arrangement.Center) {
-                CurrentTaskView(task = it)
+                CurrentTaskView(task = uiState.task)
                 Spacer(modifier = Modifier.height(56.dp))
                 CurrentTaskButtons()
             }
@@ -134,7 +150,9 @@ class CurrentTaskFragment : Fragment(R.layout.fragment_current_task) {
                     imageRes = R.drawable.ic_check, labelText = stringResource(id = R.string.done),
                     buttonColors = ButtonDefaults.buttonColors(
                         backgroundColor = colorResource(id = R.color.functionGreen),
-                        contentColor = colorResource(id = R.color.primaryWhite))) {}
+                        contentColor = colorResource(id = R.color.primaryWhite))) {
+                    currentTaskViewModel.completeTask()
+                }
             }
         }
     }

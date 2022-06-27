@@ -38,19 +38,28 @@ class TasksRepository @Inject constructor(
         }
     }
 
-    suspend fun updateTask(task: Task, willTogglePriority: Boolean = false): Result<Any?> {
+    suspend fun updateTask(task: Task, willTogglePriority: Boolean = false): Result<Task> {
         return repositoryErrorHandler.handleGeneralRepositoryOperation {
             if (willTogglePriority) {
                 toggleTaskPriority(task)
             } else {
                 localDataSource.updateTask(task)
 
-                Result.Success(null)
+                Result.Success(task)
             }
         }
     }
 
-    private suspend fun toggleTaskPriority(task: Task): Result<Any?> {
+    suspend fun completeTask(task: Task): Result<Task> {
+        return repositoryErrorHandler.handleGeneralRepositoryOperation {
+            val updatedTask = task.apply {
+                isFinished = true
+            }
+            updateTask(updatedTask, false)
+        }
+    }
+
+    private suspend fun toggleTaskPriority(task: Task): Result<Task> {
         val tasks = localDataSource.getTasks()
         val maxPendingTaskListPriority = tasks.maxOfOrNull { it.priority } ?: 0
 
@@ -63,7 +72,7 @@ class TasksRepository @Inject constructor(
 
                 updateTaskPriority(task, 0)
 
-                Result.Success(null)
+                Result.Success(task)
             }
             maxPendingTaskListPriority >= MAX_PRIORITY -> {
                 Result.Error(ErrorEntity(R.string.maximum_daily_intent_task_error_message).apply {
@@ -73,7 +82,7 @@ class TasksRepository @Inject constructor(
             else -> {
                 updateTaskPriority(task, maxPendingTaskListPriority + 1)
 
-                Result.Success(null)
+                Result.Success(task)
             }
         }
     }

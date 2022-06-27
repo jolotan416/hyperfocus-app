@@ -7,7 +7,7 @@
 
         <variable
             name="taskFormViewModel"
-            type="com.spotlight.spotlightapp.task.TaskFormViewModel" />
+            type="com.spotlight.spotlightapp.task.viewmodels.TaskFormViewModel" />
 
     </data>
 
@@ -16,7 +16,7 @@
         android:layout_height="match_parent"
         android:background="@color/primaryWhite"
         android:orientation="vertical"
-        tools:context=".task.TaskFormFragment">
+        tools:context=".task.views.TaskFormFragment">
 
         <com.spotlight.spotlightapp.view.AppToolbar
             android:id="@+id/toolbar"
