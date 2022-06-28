@@ -7,7 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.spotlight.spotlightapp.data.CharacterCountData
 import com.spotlight.spotlightapp.data.task.Task
 import com.spotlight.spotlightapp.task.repo.TasksRepository
-import com.spotlight.spotlightapp.utilities.BaseViewModel
+import com.spotlight.spotlightapp.utilities.viewmodelutils.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

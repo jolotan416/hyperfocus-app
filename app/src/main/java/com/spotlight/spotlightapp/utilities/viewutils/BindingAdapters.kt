@@ -1,4 +1,4 @@
-package com.spotlight.spotlightapp.utilities
+package com.spotlight.spotlightapp.utilities.viewutils
 
 import android.view.View
 import androidx.databinding.BindingAdapter
