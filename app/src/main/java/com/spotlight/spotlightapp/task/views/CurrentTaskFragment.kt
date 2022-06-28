@@ -21,10 +21,10 @@ import com.spotlight.spotlightapp.R
 import com.spotlight.spotlightapp.data.task.Task
 import com.spotlight.spotlightapp.databinding.FragmentCurrentTaskBinding
 import com.spotlight.spotlightapp.task.viewmodels.CurrentTaskViewModel
-import com.spotlight.spotlightapp.utilities.BaseViewModel
-import com.spotlight.spotlightapp.utilities.ComposeTextConfiguration
-import com.spotlight.spotlightapp.utilities.ViewModelErrorListener
-import com.spotlight.spotlightapp.utilities.observeErrors
+import com.spotlight.spotlightapp.utilities.viewmodelutils.BaseViewModel
+import com.spotlight.spotlightapp.utilities.viewutils.ComposeTextConfiguration
+import com.spotlight.spotlightapp.utilities.viewmodelutils.ViewModelErrorListener
+import com.spotlight.spotlightapp.utilities.viewmodelutils.observeErrors
 import com.spotlight.spotlightapp.view.CustomComposeViews
 import dagger.hilt.android.AndroidEntryPoint
 

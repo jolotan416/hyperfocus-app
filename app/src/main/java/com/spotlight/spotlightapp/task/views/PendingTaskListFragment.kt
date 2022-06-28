@@ -1,21 +1,19 @@
 package com.spotlight.spotlightapp.task.views
 
-import android.graphics.Rect
 import android.os.Bundle
-import android.util.TypedValue
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.recyclerview.widget.RecyclerView
 import com.spotlight.spotlightapp.R
 import com.spotlight.spotlightapp.data.task.Task
 import com.spotlight.spotlightapp.databinding.FragmentPendingTaskListBinding
 import com.spotlight.spotlightapp.task.TaskPageRouter
 import com.spotlight.spotlightapp.task.adapters.PendingTaskListAdapter
 import com.spotlight.spotlightapp.task.viewmodels.PendingTaskListViewModel
-import com.spotlight.spotlightapp.utilities.BaseViewModel
-import com.spotlight.spotlightapp.utilities.ViewModelErrorListener
-import com.spotlight.spotlightapp.utilities.observeErrors
+import com.spotlight.spotlightapp.utilities.viewmodelutils.BaseViewModel
+import com.spotlight.spotlightapp.utilities.viewmodelutils.ViewModelErrorListener
+import com.spotlight.spotlightapp.utilities.viewmodelutils.observeErrors
+import com.spotlight.spotlightapp.utilities.viewutils.MarginItemDecoration
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -61,16 +59,8 @@ class PendingTaskListFragment(private val taskPageRouter: TaskPageRouter)
         viewBinding.tasksRecyclerView.apply {
             adapter = pendingTaskListAdapter
             setHasFixedSize(true)
-            addItemDecoration(object : RecyclerView.ItemDecoration() {
-                override fun getItemOffsets(
-                    outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
-                    super.getItemOffsets(outRect, view, parent, state)
-
-                    outRect.bottom = TypedValue.applyDimension(
-                        TypedValue.COMPLEX_UNIT_DIP,
-                        PendingTaskListAdapter.TASK_ITEM_PADDING, resources.displayMetrics).toInt()
-                }
-            })
+            addItemDecoration(
+                MarginItemDecoration(resources, PendingTaskListAdapter.TASK_ITEM_PADDING))
         }
     }
 

@@ -13,6 +13,6 @@ class TasksAdapter(fragment: Fragment, private val taskPageRouter: TaskPageRoute
     override fun createFragment(position: Int): Fragment =
         when (TaskListType.values()[position]) {
             TaskListType.PENDING -> PendingTaskListFragment(taskPageRouter)
-            TaskListType.COMPLETED -> CompletedTaskListFragment()
+            TaskListType.COMPLETED -> CompletedTaskListFragment(taskPageRouter)
         }
 }

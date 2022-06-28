@@ -1,4 +1,4 @@
-package com.spotlight.spotlightapp.utilities
+package com.spotlight.spotlightapp.utilities.viewutils
 
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily

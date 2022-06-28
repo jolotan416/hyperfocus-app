@@ -11,9 +11,9 @@ import com.spotlight.spotlightapp.R
 import com.spotlight.spotlightapp.data.task.Task
 import com.spotlight.spotlightapp.databinding.FragmentTaskFormBinding
 import com.spotlight.spotlightapp.task.viewmodels.TaskFormViewModel
-import com.spotlight.spotlightapp.utilities.BaseViewModel
-import com.spotlight.spotlightapp.utilities.ViewModelErrorListener
-import com.spotlight.spotlightapp.utilities.observeErrors
+import com.spotlight.spotlightapp.utilities.viewmodelutils.BaseViewModel
+import com.spotlight.spotlightapp.utilities.viewmodelutils.ViewModelErrorListener
+import com.spotlight.spotlightapp.utilities.viewmodelutils.observeErrors
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

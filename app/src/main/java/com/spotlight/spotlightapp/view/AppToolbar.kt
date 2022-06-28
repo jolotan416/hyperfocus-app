@@ -11,7 +11,7 @@ import androidx.annotation.ColorInt
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.spotlight.spotlightapp.databinding.AppToolbarBinding
-import com.spotlight.spotlightapp.utilities.BindingAdapters
+import com.spotlight.spotlightapp.utilities.viewutils.BindingAdapters
 import dagger.hilt.android.internal.managers.ViewComponentManager
 
 class AppToolbar @JvmOverloads constructor(

@@ -17,7 +17,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.spotlight.spotlightapp.utilities.ComposeTextConfiguration
+import com.spotlight.spotlightapp.utilities.viewutils.ComposeTextConfiguration
 
 object CustomComposeViews {
     @Composable
