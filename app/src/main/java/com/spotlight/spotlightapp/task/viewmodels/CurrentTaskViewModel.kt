@@ -12,6 +12,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+// TODO: Observe current task to update page with changes
 @HiltViewModel
 class CurrentTaskViewModel @Inject constructor(private val tasksRepository: TasksRepository) :
     BaseViewModel() {
