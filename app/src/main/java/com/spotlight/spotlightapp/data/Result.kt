@@ -13,10 +13,10 @@ class ErrorEntity(@StringRes val errorMessageRes: Int) {
         val GENERAL_ERROR_ENTITY = ErrorEntity(R.string.general_error_message)
     }
 
-    var arguments: Array<Any?> = arrayOf()
+    var errorMessageArguments: Array<Any?> = arrayOf()
         private set
 
-    fun setArguments(vararg arguments: Any?) {
-        this.arguments = arguments.asList().toTypedArray()
+    fun setErrorMessageArguments(vararg errorMessageArguments: Any?) {
+        this.errorMessageArguments = errorMessageArguments.asList().toTypedArray()
     }
 }

@@ -76,7 +76,7 @@ class TasksRepository @Inject constructor(
             }
             maxPendingTaskListPriority >= MAX_PRIORITY -> {
                 Result.Error(ErrorEntity(R.string.maximum_daily_intent_task_error_message).apply {
-                    setArguments(MAX_PRIORITY)
+                    setErrorMessageArguments(MAX_PRIORITY)
                 })
             }
             else -> {
