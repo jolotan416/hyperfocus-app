@@ -22,9 +22,9 @@ import com.spotlight.spotlightapp.data.task.Task
 import com.spotlight.spotlightapp.databinding.FragmentCurrentTaskBinding
 import com.spotlight.spotlightapp.task.viewmodels.CurrentTaskViewModel
 import com.spotlight.spotlightapp.utilities.viewmodelutils.BaseViewModel
-import com.spotlight.spotlightapp.utilities.viewutils.ComposeTextConfiguration
 import com.spotlight.spotlightapp.utilities.viewmodelutils.ViewModelErrorListener
 import com.spotlight.spotlightapp.utilities.viewmodelutils.observeErrors
+import com.spotlight.spotlightapp.utilities.viewutils.ComposeTextConfiguration
 import com.spotlight.spotlightapp.view.CustomComposeViews
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -64,10 +64,7 @@ class CurrentTaskFragment() : Fragment(R.layout.fragment_current_task), ViewMode
             currentTaskUIState.observe(viewLifecycleOwner) { uiState ->
                 when {
                     uiState.completeTaskResult != null -> parentFragmentManager.popBackStack()
-                    else -> viewBinding.apply {
-                        this.task = task
-                        mainLayout.transitionName = Task::class.java.simpleName + uiState.task.id
-                    }
+                    else -> viewBinding.mainLayout.transitionName = Task::class.java.simpleName + uiState.task.id
                 }
             }
         }
