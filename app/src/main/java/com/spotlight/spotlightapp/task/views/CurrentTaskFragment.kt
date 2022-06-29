@@ -39,12 +39,22 @@ class CurrentTaskFragment() : Fragment(R.layout.fragment_current_task), ViewMode
     private val currentTaskViewModel: CurrentTaskViewModel by viewModels()
     private lateinit var viewBinding: FragmentCurrentTaskBinding
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        requireArguments().let {
+            currentTaskViewModel.setCurrentTask(
+                it.getParcelable(TASK)!!, it.getBoolean(WILL_ALLOW_EDIT))
+        }
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         viewBinding = FragmentCurrentTaskBinding.bind(view)
-        initializeViewModel()
         configureViews()
+        observeViewModel()
+        observeErrors()
         startPostponedEnterTransition()
     }
 
@@ -54,18 +64,11 @@ class CurrentTaskFragment() : Fragment(R.layout.fragment_current_task), ViewMode
     override val snackbarLayout: View
         get() = viewBinding.mainLayout
 
-    private fun initializeViewModel() {
-        observeErrors()
-        currentTaskViewModel.apply {
-            requireArguments().let {
-                setCurrentTask(it.getParcelable(TASK)!!, it.getBoolean(WILL_ALLOW_EDIT))
-            }
-
-            currentTaskUIState.observe(viewLifecycleOwner) { uiState ->
-                when {
-                    uiState.completeTaskResult != null -> parentFragmentManager.popBackStack()
-                    else -> viewBinding.mainLayout.transitionName = Task::class.java.simpleName + uiState.task.id
-                }
+    private fun observeViewModel() {
+        currentTaskViewModel.currentTaskUIState.observe(viewLifecycleOwner) { uiState ->
+            when {
+                uiState.completeTaskResult != null -> parentFragmentManager.popBackStack()
+                else -> viewBinding.mainLayout.transitionName = Task::class.java.simpleName + uiState.task.id
             }
         }
     }
