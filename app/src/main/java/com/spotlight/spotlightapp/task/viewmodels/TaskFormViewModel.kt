@@ -31,8 +31,12 @@ class TaskFormViewModel @Inject constructor(private val tasksRepository: TasksRe
                 MAX_TASK_TITLE_CHARACTERS, false))
     }
 
-    private val mutableHasDescription: MutableLiveData<Boolean> by lazy {
-        MutableLiveData<Boolean>()
+    private val mutableHasValidTitle: MutableLiveData<Boolean> by lazy {
+        MutableLiveData<Boolean>(false)
+    }
+
+    private val mutableHasValidDescription: MutableLiveData<Boolean> by lazy {
+        MutableLiveData<Boolean>(false)
     }
 
     private val mutableIsFormSubmitted: MutableLiveData<Boolean> by lazy {
@@ -40,16 +44,27 @@ class TaskFormViewModel @Inject constructor(private val tasksRepository: TasksRe
     }
 
     private var title: String = ""
+        set(value) {
+            field = value
+
+            mutableHasValidTitle.value = value.isNotBlank() && (value != initialTask.value?.title)
+        }
+
     private var description: String = ""
+        set(value) {
+            field = value
+
+            mutableHasValidDescription.value = value.isNotBlank() && (value != initialTask.value?.description)
+        }
 
     val initialTask: LiveData<Task> = mutableInitialTask
     val titleCharacterCountData: LiveData<CharacterCountData> = mutableTitleCharacterCountData
     val isFormValid: MediatorLiveData<Boolean> = MediatorLiveData<Boolean>().apply {
         val onChangedListener = {
-            value = title.isNotBlank() && description.isNotBlank()
+            value = mutableHasValidTitle.value!! && mutableHasValidDescription.value!!
         }
-        addSource(mutableTitleCharacterCountData) { onChangedListener() }
-        addSource(mutableHasDescription) { onChangedListener() }
+        addSource(mutableHasValidTitle) { onChangedListener() }
+        addSource(mutableHasValidDescription) { onChangedListener() }
     }
     val isFormSubmitted: LiveData<Boolean> = mutableIsFormSubmitted
 
@@ -79,10 +94,7 @@ class TaskFormViewModel @Inject constructor(private val tasksRepository: TasksRe
     }
 
     fun updateDescription(description: String?) {
-        description.let {
-            this.description = it ?: ""
-            mutableHasDescription.value = this.description.isNotBlank()
-        }
+        this.description = description ?: ""
     }
 
     fun saveTask() {
