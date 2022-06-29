@@ -18,13 +18,14 @@
         tools:background="?attr/colorPrimary">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/taskRecyclerView"
+            android:id="@+id/tasksRecyclerView"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:clipToPadding="false"
             android:paddingHorizontal="20dp"
             android:paddingTop="32dp"
             android:paddingBottom="100dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
