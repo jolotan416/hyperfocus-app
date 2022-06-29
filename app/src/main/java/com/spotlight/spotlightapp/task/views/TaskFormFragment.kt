@@ -11,10 +11,11 @@ import com.spotlight.spotlightapp.R
 import com.spotlight.spotlightapp.data.task.Task
 import com.spotlight.spotlightapp.databinding.FragmentTaskFormBinding
 import com.spotlight.spotlightapp.task.viewmodels.TaskFormViewModel
-import com.spotlight.spotlightapp.utilities.viewmodelutils.BaseViewModel
+import com.spotlight.spotlightapp.utilities.viewmodelutils.ErrorHolder
 import com.spotlight.spotlightapp.utilities.viewmodelutils.ViewModelErrorListener
 import com.spotlight.spotlightapp.utilities.viewmodelutils.observeErrors
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class TaskFormFragment : Fragment(R.layout.fragment_task_form), ViewModelErrorListener {
@@ -23,6 +24,9 @@ class TaskFormFragment : Fragment(R.layout.fragment_task_form), ViewModelErrorLi
 
         const val TASK = "task"
     }
+
+    @Inject
+    lateinit var mErrorHolder: ErrorHolder
 
     private val taskFormViewModel: TaskFormViewModel by viewModels()
     private lateinit var binding: FragmentTaskFormBinding
@@ -47,8 +51,8 @@ class TaskFormFragment : Fragment(R.layout.fragment_task_form), ViewModelErrorLi
         startPostponedEnterTransition()
     }
 
-    override val baseViewModel: BaseViewModel
-        get() = taskFormViewModel
+    override val errorHolder: ErrorHolder
+        get() = mErrorHolder
 
     override val snackbarLayout: View
         get() = binding.root

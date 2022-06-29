@@ -21,20 +21,24 @@ import com.spotlight.spotlightapp.R
 import com.spotlight.spotlightapp.data.task.Task
 import com.spotlight.spotlightapp.databinding.FragmentCurrentTaskBinding
 import com.spotlight.spotlightapp.task.viewmodels.CurrentTaskViewModel
-import com.spotlight.spotlightapp.utilities.viewmodelutils.BaseViewModel
+import com.spotlight.spotlightapp.utilities.viewmodelutils.ErrorHolder
 import com.spotlight.spotlightapp.utilities.viewmodelutils.ViewModelErrorListener
 import com.spotlight.spotlightapp.utilities.viewmodelutils.observeErrors
 import com.spotlight.spotlightapp.utilities.viewutils.ComposeTextConfiguration
 import com.spotlight.spotlightapp.view.CustomComposeViews
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
-class CurrentTaskFragment() : Fragment(R.layout.fragment_current_task), ViewModelErrorListener {
+class CurrentTaskFragment : Fragment(R.layout.fragment_current_task), ViewModelErrorListener {
     companion object {
         const val TAG = "CurrentTaskFragment"
         const val TASK = "task"
         const val WILL_ALLOW_EDIT = "will_allow_edit"
     }
+
+    @Inject
+    lateinit var mErrorHolder: ErrorHolder
 
     private val currentTaskViewModel: CurrentTaskViewModel by viewModels()
     private lateinit var viewBinding: FragmentCurrentTaskBinding
@@ -58,8 +62,8 @@ class CurrentTaskFragment() : Fragment(R.layout.fragment_current_task), ViewMode
         startPostponedEnterTransition()
     }
 
-    override val baseViewModel: BaseViewModel
-        get() = currentTaskViewModel
+    override val errorHolder: ErrorHolder
+        get() = mErrorHolder
 
     override val snackbarLayout: View
         get() = viewBinding.mainLayout

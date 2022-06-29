@@ -8,7 +8,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.spotlight.spotlightapp.R
 
 interface ViewModelErrorListener {
-    val baseViewModel: BaseViewModel
+    val errorHolder: ErrorHolder
     val snackbarLayout: View
 }
 
@@ -20,7 +20,7 @@ fun ViewModelErrorListener.observeErrors() {
             "ViewModelErrorListener can only be either an instance of  AppCompatActivity or Fragment")
     }
 
-    baseViewModel.snackbarErrorMessageRes.observe(lifecycleOwner) { errorEntity ->
+    errorHolder.snackbarErrorMessageRes.observe(lifecycleOwner) { errorEntity ->
         val snackbarErrorMessage = errorEntity?.let {
             context.getString(it.errorMessageRes, *it.errorMessageArguments)
         } ?: return@observe
@@ -29,6 +29,6 @@ fun ViewModelErrorListener.observeErrors() {
             .setTextColor(ContextCompat.getColor(context, R.color.primaryWhite))
             .show()
 
-        baseViewModel.notifySnackbarMessageShown()
+        errorHolder.notifySnackbarMessageShown()
     }
 }
