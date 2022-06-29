@@ -52,10 +52,6 @@ class PendingTaskListFragment(private val taskPageRouter: TaskPageRouter)
     }
 
     private fun configureViews() {
-        configureTaskRecyclerView()
-    }
-
-    private fun configureTaskRecyclerView() {
         viewBinding.tasksRecyclerView.apply {
             adapter = pendingTaskListAdapter
             setHasFixedSize(true)
