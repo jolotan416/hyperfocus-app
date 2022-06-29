@@ -2,13 +2,15 @@ package com.spotlight.spotlightapp.utilities.viewmodelutils
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import com.spotlight.spotlightapp.data.ErrorEntity
 import com.spotlight.spotlightapp.data.Result
+import dagger.hilt.android.scopes.ActivityRetainedScoped
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-open class BaseViewModel : ViewModel() {
+@ActivityRetainedScoped
+class ErrorHolder @Inject constructor() {
     private val mSnackbarErrorMessageRes: MutableLiveData<ErrorEntity?> by lazy {
         MutableLiveData<ErrorEntity?>(null)
     }
@@ -19,7 +21,7 @@ open class BaseViewModel : ViewModel() {
         mSnackbarErrorMessageRes.value = null
     }
 
-    protected suspend fun <R> handleRepositoryResult(
+    suspend fun <R> handleRepositoryResult(
         result: Result<R>, successHandling: (Result.Success<R>) -> Unit = {}) {
         withContext(Dispatchers.Main) {
             when (result) {

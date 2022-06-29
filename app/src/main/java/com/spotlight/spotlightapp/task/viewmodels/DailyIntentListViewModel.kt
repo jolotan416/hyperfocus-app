@@ -1,17 +1,17 @@
 package com.spotlight.spotlightapp.task.viewmodels
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import com.spotlight.spotlightapp.data.task.Task
 import com.spotlight.spotlightapp.task.repo.TasksRepository
-import com.spotlight.spotlightapp.utilities.viewmodelutils.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 @HiltViewModel
 class DailyIntentListViewModel @Inject constructor(private val tasksRepository: TasksRepository)
-    : BaseViewModel() {
+    : ViewModel() {
     val dailyIntentList: LiveData<List<Task>>
         get() = tasksRepository.dailyIntentList.asLiveData()
 

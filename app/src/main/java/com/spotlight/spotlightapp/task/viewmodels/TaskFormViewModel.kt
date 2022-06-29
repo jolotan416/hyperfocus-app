@@ -1,21 +1,19 @@
 package com.spotlight.spotlightapp.task.viewmodels
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.spotlight.spotlightapp.data.task.Task
 import com.spotlight.spotlightapp.task.repo.TasksRepository
 import com.spotlight.spotlightapp.task.viewdata.CharacterCountData
-import com.spotlight.spotlightapp.utilities.viewmodelutils.BaseViewModel
+import com.spotlight.spotlightapp.utilities.viewmodelutils.ErrorHolder
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class TaskFormViewModel @Inject constructor(private val tasksRepository: TasksRepository) :
-    BaseViewModel() {
+class TaskFormViewModel @Inject constructor(
+    private val errorHolder: ErrorHolder, private val tasksRepository: TasksRepository) :
+    ViewModel() {
     companion object {
         private const val MAX_TASK_TITLE_CHARACTERS = 140
     }
@@ -108,7 +106,7 @@ class TaskFormViewModel @Inject constructor(private val tasksRepository: TasksRe
                 })
             }
 
-            handleRepositoryResult(result) {
+            errorHolder.handleRepositoryResult(result) {
                 mutableIsFormSubmitted.value = true
             }
         }
