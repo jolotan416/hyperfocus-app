@@ -34,10 +34,7 @@ class CompletedTaskListAdapter(private val callback: Callback) :
             oldItem.id == newItem.id
 
         override fun areContentsTheSame(oldItem: Task, newItem: Task) =
-            oldItem.title == newItem.title &&
-                    oldItem.description == newItem.description &&
-                    oldItem.priority == newItem.priority &&
-                    oldItem.isFinished == newItem.isFinished
+            oldItem == newItem
     })
 
     override fun getItemCount(): Int = asyncListDiffer.currentList.size
