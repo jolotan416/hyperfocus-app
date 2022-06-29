@@ -1,4 +1,4 @@
-package com.spotlight.spotlightapp.data
+package com.spotlight.spotlightapp.task.viewdata
 
 data class CharacterCountData(
     val maxCharacterCount: Int,
