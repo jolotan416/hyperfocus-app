@@ -133,6 +133,7 @@ class CurrentTaskFragment() : Fragment(R.layout.fragment_current_task), ViewMode
                             contentColor = colorResource(id = R.color.primaryWhite))) {}
                 }
                 !isTaskFinished -> {
+                    // TODO: Make labelText for the timer value Button dynamic
                     CustomComposeViews.Button(
                         modifier = Modifier
                             .weight(1f)
