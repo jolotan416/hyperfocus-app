@@ -10,7 +10,7 @@ import com.spotlight.spotlightapp.data.task.Task
 import com.spotlight.spotlightapp.databinding.NewTaskItemBinding
 import com.spotlight.spotlightapp.databinding.PendingTaskListItemBinding
 
-class PendingTaskListAdapter(private val callback: PendingTaskListCallback)
+class PendingTaskListAdapter(private val callback: Callback)
     : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     companion object {
         const val TASK_ITEM_PADDING = 12f
@@ -74,7 +74,7 @@ class PendingTaskListAdapter(private val callback: PendingTaskListCallback)
         }
     }
 
-    interface PendingTaskListCallback {
+    interface Callback {
         fun createTask(view: View)
         fun editTask(view: View, task: Task)
         fun selectPendingTask(task: Task)

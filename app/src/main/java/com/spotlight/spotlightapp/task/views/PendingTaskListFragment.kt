@@ -19,7 +19,7 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class PendingTaskListFragment(private val taskPageRouter: TaskPageRouter)
     : Fragment(R.layout.fragment_pending_task_list), ViewModelErrorListener,
-    PendingTaskListAdapter.PendingTaskListCallback {
+    PendingTaskListAdapter.Callback {
     private lateinit var viewBinding: FragmentPendingTaskListBinding
     private val viewModel: PendingTaskListViewModel by viewModels()
     private val pendingTaskListAdapter = PendingTaskListAdapter(this)
