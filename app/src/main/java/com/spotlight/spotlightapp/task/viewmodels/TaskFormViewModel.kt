@@ -4,9 +4,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.spotlight.spotlightapp.task.viewdata.CharacterCountData
 import com.spotlight.spotlightapp.data.task.Task
 import com.spotlight.spotlightapp.task.repo.TasksRepository
+import com.spotlight.spotlightapp.task.viewdata.CharacterCountData
 import com.spotlight.spotlightapp.utilities.viewmodelutils.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -68,7 +68,7 @@ class TaskFormViewModel @Inject constructor(private val tasksRepository: TasksRe
             mutableTitleCharacterCountData.value = titleCharacterCountData.value!!.apply {
                 this.charactersRemaining = charactersRemaining
             }
-            updateTitleCharacterCountVisibility(false)
+            updateTitleCharacterCountVisibility(true)
         }
     }
 
