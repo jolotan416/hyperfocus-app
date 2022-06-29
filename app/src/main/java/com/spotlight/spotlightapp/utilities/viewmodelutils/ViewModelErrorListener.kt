@@ -22,11 +22,11 @@ fun ViewModelErrorListener.observeErrors() {
 
     baseViewModel.snackbarErrorMessageRes.observe(lifecycleOwner) { errorEntity ->
         val snackbarErrorMessage = errorEntity?.let {
-            context.getString(it.errorMessageRes, *it.arguments)
+            context.getString(it.errorMessageRes, *it.errorMessageArguments)
         } ?: return@observe
         Snackbar.make(snackbarLayout, snackbarErrorMessage, Snackbar.LENGTH_LONG)
-            .setBackgroundTint(ContextCompat.getColor(context, R.color.primaryWhite))
-            .setTextColor(ContextCompat.getColor(context, R.color.primaryBlack))
+            .setBackgroundTint(ContextCompat.getColor(context, R.color.functionRed))
+            .setTextColor(ContextCompat.getColor(context, R.color.primaryWhite))
             .show()
 
         baseViewModel.notifySnackbarMessageShown()
