@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.spotlight.spotlightapp.R
 import com.spotlight.spotlightapp.data.task.Task
 import com.spotlight.spotlightapp.databinding.FragmentDailyIntentListBinding
@@ -21,9 +20,10 @@ import dagger.hilt.android.AndroidEntryPoint
 class DailyIntentListFragment(private val taskPageRouter: TaskPageRouter)
     : Fragment(R.layout.fragment_daily_intent_list), ViewModelErrorListener,
     DailyIntentListAdapter.Callback {
-    private val viewModel: DailyIntentListViewModel by viewModels()
     private lateinit var viewBinding: FragmentDailyIntentListBinding
-    private lateinit var dailyIntentListAdapter: DailyIntentListAdapter
+
+    private val viewModel: DailyIntentListViewModel by viewModels()
+    private val dailyIntentListAdapter: DailyIntentListAdapter = DailyIntentListAdapter(this)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -50,11 +50,8 @@ class DailyIntentListFragment(private val taskPageRouter: TaskPageRouter)
     }
 
     private fun configureTasksRecyclerView() {
-        dailyIntentListAdapter = DailyIntentListAdapter(this)
-
-        viewBinding.taskRecyclerView.apply {
+        viewBinding.tasksRecyclerView.apply {
             adapter = dailyIntentListAdapter
-            layoutManager = LinearLayoutManager(requireContext())
             setHasFixedSize(true)
             addItemDecoration(
                 MarginItemDecoration(resources, DailyIntentListAdapter.TASK_ITEM_PADDING))
