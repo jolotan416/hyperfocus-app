@@ -9,45 +9,45 @@ import androidx.recyclerview.widget.RecyclerView
 import com.spotlight.spotlightapp.data.task.Task
 import com.spotlight.spotlightapp.databinding.NewTaskItemBinding
 import com.spotlight.spotlightapp.databinding.PendingTaskListItemBinding
+import com.spotlight.spotlightapp.utilities.viewutils.RecyclerViewType
 
 class PendingTaskListAdapter(private val callback: Callback)
     : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     companion object {
         const val TASK_ITEM_PADDING = 12f
-
-        private const val TASK_ITEM_TYPE = 0
-        private const val NEW_TASK_CTA_ITEM_TYPE = 1
     }
 
-    private val asyncListDiffer = AsyncListDiffer(this, object : DiffUtil.ItemCallback<Task>() {
-        override fun areItemsTheSame(oldItem: Task, newItem: Task) =
-            oldItem.id == newItem.id
+    private val asyncListDiffer = AsyncListDiffer(
+        this, object : DiffUtil.ItemCallback<RecyclerViewType<Task>>() {
+            override fun areItemsTheSame(
+                oldItem: RecyclerViewType<Task>, newItem: RecyclerViewType<Task>) =
+                oldItem.isEqual(newItem) { firstItem, secondItem -> firstItem.id == secondItem?.id }
 
-        override fun areContentsTheSame(oldItem: Task, newItem: Task) =
-            oldItem == newItem
-    })
+            override fun areContentsTheSame(
+                oldItem: RecyclerViewType<Task>, newItem: RecyclerViewType<Task>) =
+                oldItem.isEqual(newItem) { firstItem, secondItem -> firstItem == secondItem }
+        })
 
-    override fun getItemCount() = asyncListDiffer.currentList.size + 1
-
-    override fun getItemViewType(position: Int) =
-        if (position in asyncListDiffer.currentList.indices) TASK_ITEM_TYPE
-        else NEW_TASK_CTA_ITEM_TYPE
+    override fun getItemCount() = asyncListDiffer.currentList.size
+    override fun getItemViewType(position: Int) = asyncListDiffer.currentList[position].viewTypeInt
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
-        if (viewType == TASK_ITEM_TYPE) TaskItemViewHolder(
-            PendingTaskListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false))
-        else NewTaskItemViewHolder(
+        if (viewType == RecyclerViewType.FOOTER_VIEW_TYPE) NewTaskItemViewHolder(
             NewTaskItemBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+        else TaskItemViewHolder(
+            PendingTaskListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false))
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
-            is TaskItemViewHolder -> holder.bind(asyncListDiffer.currentList[position])
+            is TaskItemViewHolder -> holder.bind(
+                (asyncListDiffer.currentList[position] as RecyclerViewType.Item<Task>).content)
             is NewTaskItemViewHolder -> holder.bind()
         }
     }
 
     fun setItems(tasks: List<Task>) {
-        asyncListDiffer.submitList(tasks)
+        asyncListDiffer.submitList(
+            tasks.map { RecyclerViewType.Item(it) } + listOf(RecyclerViewType.Footer()))
     }
 
     inner class TaskItemViewHolder(private val binding: PendingTaskListItemBinding)
