@@ -13,30 +13,33 @@ import androidx.recyclerview.widget.RecyclerView
 import com.spotlight.spotlightapp.R
 import com.spotlight.spotlightapp.data.task.Task
 import com.spotlight.spotlightapp.databinding.DailyIntentListItemBinding
+import com.spotlight.spotlightapp.utilities.viewutils.RecyclerViewType
 
 class DailyIntentListAdapter(private val callback: Callback)
     : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     companion object {
         const val TASK_ITEM_PADDING = 12f
 
-        private const val ITEM_VIEW_TYPE = 0
-        private const val TITLE_VIEW_TYPE = 1
-
         private const val TITLE_TEXT_SIZE = 16f
         private const val TITLE_BOTTOM_PADDING = 8f
     }
 
-    private val asyncListDiffer = AsyncListDiffer(this, object : DiffUtil.ItemCallback<Task>() {
-        override fun areItemsTheSame(oldItem: Task, newItem: Task) = oldItem.id == newItem.id
-        override fun areContentsTheSame(oldItem: Task, newItem: Task) = oldItem == newItem
-    })
+    private val asyncListDiffer = AsyncListDiffer(
+        this, object : DiffUtil.ItemCallback<RecyclerViewType<Task>>() {
+            override fun areItemsTheSame(
+                oldItem: RecyclerViewType<Task>, newItem: RecyclerViewType<Task>) =
+                oldItem.isEqual(newItem) { firstItem, secondItem -> firstItem.id == secondItem?.id }
 
-    override fun getItemCount() = asyncListDiffer.currentList.size + 1
-    override fun getItemViewType(position: Int) =
-        if (position == 0) TITLE_VIEW_TYPE else ITEM_VIEW_TYPE
+            override fun areContentsTheSame(
+                oldItem: RecyclerViewType<Task>, newItem: RecyclerViewType<Task>) =
+                oldItem.isEqual(newItem) { firstItem, secondItem -> firstItem == secondItem }
+        })
+
+    override fun getItemCount() = asyncListDiffer.currentList.size
+    override fun getItemViewType(position: Int) = asyncListDiffer.currentList[position].viewTypeInt
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
-        if (viewType == TITLE_VIEW_TYPE) {
+        if (viewType == RecyclerViewType.HEADER_VIEW_TYPE) {
             TitleViewHolder(TextView(parent.context))
         } else {
             ItemViewHolder(
@@ -47,12 +50,15 @@ class DailyIntentListAdapter(private val callback: Callback)
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
             is TitleViewHolder -> holder.configure()
-            is ItemViewHolder -> holder.bindData(asyncListDiffer.currentList[position - 1])
+            is ItemViewHolder -> holder.bindData(
+                (asyncListDiffer.currentList[position] as RecyclerViewType.Item<Task>).content)
         }
     }
 
     fun setItems(tasks: List<Task>) {
-        asyncListDiffer.submitList(tasks)
+        asyncListDiffer.submitList(listOf(RecyclerViewType.Header<Task>()) + tasks.map {
+            RecyclerViewType.Item(it)
+        })
     }
 
     inner class TitleViewHolder(private val textView: TextView) :
