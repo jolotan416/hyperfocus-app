@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.spotlight.spotlightapp.R
 import com.spotlight.spotlightapp.data.task.Task
 import com.spotlight.spotlightapp.databinding.DailyIntentListItemBinding
+import com.spotlight.spotlightapp.task.viewdata.TaskTransitionName
 import com.spotlight.spotlightapp.utilities.viewutils.RecyclerViewType
 
 class DailyIntentListAdapter(private val callback: Callback)
@@ -86,7 +87,8 @@ class DailyIntentListAdapter(private val callback: Callback)
                 this.task = task
 
                 root.apply {
-                    transitionName = Task::class.java.simpleName + task.id
+                    transitionName = TaskTransitionName.CURRENT_TASK.getTransitionName(
+                        task.id.toString())
                     setOnClickListener {
                         callback.onTaskSelected(this, task)
                     }

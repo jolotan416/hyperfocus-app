@@ -30,6 +30,8 @@ class TasksRepository @Inject constructor(
                 .sortedBy { it.priority }
         }
 
+    fun observeTask(taskId: Int): Flow<Task> = localDataSource.observeTask(taskId)
+
     suspend fun insertTask(task: Task): Result<Any?> {
         return repositoryErrorHandler.handleGeneralRepositoryOperation {
             localDataSource.insertTask(task)

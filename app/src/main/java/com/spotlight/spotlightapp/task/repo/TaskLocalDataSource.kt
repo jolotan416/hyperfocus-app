@@ -7,6 +7,7 @@ import javax.inject.Inject
 
 class TaskLocalDataSource @Inject constructor(private val taskDao: TaskDao) {
     fun observeTasks(): Flow<List<Task>> = taskDao.observeTasks()
+    fun observeTask(taskId: Int): Flow<Task> = taskDao.observeTask(taskId)
 
     suspend fun getTasks(): List<Task> = taskDao.getTasks()
 
