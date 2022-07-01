@@ -9,6 +9,7 @@ import com.spotlight.spotlightapp.data.task.Task
 import com.spotlight.spotlightapp.databinding.FragmentDailyIntentListBinding
 import com.spotlight.spotlightapp.task.TaskPageRouter
 import com.spotlight.spotlightapp.task.adapters.DailyIntentListAdapter
+import com.spotlight.spotlightapp.task.viewdata.TaskTransitionName
 import com.spotlight.spotlightapp.task.viewmodels.DailyIntentListViewModel
 import com.spotlight.spotlightapp.utilities.viewutils.MarginItemDecoration
 import dagger.hilt.android.AndroidEntryPoint
@@ -49,8 +50,11 @@ class DailyIntentListFragment(private val taskPageRouter: TaskPageRouter)
     }
 
     private fun configureAddButton() {
-        viewBinding.addButton.setOnClickListener {
-            taskPageRouter.openTaskList(viewBinding.addButton)
+        viewBinding.addButton.apply {
+            setOnClickListener {
+                taskPageRouter.openTaskList(viewBinding.addButton)
+            }
+            transitionName = TaskTransitionName.TASK_LIST.getTransitionName()
         }
     }
 

@@ -8,10 +8,12 @@ import com.spotlight.spotlightapp.R
 import com.spotlight.spotlightapp.databinding.FragmentTasksBinding
 import com.spotlight.spotlightapp.task.TaskPageRouter
 import com.spotlight.spotlightapp.task.adapters.TasksAdapter
+import com.spotlight.spotlightapp.task.viewdata.TaskTransitionName
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class TasksFragment(private val taskPageRouter: TaskPageRouter) : Fragment(R.layout.fragment_tasks) {
+class TasksFragment(private val taskPageRouter: TaskPageRouter) :
+    Fragment(R.layout.fragment_tasks) {
     companion object {
         const val TAG = "TasksFragment"
     }
@@ -22,8 +24,17 @@ class TasksFragment(private val taskPageRouter: TaskPageRouter) : Fragment(R.lay
         super.onViewCreated(view, savedInstanceState)
 
         viewBinding = FragmentTasksBinding.bind(view)
-        configureViewPager()
+        configureViews()
         startPostponedEnterTransition()
+    }
+
+    private fun configureViews() {
+        configureToolbar()
+        configureViewPager()
+    }
+
+    private fun configureToolbar() {
+        viewBinding.appToolbar.transitionName = TaskTransitionName.TASK_LIST.getTransitionName()
     }
 
     private fun configureViewPager() {

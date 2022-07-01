@@ -10,9 +10,9 @@
         android:orientation="vertical">
 
         <com.spotlight.spotlightapp.view.AppToolbar
+            android:id="@+id/appToolbar"
             android:layout_width="match_parent"
             android:layout_height="?android:attr/actionBarSize"
-            android:transitionName="task_list"
             spotlight:backButtonIcon="@{@drawable/ic_close_button}"
             spotlight:componentTint="@{@color/primaryWhite}"
             spotlight:titleText="@{@string/your_tasks}" />

@@ -20,6 +20,7 @@ import androidx.fragment.app.viewModels
 import com.spotlight.spotlightapp.R
 import com.spotlight.spotlightapp.data.task.Task
 import com.spotlight.spotlightapp.databinding.FragmentCurrentTaskBinding
+import com.spotlight.spotlightapp.task.viewdata.TaskTransitionName
 import com.spotlight.spotlightapp.task.viewmodels.CurrentTaskViewModel
 import com.spotlight.spotlightapp.utilities.viewmodelutils.ErrorHolder
 import com.spotlight.spotlightapp.utilities.viewmodelutils.ViewModelErrorListener
@@ -72,7 +73,9 @@ class CurrentTaskFragment : Fragment(R.layout.fragment_current_task), ViewModelE
         currentTaskViewModel.currentTaskUIState.observe(viewLifecycleOwner) { uiState ->
             when {
                 uiState.completeTaskResult != null -> parentFragmentManager.popBackStack()
-                else -> viewBinding.mainLayout.transitionName = Task::class.java.simpleName + uiState.task.id
+                else -> viewBinding.mainLayout.transitionName = viewBinding.mainLayout.transitionName
+                    ?: (TaskTransitionName.CURRENT_TASK.getTransitionName(
+                        uiState.task.id.toString()))
             }
         }
     }

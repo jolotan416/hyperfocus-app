@@ -8,8 +8,8 @@ import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.spotlight.spotlightapp.R
-import com.spotlight.spotlightapp.data.task.Task
 import com.spotlight.spotlightapp.databinding.FragmentTaskFormBinding
+import com.spotlight.spotlightapp.task.viewdata.TaskTransitionName
 import com.spotlight.spotlightapp.task.viewmodels.TaskFormViewModel
 import com.spotlight.spotlightapp.utilities.viewmodelutils.ErrorHolder
 import com.spotlight.spotlightapp.utilities.viewmodelutils.ViewModelErrorListener
@@ -61,8 +61,8 @@ class TaskFormFragment : Fragment(R.layout.fragment_task_form), ViewModelErrorLi
         val viewModel = taskFormViewModel
 
         binding.apply {
-            root.transitionName = Task::class.java.simpleName +
-                    (viewModel.initialTask.value?.id ?: "")
+            root.transitionName = TaskTransitionName.TASK_FORM.getTransitionName(
+                viewModel.initialTask.value?.id?.toString() ?: "")
 
             taskTitleEditText.apply {
                 imeOptions = EditorInfo.IME_ACTION_NEXT

@@ -21,6 +21,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.spotlight.spotlightapp.R
 import com.spotlight.spotlightapp.data.task.Task
+import com.spotlight.spotlightapp.task.viewdata.TaskTransitionName
 import com.spotlight.spotlightapp.utilities.viewutils.ComposeTextConfiguration
 
 class CompletedTaskListAdapter(private val callback: Callback) :
@@ -59,7 +60,8 @@ class CompletedTaskListAdapter(private val callback: Callback) :
         RecyclerView.ViewHolder(composeView) {
         fun bindData(task: Task) {
             composeView.apply {
-                transitionName = Task::class.simpleName + task.id
+                transitionName = TaskTransitionName.CURRENT_TASK.getTransitionName(
+                    task.id.toString())
                 setContent {
                     CompletedTaskListCard(task = task)
                 }

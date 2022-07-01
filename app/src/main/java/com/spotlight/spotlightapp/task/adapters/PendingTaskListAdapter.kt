@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.spotlight.spotlightapp.data.task.Task
 import com.spotlight.spotlightapp.databinding.NewTaskItemBinding
 import com.spotlight.spotlightapp.databinding.PendingTaskListItemBinding
+import com.spotlight.spotlightapp.task.viewdata.TaskTransitionName
 import com.spotlight.spotlightapp.utilities.viewutils.RecyclerViewType
 
 class PendingTaskListAdapter(private val callback: Callback)
@@ -56,7 +57,8 @@ class PendingTaskListAdapter(private val callback: Callback)
             binding.apply {
                 this.task = task
                 taskPriorityButton.setOnClickListener { callback.selectPendingTask(task) }
-                root.transitionName = Task::class.java.simpleName + task.id
+                root.transitionName = TaskTransitionName.CURRENT_TASK.getTransitionName(
+                    task.id.toString())
                 root.setOnClickListener { callback.editTask(root, task) }
             }
         }
@@ -66,7 +68,7 @@ class PendingTaskListAdapter(private val callback: Callback)
         : RecyclerView.ViewHolder(binding.root) {
         fun bind() {
             binding.root.apply {
-                transitionName = Task::class.java.simpleName
+                transitionName = TaskTransitionName.TASK_FORM.getTransitionName()
                 setOnClickListener {
                     callback.createTask(this)
                 }

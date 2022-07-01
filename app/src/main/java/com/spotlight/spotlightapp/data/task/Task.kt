@@ -2,7 +2,6 @@ package com.spotlight.spotlightapp.data.task
 
 import android.os.Parcelable
 import androidx.room.ColumnInfo
-import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import kotlinx.parcelize.Parcelize
@@ -25,6 +24,12 @@ data class Task(
     @ColumnInfo(name = "is_finished", defaultValue = "false")
     var isFinished: Boolean = false
 ) : Parcelable {
+    companion object {
+        val sampleTask = Task(
+            title = "This is a very long title to check task preview",
+            description = "This is a very long task description to check task preview")
+    }
+
     val isInDailyIntentList: Boolean
         get() = priority != 0
 }
