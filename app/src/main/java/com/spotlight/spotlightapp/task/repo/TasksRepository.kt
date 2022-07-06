@@ -52,12 +52,13 @@ class TasksRepository @Inject constructor(
         }
     }
 
-    suspend fun completeTask(task: Task): Result<Task> {
+    suspend fun toggleTaskFinished(task: Task): Result<Task> {
         return repositoryErrorHandler.handleGeneralRepositoryOperation {
+            val isTaskFinished = task.isFinished
             val updatedTask = task.apply {
-                isFinished = true
+                isFinished = !isTaskFinished
             }
-            updateTask(updatedTask, false)
+            updateTask(updatedTask, !isTaskFinished)
         }
     }
 

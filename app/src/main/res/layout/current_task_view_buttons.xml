@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/apk/res-auto"
+    xmlns:spotlight="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="willShowEditButtons"
+            type="Boolean" />
+
+        <variable
+            name="isTaskFinished"
+            type="Boolean" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <include
+            android:id="@+id/editButton"
+            layout="@layout/rounded_button"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            bind:backgroundTint="@{@color/functionBlue}"
+            bind:buttonDrawable="@{@drawable/ic_edit}"
+            spotlight:willShow="@{willShowEditButtons &amp;&amp; !isTaskFinished}"
+            tools:visibility="gone" />
+
+        <include
+            android:id="@+id/deleteButton"
+            layout="@layout/rounded_button"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="4dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/doneButtonBarrier"
+            app:layout_constraintStart_toEndOf="@id/editButton"
+            app:layout_constraintTop_toTopOf="parent"
+            bind:backgroundTint="@{@color/functionRed}"
+            bind:buttonDrawable="@{@drawable/ic_delete}"
+            spotlight:willShow="@{willShowEditButtons &amp;&amp; !isTaskFinished}"
+            tools:visibility="gone" />
+
+        <include
+            android:id="@+id/timeButton"
+            layout="@layout/rounded_button"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_percent="0.375"
+            bind:backgroundTint="@{@color/functionBlue}"
+            bind:buttonDrawable="@{@drawable/ic_bell}"
+            bind:buttonText="@{`1 hour`}"
+            spotlight:willShow="@{!willShowEditButtons &amp;&amp; !isTaskFinished}"
+            tools:visibility="gone" />
+
+        <include
+            android:id="@+id/startButton"
+            layout="@layout/rounded_button"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="12dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/doneButtonBarrier"
+            app:layout_constraintStart_toEndOf="@id/timeButton"
+            app:layout_constraintTop_toTopOf="parent"
+            bind:backgroundTint="@{@color/functionBlue}"
+            bind:buttonDrawable="@{@drawable/ic_play}"
+            spotlight:willShow="@{!willShowEditButtons &amp;&amp; !isTaskFinished}"
+            tools:visibility="gone" />
+
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/doneButtonBarrier"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:barrierAllowsGoneWidgets="false"
+            app:barrierDirection="end"
+            app:constraint_referenced_ids="deleteButton, startButton" />
+
+        <include
+            android:id="@+id/doneButton"
+            layout="@layout/rounded_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/doneButtonBarrier"
+            app:layout_constraintTop_toTopOf="parent"
+            bind:backgroundTint="@{@color/functionGreen}"
+            bind:buttonDrawable="@{isTaskFinished ? null : @drawable/ic_check}"
+            bind:buttonText="@{isTaskFinished ? @string/return_to_list : @string/done}" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

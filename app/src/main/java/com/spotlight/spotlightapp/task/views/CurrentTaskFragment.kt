@@ -1,37 +1,38 @@
 package com.spotlight.spotlightapp.task.views
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.viewinterop.AndroidView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.spotlight.spotlightapp.R
 import com.spotlight.spotlightapp.data.task.Task
+import com.spotlight.spotlightapp.databinding.CurrentTaskViewButtonsBinding
 import com.spotlight.spotlightapp.databinding.FragmentCurrentTaskBinding
+import com.spotlight.spotlightapp.task.TaskPageRouter
 import com.spotlight.spotlightapp.task.viewdata.TaskTransitionName
 import com.spotlight.spotlightapp.task.viewmodels.CurrentTaskViewModel
 import com.spotlight.spotlightapp.utilities.viewmodelutils.ErrorHolder
 import com.spotlight.spotlightapp.utilities.viewmodelutils.ViewModelErrorListener
 import com.spotlight.spotlightapp.utilities.viewmodelutils.observeErrors
 import com.spotlight.spotlightapp.utilities.viewutils.ComposeTextConfiguration
-import com.spotlight.spotlightapp.view.CustomComposeViews
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class CurrentTaskFragment : Fragment(R.layout.fragment_current_task), ViewModelErrorListener {
+class CurrentTaskFragment(private val taskPageRouter: TaskPageRouter) :
+    Fragment(R.layout.fragment_current_task), ViewModelErrorListener {
     companion object {
         const val TAG = "CurrentTaskFragment"
         const val TASK = "task"
@@ -69,6 +70,12 @@ class CurrentTaskFragment : Fragment(R.layout.fragment_current_task), ViewModelE
     override val snackbarLayout: View
         get() = viewBinding.mainLayout
 
+    private fun configureViews() {
+        viewBinding.composeView.setContent {
+            CurrentTaskLayout()
+        }
+    }
+
     private fun observeViewModel() {
         currentTaskViewModel.currentTaskUIState.observe(viewLifecycleOwner) { uiState ->
             when {
@@ -80,12 +87,6 @@ class CurrentTaskFragment : Fragment(R.layout.fragment_current_task), ViewModelE
         }
     }
 
-    private fun configureViews() {
-        viewBinding.composeView.setContent {
-            CurrentTaskLayout()
-        }
-    }
-
     @Composable
     private fun CurrentTaskLayout() {
         val currentTask = currentTaskViewModel.currentTaskUIState.observeAsState()
@@ -94,7 +95,7 @@ class CurrentTaskFragment : Fragment(R.layout.fragment_current_task), ViewModelE
             Column(modifier = Modifier.padding(20.dp), verticalArrangement = Arrangement.Center) {
                 CurrentTaskView(task = task)
                 Spacer(modifier = Modifier.height(56.dp))
-                CurrentTaskButtons(willShowEditButtons, task.isFinished)
+                CurrentTaskButtons(task = task, willShowEditButtons = willShowEditButtons)
             }
         }
     }
@@ -117,78 +118,25 @@ class CurrentTaskFragment : Fragment(R.layout.fragment_current_task), ViewModelE
     }
 
     @Composable
-    private fun CurrentTaskButtons(willShowEditButtons: Boolean, isTaskFinished: Boolean) {
-        Row(
-            modifier = Modifier
-                .height(IntrinsicSize.Min)
-                .fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically) {
-            when {
-                willShowEditButtons -> {
-                    CustomComposeViews.Button(
-                        modifier = Modifier
-                            .padding(end = 4.dp)
-                            .fillMaxHeight(),
-                        imageRes = R.drawable.ic_edit, labelText = null,
-                        buttonColors = ButtonDefaults.buttonColors(
-                            backgroundColor = colorResource(id = R.color.functionBlue),
-                            contentColor = colorResource(id = R.color.primaryWhite))) {}
-                    CustomComposeViews.Button(
-                        modifier = Modifier
-                            .padding(horizontal = 2.dp)
-                            .fillMaxHeight(),
-                        imageRes = R.drawable.ic_delete, labelText = null,
-                        buttonColors = ButtonDefaults.buttonColors(
-                            backgroundColor = colorResource(id = R.color.functionRed),
-                            contentColor = colorResource(id = R.color.primaryWhite))) {}
-                }
-                !isTaskFinished -> {
-                    // TODO: Make labelText for the timer value Button dynamic
-                    CustomComposeViews.Button(
-                        modifier = Modifier
-                            .weight(1f)
-                            .padding(end = 4.dp)
-                            .fillMaxWidth(),
-                        imageRes = 0, labelText = "1 hr",
-                        buttonColors = ButtonDefaults.buttonColors(
-                            backgroundColor = colorResource(id = R.color.functionBlue),
-                            contentColor = colorResource(id = R.color.primaryWhite))) {}
-                    CustomComposeViews.Button(
-                        modifier = Modifier
-                            .padding(start = 2.dp, end = 16.dp)
-                            .fillMaxHeight(),
-                        imageRes = R.drawable.ic_play, labelText = null,
-                        buttonColors = ButtonDefaults.buttonColors(
-                            backgroundColor = colorResource(id = R.color.functionBlue),
-                            contentColor = colorResource(id = R.color.primaryWhite))) {}
-                }
-            }
+    private fun CurrentTaskButtons(task: Task, willShowEditButtons: Boolean) {
+        AndroidView(factory = { context ->
+            CurrentTaskViewButtonsBinding.inflate(LayoutInflater.from(context)).apply {
+                this.willShowEditButtons = willShowEditButtons
+                this.isTaskFinished = task.isFinished
 
-            if (isTaskFinished) {
-                CustomComposeViews.Button(
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(start = 4.dp)
-                        .fillMaxWidth(),
-                    imageRes = 0, labelText = stringResource(id = R.string.return_to_list),
-                    buttonColors = ButtonDefaults.buttonColors(
-                        backgroundColor = colorResource(id = R.color.functionGreen),
-                        contentColor = colorResource(id = R.color.primaryWhite))) {
+                doneButton.root.setOnClickListener {
+                    currentTaskViewModel.toggleTaskFinished()
                 }
-            } else {
-                CustomComposeViews.Button(
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(start = 4.dp)
-                        .fillMaxWidth(),
-                    imageRes = R.drawable.ic_check, labelText = stringResource(id = R.string.done),
-                    buttonColors = ButtonDefaults.buttonColors(
-                        backgroundColor = colorResource(id = R.color.functionGreen),
-                        contentColor = colorResource(id = R.color.primaryWhite))) {
-                    currentTaskViewModel.completeTask()
+
+                editButton.root.apply {
+                    transitionName = TaskTransitionName.TASK_FORM.getTransitionName(
+                        task.id.toString())
+                    setOnClickListener {
+                        taskPageRouter.openTaskForm(this, task)
+                    }
                 }
-            }
-        }
+            }.root
+        }, modifier = Modifier.fillMaxWidth())
     }
 
     @Preview
@@ -198,23 +146,5 @@ class CurrentTaskFragment : Fragment(R.layout.fragment_current_task), ViewModelE
             task = Task(
                 title = "This is a very long title to check task preview",
                 description = "This is a very long task description to check task preview"))
-    }
-
-    @Preview
-    @Composable
-    private fun CurrentTaskEditButtons() {
-        CurrentTaskButtons(willShowEditButtons = true, false)
-    }
-
-    @Preview
-    @Composable
-    private fun CurrentTaskNonEditButtons() {
-        CurrentTaskButtons(willShowEditButtons = false, false)
-    }
-
-    @Preview
-    @Composable
-    private fun CompletedTaskButtons() {
-        CurrentTaskButtons(willShowEditButtons = false, isTaskFinished = true)
     }
 }
