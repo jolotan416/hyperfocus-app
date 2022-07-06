@@ -40,12 +40,12 @@ class CurrentTaskViewModel @Inject constructor(
         }
     }
 
-    fun completeTask() {
+    fun toggleTaskFinished() {
         val currentTaskUIState = mCurrentTaskUIState.value!!
 
         viewModelScope.launch(Dispatchers.IO) {
             errorHolder.handleRepositoryResult(
-                tasksRepository.completeTask(currentTaskUIState.task.copy())) { result ->
+                tasksRepository.toggleTaskFinished(currentTaskUIState.task.copy())) { result ->
                 mCurrentTaskUIState.value = CurrentTaskUIState(
                     result.content, currentTaskUIState.willShowEditButtons, result)
             }

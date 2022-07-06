@@ -25,7 +25,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main), TaskPageRouter {
         override fun instantiate(classLoader: ClassLoader, className: String): Fragment {
             return when (loadFragmentClass(classLoader, className)) {
                 DailyIntentListFragment::class.java -> DailyIntentListFragment(this@MainActivity)
-                CurrentTaskFragment::class.java -> CurrentTaskFragment().apply {
+                CurrentTaskFragment::class.java -> CurrentTaskFragment(this@MainActivity).apply {
                     addSharedElementTransition()
                 }
                 TasksFragment::class.java -> TasksFragment(this@MainActivity).apply {
