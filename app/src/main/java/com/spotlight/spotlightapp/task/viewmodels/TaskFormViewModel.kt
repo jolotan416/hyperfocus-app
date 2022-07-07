@@ -45,21 +45,22 @@ class TaskFormViewModel @Inject constructor(
         set(value) {
             field = value
 
-            mutableHasValidTitle.value = value.isNotBlank() && (value != initialTask.value?.title)
+            mutableHasValidTitle.value = value.isNotBlank()
         }
 
     private var description: String = ""
         set(value) {
             field = value
 
-            mutableHasValidDescription.value = value.isNotBlank() && (value != initialTask.value?.description)
+            mutableHasValidDescription.value = value.isNotBlank()
         }
 
     val initialTask: LiveData<Task> = mutableInitialTask
     val titleCharacterCountData: LiveData<CharacterCountData> = mutableTitleCharacterCountData
     val isFormValid: MediatorLiveData<Boolean> = MediatorLiveData<Boolean>().apply {
         val onChangedListener = {
-            value = mutableHasValidTitle.value!! && mutableHasValidDescription.value!!
+            value = mutableHasValidTitle.value!! && mutableHasValidDescription.value!! &&
+                    (title != initialTask.value?.title || description != initialTask.value?.description)
         }
         addSource(mutableHasValidTitle) { onChangedListener() }
         addSource(mutableHasValidDescription) { onChangedListener() }
