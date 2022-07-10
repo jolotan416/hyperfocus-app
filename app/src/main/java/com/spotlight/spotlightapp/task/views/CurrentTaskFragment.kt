@@ -10,10 +10,10 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.spotlight.spotlightapp.R
@@ -27,6 +27,7 @@ import com.spotlight.spotlightapp.utilities.viewmodelutils.ErrorHolder
 import com.spotlight.spotlightapp.utilities.viewmodelutils.ViewModelErrorListener
 import com.spotlight.spotlightapp.utilities.viewmodelutils.observeErrors
 import com.spotlight.spotlightapp.utilities.viewutils.ComposeTextConfiguration
+import com.spotlight.spotlightapp.utilities.viewutils.CustomAlertDialog
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -79,7 +80,7 @@ class CurrentTaskFragment(private val taskPageRouter: TaskPageRouter) :
     private fun observeViewModel() {
         currentTaskViewModel.currentTaskUIState.observe(viewLifecycleOwner) { uiState ->
             when {
-                uiState.completeTaskResult != null -> parentFragmentManager.popBackStack()
+                (uiState.deleteTaskResult != null || uiState.completeTaskResult != null) -> parentFragmentManager.popBackStack()
                 else -> viewBinding.mainLayout.transitionName = viewBinding.mainLayout.transitionName
                     ?: (TaskTransitionName.CURRENT_TASK.getTransitionName(
                         uiState.task.id.toString()))
@@ -135,16 +136,23 @@ class CurrentTaskFragment(private val taskPageRouter: TaskPageRouter) :
                         taskPageRouter.openTaskForm(this, task)
                     }
                 }
+
+                deleteButton.root.setOnClickListener {
+                    val customAlertDialogViewData = CustomAlertDialog.ViewData(
+                        title = getString(R.string.delete_task_dialog_title),
+                        negativeButtonViewData = CustomAlertDialog.ButtonViewData(
+                            getString(R.string.no),
+                            ContextCompat.getColor(context, R.color.primaryBlack)) {},
+                        positiveButtonViewData = CustomAlertDialog.ButtonViewData(
+                            getString(R.string.yes),
+                            ContextCompat.getColor(
+                                context,
+                                R.color.functionGreen)) { currentTaskViewModel.deleteTask() }
+                    )
+
+                    CustomAlertDialog(context, customAlertDialogViewData).show()
+                }
             }.root
         }, modifier = Modifier.fillMaxWidth())
-    }
-
-    @Preview
-    @Composable
-    private fun CurrentTaskViewPreview() {
-        CurrentTaskView(
-            task = Task(
-                title = "This is a very long title to check task preview",
-                description = "This is a very long task description to check task preview"))
     }
 }

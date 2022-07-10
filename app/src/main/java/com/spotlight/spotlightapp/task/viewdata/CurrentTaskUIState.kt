@@ -4,7 +4,8 @@ import com.spotlight.spotlightapp.data.Result
 import com.spotlight.spotlightapp.data.task.Task
 
 data class CurrentTaskUIState(
-    val task: Task,
-    val willShowEditButtons: Boolean,
-    val completeTaskResult: Result<Task>? = null
+    var task: Task,
+    var willShowEditButtons: Boolean,
+    var completeTaskResult: Result<Task>? = null,
+    var deleteTaskResult: Result<Any?>? = null
 )
