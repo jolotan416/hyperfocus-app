@@ -34,20 +34,30 @@ class CurrentTaskViewModel @Inject constructor(
         taskFlowObserverJob = viewModelScope.launch(Dispatchers.IO) {
             tasksRepository.observeTask(currentTask.id).collect { task ->
                 withContext(Dispatchers.Main) {
-                    mCurrentTaskUIState.value = CurrentTaskUIState(task, willAllowEdit)
+                    mCurrentTaskUIState.value = currentTaskUIState.value!!.copy(
+                        task = task ?: return@withContext)
                 }
             }
         }
     }
 
-    fun toggleTaskFinished() {
-        val currentTaskUIState = mCurrentTaskUIState.value!!
+    fun deleteTask() {
+        val task = currentTaskUIState.value!!.task
+        viewModelScope.launch(Dispatchers.IO) {
+            errorHolder.handleRepositoryResult(tasksRepository.deleteTask(task.copy())) { result ->
+                mCurrentTaskUIState.value = currentTaskUIState.value!!.copy(
+                    deleteTaskResult = result)
+            }
+        }
+    }
 
+    fun toggleTaskFinished() {
         viewModelScope.launch(Dispatchers.IO) {
             errorHolder.handleRepositoryResult(
-                tasksRepository.toggleTaskFinished(currentTaskUIState.task.copy())) { result ->
-                mCurrentTaskUIState.value = CurrentTaskUIState(
-                    result.content, currentTaskUIState.willShowEditButtons, result)
+                tasksRepository.toggleTaskFinished(
+                    currentTaskUIState.value!!.task.copy())) { result ->
+                mCurrentTaskUIState.value = currentTaskUIState.value!!.copy(
+                    task = result.content, completeTaskResult = result)
             }
         }
     }

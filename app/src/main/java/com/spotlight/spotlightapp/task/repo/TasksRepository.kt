@@ -30,7 +30,7 @@ class TasksRepository @Inject constructor(
                 .sortedBy { it.priority }
         }
 
-    fun observeTask(taskId: Int): Flow<Task> = localDataSource.observeTask(taskId)
+    fun observeTask(taskId: Int): Flow<Task?> = localDataSource.observeTask(taskId)
 
     suspend fun insertTask(task: Task): Result<Any?> {
         return repositoryErrorHandler.handleGeneralRepositoryOperation {
@@ -59,6 +59,14 @@ class TasksRepository @Inject constructor(
                 isFinished = !isTaskFinished
             }
             updateTask(updatedTask, !isTaskFinished)
+        }
+    }
+
+    suspend fun deleteTask(task: Task): Result<Any?> {
+        return repositoryErrorHandler.handleGeneralRepositoryOperation {
+            localDataSource.deleteTask(task)
+
+            Result.Success(null)
         }
     }
 
