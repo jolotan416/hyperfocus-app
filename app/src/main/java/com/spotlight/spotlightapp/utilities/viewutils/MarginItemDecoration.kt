@@ -12,8 +12,6 @@ class MarginItemDecoration(private val resources: Resources, private val itemPad
         outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
         super.getItemOffsets(outRect, view, parent, state)
 
-        outRect.bottom = TypedValue.applyDimension(
-            TypedValue.COMPLEX_UNIT_DIP, itemPadding, resources.displayMetrics)
-            .toInt()
+        outRect.bottom = itemPadding.dpToPx(resources)
     }
 }

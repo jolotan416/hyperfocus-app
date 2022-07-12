@@ -10,4 +10,6 @@
 
     <string name="yes">Yes</string>
     <string name="no">No</string>
+    <string name="set">Set</string>
+    <string name="cancel">Cancel</string>
 </resources>

@@ -15,6 +15,7 @@ import com.spotlight.spotlightapp.data.task.Task
 import com.spotlight.spotlightapp.databinding.DailyIntentListItemBinding
 import com.spotlight.spotlightapp.task.viewdata.TaskTransitionName
 import com.spotlight.spotlightapp.utilities.viewutils.RecyclerViewType
+import com.spotlight.spotlightapp.utilities.viewutils.dpToPx
 
 class DailyIntentListAdapter(private val callback: Callback)
     : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -72,10 +73,7 @@ class DailyIntentListAdapter(private val callback: Callback)
                 textSize = TITLE_TEXT_SIZE
                 typeface = ResourcesCompat.getFont(context, R.font.lato_medium)
 
-                val bottomPadding = TypedValue.applyDimension(
-                    TypedValue.COMPLEX_UNIT_DIP, TITLE_BOTTOM_PADDING, resources.displayMetrics)
-                    .toInt()
-                setPadding(paddingLeft, paddingTop, paddingRight, bottomPadding)
+                setPadding(paddingLeft, paddingTop, paddingRight, TITLE_BOTTOM_PADDING.dpToPx(resources))
             }
         }
     }

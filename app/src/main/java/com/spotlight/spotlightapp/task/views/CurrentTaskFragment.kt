@@ -1,7 +1,6 @@
 package com.spotlight.spotlightapp.task.views
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Text
@@ -12,7 +11,7 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.viewinterop.AndroidView
+import androidx.compose.ui.viewinterop.AndroidViewBinding
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -21,6 +20,7 @@ import com.spotlight.spotlightapp.data.task.Task
 import com.spotlight.spotlightapp.databinding.CurrentTaskViewButtonsBinding
 import com.spotlight.spotlightapp.databinding.FragmentCurrentTaskBinding
 import com.spotlight.spotlightapp.task.TaskPageRouter
+import com.spotlight.spotlightapp.task.viewdata.CurrentTaskAlertInterval
 import com.spotlight.spotlightapp.task.viewdata.TaskTransitionName
 import com.spotlight.spotlightapp.task.viewmodels.CurrentTaskViewModel
 import com.spotlight.spotlightapp.utilities.viewmodelutils.ErrorHolder
@@ -62,6 +62,7 @@ class CurrentTaskFragment(private val taskPageRouter: TaskPageRouter) :
         configureViews()
         observeViewModel()
         observeErrors()
+        setAlertIntervalResultListener()
         startPostponedEnterTransition()
     }
 
@@ -88,6 +89,19 @@ class CurrentTaskFragment(private val taskPageRouter: TaskPageRouter) :
         }
     }
 
+    private fun setAlertIntervalResultListener() {
+        childFragmentManager.setFragmentResultListener(
+            CurrentTaskAlertIntervalDialogFragment.CURRENT_TASK_ALERT_INTERVAL_RESULT,
+            viewLifecycleOwner) { requestKey: String, result: Bundle ->
+            if (requestKey != CurrentTaskAlertIntervalDialogFragment.CURRENT_TASK_ALERT_INTERVAL_RESULT) return@setFragmentResultListener
+
+            currentTaskViewModel.setCurrentTaskAlertInterval(
+                result.getParcelable(
+                    CurrentTaskAlertIntervalDialogFragment.CURRENT_TASK_ALERT_INTERVAL)
+                    ?: return@setFragmentResultListener)
+        }
+    }
+
     @Composable
     private fun CurrentTaskLayout() {
         val currentTask = currentTaskViewModel.currentTaskUIState.observeAsState()
@@ -96,7 +110,9 @@ class CurrentTaskFragment(private val taskPageRouter: TaskPageRouter) :
             Column(modifier = Modifier.padding(20.dp), verticalArrangement = Arrangement.Center) {
                 CurrentTaskView(task = task)
                 Spacer(modifier = Modifier.height(56.dp))
-                CurrentTaskButtons(task = task, willShowEditButtons = willShowEditButtons)
+                CurrentTaskButtons(
+                    task = task, willShowEditButtons = willShowEditButtons,
+                    currentTaskAlertInterval = currentTaskAlertInterval)
             }
         }
     }
@@ -119,11 +135,32 @@ class CurrentTaskFragment(private val taskPageRouter: TaskPageRouter) :
     }
 
     @Composable
-    private fun CurrentTaskButtons(task: Task, willShowEditButtons: Boolean) {
-        AndroidView(factory = { context ->
-            CurrentTaskViewButtonsBinding.inflate(LayoutInflater.from(context)).apply {
+    private fun CurrentTaskButtons(
+        task: Task, willShowEditButtons: Boolean,
+        currentTaskAlertInterval: CurrentTaskAlertInterval) {
+        AndroidViewBinding(
+            factory = CurrentTaskViewButtonsBinding::inflate, modifier = Modifier.fillMaxWidth(),
+            update = {
                 this.willShowEditButtons = willShowEditButtons
                 this.isTaskFinished = task.isFinished
+
+                timeButton.apply {
+                    buttonText = "${currentTaskAlertInterval.amount} ${
+                        resources.getQuantityString(
+                            currentTaskAlertInterval.unit.labelPluralRes,
+                            currentTaskAlertInterval.amount)
+                    }"
+
+                    root.setOnClickListener {
+                        CurrentTaskAlertIntervalDialogFragment().apply {
+                            arguments = Bundle().apply {
+                                putParcelable(
+                                    CurrentTaskAlertIntervalDialogFragment.CURRENT_TASK_ALERT_INTERVAL,
+                                    currentTaskAlertInterval)
+                            }
+                        }.show(childFragmentManager, CurrentTaskAlertIntervalDialogFragment.TAG)
+                    }
+                }
 
                 doneButton.root.setOnClickListener {
                     currentTaskViewModel.toggleTaskFinished()
@@ -142,17 +179,16 @@ class CurrentTaskFragment(private val taskPageRouter: TaskPageRouter) :
                         title = getString(R.string.delete_task_dialog_title),
                         negativeButtonViewData = CustomAlertDialog.ButtonViewData(
                             getString(R.string.no),
-                            ContextCompat.getColor(context, R.color.primaryBlack)) {},
+                            ContextCompat.getColor(requireContext(), R.color.primaryBlack)) {},
                         positiveButtonViewData = CustomAlertDialog.ButtonViewData(
                             getString(R.string.yes),
                             ContextCompat.getColor(
-                                context,
+                                requireContext(),
                                 R.color.functionGreen)) { currentTaskViewModel.deleteTask() }
                     )
 
-                    CustomAlertDialog(context, customAlertDialogViewData).show()
+                    CustomAlertDialog(requireContext(), customAlertDialogViewData).show()
                 }
-            }.root
-        }, modifier = Modifier.fillMaxWidth())
+            })
     }
 }
