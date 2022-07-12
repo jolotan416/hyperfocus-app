@@ -7,4 +7,7 @@
     <color name="functionBlue">#2196F3</color>
     <color name="functionGreen">#4CAF50</color>
     <color name="functionRed">#F44336</color>
+
+    <!-- Colors with adjusted opacity -->
+    <color name="primaryWhite70">#B3FAFAFA</color>
 </resources>

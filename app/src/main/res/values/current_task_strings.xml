@@ -5,4 +5,16 @@
     <string name="return_to_list">Return to List</string>
 
     <string name="delete_task_dialog_title">Are you sure you want to delete this task?</string>
+
+    <string name="current_task_alert_interval_dialog_title">Choose a task alert interval</string>
+
+    <plurals name="hours">
+        <item quantity="one">hour</item>
+        <item quantity="other">hours</item>
+    </plurals>
+
+    <plurals name="minutes">
+        <item quantity="one">minute</item>
+        <item quantity="other">minutes</item>
+    </plurals>
 </resources>
