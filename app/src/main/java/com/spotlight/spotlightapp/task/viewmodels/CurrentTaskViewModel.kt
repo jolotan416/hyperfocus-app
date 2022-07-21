@@ -30,24 +30,21 @@ class CurrentTaskViewModel @Inject constructor(
 
     fun setCurrentTask(currentTask: Task, willAllowEdit: Boolean) {
         mCurrentTaskUIState.value = CurrentTaskUIState(currentTask, willAllowEdit)
-
-        taskFlowObserverJob?.cancel()
-        taskFlowObserverJob = viewModelScope.launch(Dispatchers.IO) {
-            tasksRepository.observeTask(currentTask.id).collect { task ->
-                withContext(Dispatchers.Main) {
-                    mCurrentTaskUIState.value = currentTaskUIState.value!!.copy(
-                        task = task ?: return@withContext)
-                }
-            }
-        }
+        observeTask(currentTask.id)
     }
 
     fun setCurrentTaskAlertInterval(taskAlertInterval: TaskAlertInterval) {
-        val task = currentTaskUIState.value!!.task.copy().apply {
-            alertInterval = taskAlertInterval
-        }
+        val task = currentTaskUIState.value!!.task.copy(alertInterval = taskAlertInterval)
         viewModelScope.launch(Dispatchers.IO) {
             errorHolder.handleRepositoryResult(tasksRepository.updateTask(task))
+        }
+    }
+
+    fun toggleTaskAlertTimer(isTimerRunning: Boolean) {
+        val task = currentTaskUIState.value!!.task
+        viewModelScope.launch(Dispatchers.IO) {
+            errorHolder.handleRepositoryResult(
+                tasksRepository.toggleTaskTimer(task, isTimerRunning))
         }
     }
 
@@ -68,6 +65,18 @@ class CurrentTaskViewModel @Inject constructor(
                     currentTaskUIState.value!!.task.copy())) { result ->
                 mCurrentTaskUIState.value = currentTaskUIState.value!!.copy(
                     task = result.content, completeTaskResult = result)
+            }
+        }
+    }
+
+    private fun observeTask(taskId: Int) {
+        taskFlowObserverJob?.cancel()
+        taskFlowObserverJob = viewModelScope.launch(Dispatchers.IO) {
+            tasksRepository.observeTask(taskId).collect { task ->
+                withContext(Dispatchers.Main) {
+                    mCurrentTaskUIState.value = currentTaskUIState.value!!.copy(
+                        task = task ?: return@withContext)
+                }
             }
         }
     }

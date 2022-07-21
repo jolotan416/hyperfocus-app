@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "d3f1c8838170dc48c2a9da267a6f321a",
+    "identityHash": "f9d7f137a37b06fd733a66e49c683dc1",
     "entities": [
       {
         "tableName": "Task",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `title` TEXT NOT NULL, `description` TEXT NOT NULL, `priority` INTEGER NOT NULL DEFAULT 0, `is_finished` INTEGER NOT NULL DEFAULT false, `alert_interval_amount` INTEGER NOT NULL DEFAULT 1, `alert_interval_unit` INTEGER NOT NULL DEFAULT 0)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `title` TEXT NOT NULL, `description` TEXT NOT NULL, `priority` INTEGER NOT NULL DEFAULT 0, `is_finished` INTEGER NOT NULL DEFAULT false, `current_timer_end_date` INTEGER DEFAULT 0, `alert_interval_amount` INTEGER NOT NULL DEFAULT 1, `alert_interval_unit` INTEGER NOT NULL DEFAULT 0)",
         "fields": [
           {
             "fieldPath": "id",
@@ -41,6 +41,13 @@
             "defaultValue": "false"
           },
           {
+            "fieldPath": "currentTimerEndDate",
+            "columnName": "current_timer_end_date",
+            "affinity": "INTEGER",
+            "notNull": false,
+            "defaultValue": "0"
+          },
+          {
             "fieldPath": "alertInterval.amount",
             "columnName": "alert_interval_amount",
             "affinity": "INTEGER",
@@ -68,7 +75,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'd3f1c8838170dc48c2a9da267a6f321a')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'f9d7f137a37b06fd733a66e49c683dc1')"
     ]
   }
 }

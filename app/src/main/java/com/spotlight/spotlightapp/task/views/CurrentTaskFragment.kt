@@ -17,8 +17,10 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.spotlight.spotlightapp.R
 import com.spotlight.spotlightapp.data.task.Task
+import com.spotlight.spotlightapp.data.task.TaskAlertInterval
 import com.spotlight.spotlightapp.databinding.CurrentTaskViewButtonsBinding
 import com.spotlight.spotlightapp.databinding.FragmentCurrentTaskBinding
+import com.spotlight.spotlightapp.databinding.RoundedButtonBinding
 import com.spotlight.spotlightapp.task.TaskPageRouter
 import com.spotlight.spotlightapp.task.viewdata.TaskTransitionName
 import com.spotlight.spotlightapp.task.viewmodels.CurrentTaskViewModel
@@ -138,52 +140,64 @@ class CurrentTaskFragment(private val taskPageRouter: TaskPageRouter) :
             update = {
                 this.willShowEditButtons = willShowEditButtons
                 this.isTaskFinished = task.isFinished
+                configureTimeButton(timeButton, task.alertInterval)
+                configureEditButton(editButton, task)
+                configureDeleteButton(deleteButton)
 
-                timeButton.apply {
-                    buttonText = "${task.alertInterval.amount} ${
-                        resources.getQuantityString(
-                            task.alertInterval.unit.labelPluralRes,
-                            task.alertInterval.amount)
-                    }"
-
-                    root.setOnClickListener {
-                        CurrentTaskAlertIntervalDialogFragment().apply {
-                            arguments = Bundle().apply {
-                                putParcelable(
-                                    CurrentTaskAlertIntervalDialogFragment.CURRENT_TASK_ALERT_INTERVAL,
-                                    task.alertInterval)
-                            }
-                        }.show(childFragmentManager, CurrentTaskAlertIntervalDialogFragment.TAG)
-                    }
+                startButton.root.setOnClickListener {
+                    currentTaskViewModel.toggleTaskAlertTimer(true)
                 }
 
                 doneButton.root.setOnClickListener {
                     currentTaskViewModel.toggleTaskFinished()
                 }
-
-                editButton.root.apply {
-                    transitionName = TaskTransitionName.TASK_FORM.getTransitionName(
-                        task.id.toString())
-                    setOnClickListener {
-                        taskPageRouter.openTaskForm(this, task)
-                    }
-                }
-
-                deleteButton.root.setOnClickListener {
-                    val customAlertDialogViewData = CustomAlertDialog.ViewData(
-                        title = getString(R.string.delete_task_dialog_title),
-                        negativeButtonViewData = CustomAlertDialog.ButtonViewData(
-                            getString(R.string.no),
-                            ContextCompat.getColor(requireContext(), R.color.primaryBlack)) {},
-                        positiveButtonViewData = CustomAlertDialog.ButtonViewData(
-                            getString(R.string.yes),
-                            ContextCompat.getColor(
-                                requireContext(),
-                                R.color.functionGreen)) { currentTaskViewModel.deleteTask() }
-                    )
-
-                    CustomAlertDialog(requireContext(), customAlertDialogViewData).show()
-                }
             })
+    }
+
+    private fun configureTimeButton(
+        timeButton: RoundedButtonBinding, taskAlertInterval: TaskAlertInterval) {
+        timeButton.apply {
+            buttonText = "${taskAlertInterval.amount} ${
+                resources.getQuantityString(
+                    taskAlertInterval.unit.labelPluralRes, taskAlertInterval.amount)
+            }"
+
+            root.setOnClickListener {
+                CurrentTaskAlertIntervalDialogFragment().apply {
+                    arguments = Bundle().apply {
+                        putParcelable(
+                            CurrentTaskAlertIntervalDialogFragment.CURRENT_TASK_ALERT_INTERVAL,
+                            taskAlertInterval)
+                    }
+                }.show(childFragmentManager, CurrentTaskAlertIntervalDialogFragment.TAG)
+            }
+        }
+    }
+
+    private fun configureEditButton(editButton: RoundedButtonBinding, task: Task) {
+        editButton.root.apply {
+            transitionName = TaskTransitionName.TASK_FORM.getTransitionName(
+                task.id.toString())
+            setOnClickListener {
+                taskPageRouter.openTaskForm(this, task)
+            }
+        }
+    }
+
+    private fun configureDeleteButton(deleteButton: RoundedButtonBinding) {
+        deleteButton.root.setOnClickListener {
+            val customAlertDialogViewData = CustomAlertDialog.ViewData(
+                title = getString(R.string.delete_task_dialog_title),
+                negativeButtonViewData = CustomAlertDialog.ButtonViewData(
+                    getString(R.string.no), ContextCompat.getColor(
+                        requireContext(), R.color.primaryBlack)) {},
+                positiveButtonViewData = CustomAlertDialog.ButtonViewData(
+                    getString(R.string.yes), ContextCompat.getColor(
+                        requireContext(),
+                        R.color.functionGreen)) { currentTaskViewModel.deleteTask() }
+            )
+
+            CustomAlertDialog(requireContext(), customAlertDialogViewData).show()
+        }
     }
 }

@@ -1,6 +1,7 @@
-package com.spotlight.spotlightapp.data.task
+package com.spotlight.spotlightapp.data.converter
 
 import androidx.room.TypeConverter
+import com.spotlight.spotlightapp.data.task.TaskAlertInterval
 
 class TaskAlertIntervalUnitConverter {
     @TypeConverter
