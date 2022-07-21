@@ -20,7 +20,6 @@ import com.spotlight.spotlightapp.data.task.Task
 import com.spotlight.spotlightapp.databinding.CurrentTaskViewButtonsBinding
 import com.spotlight.spotlightapp.databinding.FragmentCurrentTaskBinding
 import com.spotlight.spotlightapp.task.TaskPageRouter
-import com.spotlight.spotlightapp.task.viewdata.CurrentTaskAlertInterval
 import com.spotlight.spotlightapp.task.viewdata.TaskTransitionName
 import com.spotlight.spotlightapp.task.viewmodels.CurrentTaskViewModel
 import com.spotlight.spotlightapp.utilities.viewmodelutils.ErrorHolder
@@ -110,9 +109,7 @@ class CurrentTaskFragment(private val taskPageRouter: TaskPageRouter) :
             Column(modifier = Modifier.padding(20.dp), verticalArrangement = Arrangement.Center) {
                 CurrentTaskView(task = task)
                 Spacer(modifier = Modifier.height(56.dp))
-                CurrentTaskButtons(
-                    task = task, willShowEditButtons = willShowEditButtons,
-                    currentTaskAlertInterval = currentTaskAlertInterval)
+                CurrentTaskButtons(task = task, willShowEditButtons = willShowEditButtons)
             }
         }
     }
@@ -135,9 +132,7 @@ class CurrentTaskFragment(private val taskPageRouter: TaskPageRouter) :
     }
 
     @Composable
-    private fun CurrentTaskButtons(
-        task: Task, willShowEditButtons: Boolean,
-        currentTaskAlertInterval: CurrentTaskAlertInterval) {
+    private fun CurrentTaskButtons(task: Task, willShowEditButtons: Boolean) {
         AndroidViewBinding(
             factory = CurrentTaskViewButtonsBinding::inflate, modifier = Modifier.fillMaxWidth(),
             update = {
@@ -145,10 +140,10 @@ class CurrentTaskFragment(private val taskPageRouter: TaskPageRouter) :
                 this.isTaskFinished = task.isFinished
 
                 timeButton.apply {
-                    buttonText = "${currentTaskAlertInterval.amount} ${
+                    buttonText = "${task.alertInterval.amount} ${
                         resources.getQuantityString(
-                            currentTaskAlertInterval.unit.labelPluralRes,
-                            currentTaskAlertInterval.amount)
+                            task.alertInterval.unit.labelPluralRes,
+                            task.alertInterval.amount)
                     }"
 
                     root.setOnClickListener {
@@ -156,7 +151,7 @@ class CurrentTaskFragment(private val taskPageRouter: TaskPageRouter) :
                             arguments = Bundle().apply {
                                 putParcelable(
                                     CurrentTaskAlertIntervalDialogFragment.CURRENT_TASK_ALERT_INTERVAL,
-                                    currentTaskAlertInterval)
+                                    task.alertInterval)
                             }
                         }.show(childFragmentManager, CurrentTaskAlertIntervalDialogFragment.TAG)
                     }
