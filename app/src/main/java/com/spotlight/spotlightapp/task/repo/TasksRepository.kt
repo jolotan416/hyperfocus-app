@@ -7,6 +7,7 @@ import com.spotlight.spotlightapp.data.task.Task
 import com.spotlight.spotlightapp.utilities.RepositoryErrorHandler
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -52,12 +53,23 @@ class TasksRepository @Inject constructor(
         }
     }
 
+    suspend fun toggleTaskTimer(task: Task, isTimerRunning: Boolean): Result<Task> {
+        return repositoryErrorHandler.handleGeneralRepositoryOperation {
+            val newCurrentTimerEndDate: Calendar? = if (isTimerRunning) Calendar.getInstance()
+                .apply {
+                    add(task.alertInterval.unit.calendarUnit, task.alertInterval.amount)
+                } else null
+            val updatedTask = task.copy(currentTimerEndDate = newCurrentTimerEndDate?.time)
+            updateTask(updatedTask)
+
+            Result.Success(updatedTask)
+        }
+    }
+
     suspend fun toggleTaskFinished(task: Task): Result<Task> {
         return repositoryErrorHandler.handleGeneralRepositoryOperation {
             val isTaskFinished = task.isFinished
-            val updatedTask = task.apply {
-                isFinished = !isTaskFinished
-            }
+            val updatedTask = task.copy(isFinished = !isTaskFinished)
             updateTask(updatedTask, !isTaskFinished)
         }
     }
@@ -99,8 +111,7 @@ class TasksRepository @Inject constructor(
     }
 
     private suspend fun updateTaskPriority(task: Task, priority: Int) {
-        task.priority = priority
-        localDataSource.updateTask(task)
+        localDataSource.updateTask(task.copy(priority = priority))
     }
 
     private fun filterTasksByCompletion(tasks: List<Task>, isFinished: Boolean) =

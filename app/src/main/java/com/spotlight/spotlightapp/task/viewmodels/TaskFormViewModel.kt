@@ -101,10 +101,8 @@ class TaskFormViewModel @Inject constructor(
             val result = if (initialTask.value == null) {
                 tasksRepository.insertTask(Task(title = title, description = description))
             } else {
-                tasksRepository.updateTask(initialTask.value!!.also {
-                    it.title = title
-                    it.description = description
-                })
+                tasksRepository.updateTask(
+                    initialTask.value!!.copy(title = title, description = description))
             }
 
             errorHolder.handleRepositoryResult(result) {
