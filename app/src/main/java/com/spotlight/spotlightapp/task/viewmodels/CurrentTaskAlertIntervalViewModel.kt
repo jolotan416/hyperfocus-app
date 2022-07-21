@@ -3,7 +3,7 @@ package com.spotlight.spotlightapp.task.viewmodels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.spotlight.spotlightapp.task.viewdata.CurrentTaskAlertInterval
+import com.spotlight.spotlightapp.data.task.TaskAlertInterval
 import kotlin.math.max
 import kotlin.math.min
 
@@ -12,17 +12,17 @@ class CurrentTaskAlertIntervalViewModel : ViewModel() {
         private const val MINIMUM_AMOUNT = 0
     }
 
-    private val mCurrentTaskAlertInterval: MutableLiveData<CurrentTaskAlertInterval> by lazy {
-        MutableLiveData<CurrentTaskAlertInterval>()
+    private val mCurrentTaskAlertInterval: MutableLiveData<TaskAlertInterval> by lazy {
+        MutableLiveData<TaskAlertInterval>()
     }
 
-    val currentTaskAlertInterval: LiveData<CurrentTaskAlertInterval> = mCurrentTaskAlertInterval
+    val currentTaskAlertInterval: LiveData<TaskAlertInterval> = mCurrentTaskAlertInterval
 
-    fun setCurrentTaskAlertInterval(currentTaskAlertInterval: CurrentTaskAlertInterval) {
-        mCurrentTaskAlertInterval.value = currentTaskAlertInterval
+    fun setCurrentTaskAlertInterval(taskAlertInterval: TaskAlertInterval) {
+        mCurrentTaskAlertInterval.value = taskAlertInterval
     }
 
-    fun setAlertIntervalUnit(unit: CurrentTaskAlertInterval.Unit) {
+    fun setAlertIntervalUnit(unit: TaskAlertInterval.Unit) {
         validateMaxAlertInterval(currentTaskAlertInterval.value!!.amount, unit)
     }
 
@@ -31,8 +31,8 @@ class CurrentTaskAlertIntervalViewModel : ViewModel() {
             amount.toIntOrNull() ?: MINIMUM_AMOUNT, currentTaskAlertInterval.value!!.unit)
     }
 
-    private fun validateMaxAlertInterval(amount: Int, unit: CurrentTaskAlertInterval.Unit) {
-        mCurrentTaskAlertInterval.value = CurrentTaskAlertInterval(
+    private fun validateMaxAlertInterval(amount: Int, unit: TaskAlertInterval.Unit) {
+        mCurrentTaskAlertInterval.value = TaskAlertInterval(
             min(max(amount, MINIMUM_AMOUNT), unit.maxAmount), unit)
     }
 }

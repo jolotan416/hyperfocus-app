@@ -1,16 +1,20 @@
-package com.spotlight.spotlightapp.task.viewdata
+package com.spotlight.spotlightapp.data.task
 
 import android.content.res.Resources
 import android.os.Parcelable
 import androidx.annotation.PluralsRes
+import androidx.room.ColumnInfo
 import com.spotlight.spotlightapp.R
 import kotlinx.parcelize.Parcelize
 import java.util.*
 import kotlin.math.max
 
 @Parcelize
-data class CurrentTaskAlertInterval(
+data class TaskAlertInterval(
+    @ColumnInfo(name = "amount", defaultValue = "1")
     val amount: Int = 1,
+
+    @ColumnInfo("unit", defaultValue = "0")
     val unit: Unit = Unit.HOUR
 ) : Parcelable {
     enum class Unit(

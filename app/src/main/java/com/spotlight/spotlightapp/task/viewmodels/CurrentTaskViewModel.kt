@@ -5,8 +5,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.spotlight.spotlightapp.data.task.Task
+import com.spotlight.spotlightapp.data.task.TaskAlertInterval
 import com.spotlight.spotlightapp.task.repo.TasksRepository
-import com.spotlight.spotlightapp.task.viewdata.CurrentTaskAlertInterval
 import com.spotlight.spotlightapp.task.viewdata.CurrentTaskUIState
 import com.spotlight.spotlightapp.utilities.viewmodelutils.ErrorHolder
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -42,9 +42,13 @@ class CurrentTaskViewModel @Inject constructor(
         }
     }
 
-    fun setCurrentTaskAlertInterval(currentTaskAlertInterval: CurrentTaskAlertInterval) {
-        mCurrentTaskUIState.value = currentTaskUIState.value!!.copy(
-            currentTaskAlertInterval = currentTaskAlertInterval)
+    fun setCurrentTaskAlertInterval(taskAlertInterval: TaskAlertInterval) {
+        val task = currentTaskUIState.value!!.task.copy().apply {
+            alertInterval = taskAlertInterval
+        }
+        viewModelScope.launch(Dispatchers.IO) {
+            errorHolder.handleRepositoryResult(tasksRepository.updateTask(task))
+        }
     }
 
     fun deleteTask() {

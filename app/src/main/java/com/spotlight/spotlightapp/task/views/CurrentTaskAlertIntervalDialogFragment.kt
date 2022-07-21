@@ -15,7 +15,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.spotlight.spotlightapp.R
 import com.spotlight.spotlightapp.databinding.FragmentCurrentTaskAlertIntervialDialogBinding
 import com.spotlight.spotlightapp.task.adapters.CurrentTaskAlertIntervalUnitAdapter
-import com.spotlight.spotlightapp.task.viewdata.CurrentTaskAlertInterval
+import com.spotlight.spotlightapp.data.task.TaskAlertInterval
 import com.spotlight.spotlightapp.task.viewmodels.CurrentTaskAlertIntervalViewModel
 import com.spotlight.spotlightapp.utilities.viewutils.dpToPx
 
@@ -89,7 +89,7 @@ class CurrentTaskAlertIntervalDialogFragment :
                     if (!isUnitScrollUserInput) return
 
                     currentTaskAlertIntervalViewModel.setAlertIntervalUnit(
-                        CurrentTaskAlertInterval.Unit.values()[position])
+                        TaskAlertInterval.Unit.values()[position])
                 }
             })
         }
@@ -137,12 +137,12 @@ class CurrentTaskAlertIntervalDialogFragment :
         }
     }
 
-    private fun updateAlertIntervalUnitList(amount: Int, unit: CurrentTaskAlertInterval.Unit) {
-        val unitPosition = CurrentTaskAlertInterval.Unit.getPosition(unit)
+    private fun updateAlertIntervalUnitList(amount: Int, unit: TaskAlertInterval.Unit) {
+        val unitPosition = TaskAlertInterval.Unit.getPosition(unit)
         isUnitScrollUserInput = false
 
         currentTaskAlertIntervalUnitAdapter.setItems(
-            CurrentTaskAlertInterval.Unit.getLabelList(resources, amount))
+            TaskAlertInterval.Unit.getLabelList(resources, amount))
         viewBinding.alertIntervalUnitViewPager.apply {
             doOnNextLayout {
                 currentItem = unitPosition
