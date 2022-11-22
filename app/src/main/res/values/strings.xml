@@ -12,4 +12,8 @@
     <string name="no">No</string>
     <string name="set">Set</string>
     <string name="cancel">Cancel</string>
+
+    <!-- Notification Strings -->
+    <string name="task_notification_channel_name">Task Notifications</string>
+    <string name="finished_task_timer_notification_text">Great job focusing on this task!</string>
 </resources>

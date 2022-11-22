@@ -1,5 +1,7 @@
 package com.spotlight.spotlightapp.task.views
 
+import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import androidx.compose.foundation.layout.*
@@ -22,6 +24,7 @@ import com.spotlight.spotlightapp.databinding.CurrentTaskViewButtonsBinding
 import com.spotlight.spotlightapp.databinding.FragmentCurrentTaskBinding
 import com.spotlight.spotlightapp.databinding.RoundedButtonBinding
 import com.spotlight.spotlightapp.task.TaskPageRouter
+import com.spotlight.spotlightapp.task.services.TaskTimerService
 import com.spotlight.spotlightapp.task.viewdata.TaskTransitionName
 import com.spotlight.spotlightapp.task.viewmodels.CurrentTaskViewModel
 import com.spotlight.spotlightapp.utilities.viewmodelutils.ErrorHolder
@@ -83,9 +86,12 @@ class CurrentTaskFragment(private val taskPageRouter: TaskPageRouter) :
         currentTaskViewModel.currentTaskUIState.observe(viewLifecycleOwner) { uiState ->
             when {
                 (uiState.deleteTaskResult != null || uiState.completeTaskResult != null) -> parentFragmentManager.popBackStack()
-                else -> viewBinding.mainLayout.transitionName = viewBinding.mainLayout.transitionName
-                    ?: (TaskTransitionName.CURRENT_TASK.getTransitionName(
-                        uiState.task.id.toString()))
+                else -> {
+                    viewBinding.mainLayout.transitionName = viewBinding.mainLayout.transitionName
+                        ?: (TaskTransitionName.CURRENT_TASK.getTransitionName(
+                            uiState.task.id.toString()))
+                    runTaskTimer(uiState.task)
+                }
             }
         }
     }
@@ -100,6 +106,20 @@ class CurrentTaskFragment(private val taskPageRouter: TaskPageRouter) :
                 result.getParcelable(
                     CurrentTaskAlertIntervalDialogFragment.CURRENT_TASK_ALERT_INTERVAL)
                     ?: return@setFragmentResultListener)
+        }
+    }
+
+    private fun runTaskTimer(task: Task) {
+        if (task.currentTimerEndDate == null) return
+
+        // TODO: Figure out UI state changes
+        val intent = Intent(requireContext(), TaskTimerService::class.java).apply {
+            putExtra(TaskTimerService.RUNNING_TASK, task)
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            requireContext().startForegroundService(intent)
+        } else {
+            requireContext().startService(intent)
         }
     }
 
