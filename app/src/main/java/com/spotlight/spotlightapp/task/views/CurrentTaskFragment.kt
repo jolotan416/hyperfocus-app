@@ -112,8 +112,8 @@ class CurrentTaskFragment(private val taskPageRouter: TaskPageRouter) :
     private fun runTaskTimer(task: Task) {
         if (task.currentTimerEndDate == null) return
 
-        // TODO: Figure out UI state changes
         val intent = Intent(requireContext(), TaskTimerService::class.java).apply {
+            action = TaskTimerService.RUN_TASK
             putExtra(TaskTimerService.RUNNING_TASK, task)
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -160,6 +160,7 @@ class CurrentTaskFragment(private val taskPageRouter: TaskPageRouter) :
             update = {
                 this.willShowEditButtons = willShowEditButtons
                 this.isTaskFinished = task.isFinished
+                this.isTimerRunning = task.currentTimerEndDate != null
                 configureTimeButton(timeButton, task.alertInterval)
                 configureEditButton(editButton, task)
                 configureDeleteButton(deleteButton)
@@ -170,6 +171,13 @@ class CurrentTaskFragment(private val taskPageRouter: TaskPageRouter) :
 
                 doneButton.root.setOnClickListener {
                     currentTaskViewModel.toggleTaskFinished()
+                }
+
+                stopButton.root.setOnClickListener {
+                    val intent = Intent(requireContext(), TaskTimerService::class.java).apply {
+                        action = TaskTimerService.STOP_TASK
+                    }
+                    requireContext().startService(intent)
                 }
             })
     }
