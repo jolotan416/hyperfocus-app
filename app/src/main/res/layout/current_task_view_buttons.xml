@@ -15,6 +15,10 @@
             name="isTaskFinished"
             type="Boolean" />
 
+        <variable
+            name="isTimerRunning"
+            type="Boolean" />
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -31,7 +35,7 @@
             app:layout_constraintTop_toTopOf="parent"
             bind:backgroundTint="@{@color/functionBlue}"
             bind:buttonDrawable="@{@drawable/ic_edit}"
-            spotlight:willShow="@{willShowEditButtons &amp;&amp; !isTaskFinished}"
+            spotlight:willShow="@{willShowEditButtons &amp;&amp; !isTaskFinished &amp;&amp; !isTimerRunning}"
             tools:visibility="gone" />
 
         <include
@@ -47,7 +51,7 @@
             app:layout_constraintTop_toTopOf="parent"
             bind:backgroundTint="@{@color/functionRed}"
             bind:buttonDrawable="@{@drawable/ic_delete}"
-            spotlight:willShow="@{willShowEditButtons &amp;&amp; !isTaskFinished}"
+            spotlight:willShow="@{willShowEditButtons &amp;&amp; !isTaskFinished &amp;&amp; !isTimerRunning}"
             tools:visibility="gone" />
 
         <include
@@ -60,7 +64,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintWidth_percent="0.45"
             bind:backgroundTint="@{@color/functionBlue}"
-            spotlight:willShow="@{!willShowEditButtons &amp;&amp; !isTaskFinished}"
+            spotlight:willShow="@{!willShowEditButtons &amp;&amp; !isTaskFinished &amp;&amp; !isTimerRunning}"
             tools:visibility="gone" />
 
         <include
@@ -76,7 +80,7 @@
             app:layout_constraintTop_toTopOf="parent"
             bind:backgroundTint="@{@color/functionBlue}"
             bind:buttonDrawable="@{@drawable/ic_bell}"
-            spotlight:willShow="@{!willShowEditButtons &amp;&amp; !isTaskFinished}"
+            spotlight:willShow="@{!willShowEditButtons &amp;&amp; !isTaskFinished &amp;&amp; !isTimerRunning}"
             tools:visibility="gone" />
 
         <androidx.constraintlayout.widget.Barrier
@@ -98,7 +102,22 @@
             app:layout_constraintTop_toTopOf="parent"
             bind:backgroundTint="@{@color/functionGreen}"
             bind:buttonDrawable="@{isTaskFinished ? null : @drawable/ic_check}"
-            bind:buttonText="@{isTaskFinished ? @string/return_to_list : @string/done}" />
+            bind:buttonText="@{isTaskFinished ? @string/return_to_list : @string/done}"
+            spotlight:willShow="@{!isTimerRunning}" />
+
+        <include
+            android:id="@+id/stopButton"
+            layout="@layout/rounded_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            bind:backgroundTint="@{@color/functionRed}"
+            bind:buttonDrawable="@{@drawable/ic_stop}"
+            bind:buttonText="@{@string/stop}"
+            spotlight:willShow="@{isTimerRunning}" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
