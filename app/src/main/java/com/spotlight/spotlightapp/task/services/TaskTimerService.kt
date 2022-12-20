@@ -7,6 +7,7 @@ import android.os.IBinder
 import com.spotlight.spotlightapp.data.task.Task
 import com.spotlight.spotlightapp.task.repo.TasksRepository
 import com.spotlight.spotlightapp.utilities.NotificationModule
+import com.spotlight.spotlightapp.utilities.notification.NotificationType
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -33,7 +34,7 @@ class TaskTimerService : Service() {
                 startForeground(intent.getParcelableExtra(RUNNING_TASK)!!)
             }
             STOP_TASK -> {
-                notificationModule.stopNotificationTimer(applicationContext)
+                notificationModule.stopNotificationTimer()
                 stopSelf()
             }
         }
@@ -44,7 +45,7 @@ class TaskTimerService : Service() {
     override fun onBind(intent: Intent?): IBinder? = null
 
     private fun startForeground(task: Task) {
-        val timerNotificationType = NotificationModule.NotificationType.TimerNotification(
+        val timerNotificationType = NotificationType.TimerNotification(
             task.title, task.currentTimerEndDate!!.time) {
             CoroutineScope(Dispatchers.IO).launch {
                 repository.toggleTaskTimer(task, false)
@@ -55,7 +56,7 @@ class TaskTimerService : Service() {
             applicationContext, timerNotificationType)
 
         startForeground(
-            NotificationModule.NotificationType.getIdFromNotificationType(
+            NotificationType.getIdFromNotificationType(
                 timerNotificationType::class.java), notification)
     }
 
