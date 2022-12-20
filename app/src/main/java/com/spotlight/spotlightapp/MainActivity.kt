@@ -46,6 +46,12 @@ class MainActivity : AppCompatActivity(R.layout.activity_main), TaskPageRouter {
         configureSplashScreenFragment()
     }
 
+    override fun openTaskList(view: View) {
+        attachFragment(
+            TasksFragment::class.java, TasksFragment.TAG, willAddToBackStack = true,
+            sharedElements = mapOf(Pair(view, view.transitionName)))
+    }
+
     override fun openTaskPage(view: View, task: Task, willAllowEdit: Boolean) {
         val bundle = Bundle().apply {
             putParcelable(CurrentTaskFragment.TASK, task)
@@ -58,11 +64,6 @@ class MainActivity : AppCompatActivity(R.layout.activity_main), TaskPageRouter {
             sharedElements = mapOf(Pair(view, view.transitionName)))
     }
 
-    override fun openTaskList(view: View) {
-        attachFragment(
-            TasksFragment::class.java, TasksFragment.TAG, willAddToBackStack = true,
-            sharedElements = mapOf(Pair(view, view.transitionName)))
-    }
 
     override fun openTaskForm(view: View, task: Task?) {
         val bundle = task?.let {
@@ -91,10 +92,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main), TaskPageRouter {
     }
 
     private fun configureDailyIntentListFragment() {
-        supportFragmentManager.commit {
-            setReorderingAllowed(true)
-            replace(R.id.fragmentContainer, DailyIntentListFragment::class.java, null)
-        }
+        attachFragment(DailyIntentListFragment::class.java, DailyIntentListFragment.TAG)
     }
 
     private fun attachFragment(

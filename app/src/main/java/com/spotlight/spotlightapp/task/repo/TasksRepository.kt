@@ -55,14 +55,12 @@ class TasksRepository @Inject constructor(
 
     suspend fun toggleTaskTimer(task: Task, isTimerRunning: Boolean): Result<Task> {
         return repositoryErrorHandler.handleGeneralRepositoryOperation {
-            val newCurrentTimerEndDate: Calendar? = if (isTimerRunning) Calendar.getInstance()
-                .apply {
+            val newCurrentTimerEndDate: Calendar? =
+                if (isTimerRunning) Calendar.getInstance().apply {
                     add(task.alertInterval.unit.calendarUnit, task.alertInterval.amount)
                 } else null
             val updatedTask = task.copy(currentTimerEndDate = newCurrentTimerEndDate?.time)
             updateTask(updatedTask)
-
-            Result.Success(updatedTask)
         }
     }
 
