@@ -18,6 +18,10 @@ import dagger.hilt.android.AndroidEntryPoint
 class DailyIntentListFragment(private val taskPageRouter: TaskPageRouter)
     : Fragment(R.layout.fragment_daily_intent_list),
     DailyIntentListAdapter.Callback {
+    companion object {
+        const val TAG = "DailyIntentListFragment"
+    }
+
     private lateinit var viewBinding: FragmentDailyIntentListBinding
 
     private val viewModel: DailyIntentListViewModel by viewModels()
