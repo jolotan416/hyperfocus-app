@@ -5,10 +5,11 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
 import android.os.Build
-import android.os.CountDownTimer
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.spotlight.spotlightapp.R
+import com.spotlight.spotlightapp.utilities.notification.NotificationCountDownTimer
+import com.spotlight.spotlightapp.utilities.notification.NotificationType
 import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -17,24 +18,9 @@ import javax.inject.Singleton
 class NotificationModule @Inject constructor() {
     companion object {
         private const val TASK_NOTIFICATION_CHANNEL_ID = "task_notification_channel"
-        private const val TIMER_INTERVAL_IN_MILLISECONDS = 1000L
     }
 
-    sealed interface NotificationType {
-        data class TimerNotification(
-            val title: String, val timerEndTime: Long,
-            val onFinish: () -> Unit) : NotificationType
-
-        companion object {
-            fun getIdFromNotificationType(notificationType: Class<out NotificationType>): Int =
-                when (notificationType) {
-                    TimerNotification::class.java -> 1
-                    else -> 0
-                }
-        }
-    }
-
-    private var currentCountDownTimer: CountDownTimer? = null
+    private var currentCountDownTimer: NotificationCountDownTimer? = null
 
     fun createNotificationChannels(context: Context) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -55,14 +41,14 @@ class NotificationModule @Inject constructor() {
 
         val notification = when (notificationType) {
             is NotificationType.TimerNotification -> {
-                createNotification(context, notificationBuilder, notificationType)
+                createTimerNotification(context, notificationBuilder, notificationType)
             }
         }
 
         return notification
     }
 
-    private fun createNotification(
+    private fun createTimerNotification(
         context: Context,
         notificationBuilder: NotificationCompat.Builder,
         timerNotification: NotificationType.TimerNotification): Notification {
@@ -84,42 +70,14 @@ class NotificationModule @Inject constructor() {
             notificationBuilder.setWhen(timerStartTime - timerEndTimeDifference)
         }
 
-        currentCountDownTimer = object : CountDownTimer(
-            timerEndTimeDifference,
-            TIMER_INTERVAL_IN_MILLISECONDS) {
-            override fun onTick(millisUntilFinished: Long) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) return
-
-                notificationBuilder.setWhen(
-                    Calendar.getInstance().timeInMillis - millisUntilFinished)
-                NotificationManagerCompat.from(context)
-                    .notify(
-                        NotificationType.getIdFromNotificationType(timerNotification.javaClass),
-                        notificationBuilder.build())
-            }
-
-            override fun onFinish() {
-                notificationBuilder.setContentText(
-                    context.getString(R.string.finished_task_timer_notification_text))
-                    .setShowWhen(false)
-                    .setUsesChronometer(false)
-                NotificationManagerCompat.from(context)
-                    .notify(
-                        NotificationType.getIdFromNotificationType(timerNotification.javaClass),
-                        notificationBuilder.build())
-                timerNotification.onFinish()
-            }
-        }
+        currentCountDownTimer = NotificationCountDownTimer(
+            context, notificationBuilder, timerNotification, timerEndTimeDifference)
         currentCountDownTimer!!.start()
 
         return notificationBuilder.build()
     }
 
-    fun stopNotificationTimer(context: Context) {
-        currentCountDownTimer?.onFinish()
-        NotificationManagerCompat.from(context)
-            .cancel(
-                NotificationType.getIdFromNotificationType(
-                    NotificationType.TimerNotification::class.java))
+    fun stopNotificationTimer() {
+        currentCountDownTimer?.cancelNotificationTimer()
     }
 }
