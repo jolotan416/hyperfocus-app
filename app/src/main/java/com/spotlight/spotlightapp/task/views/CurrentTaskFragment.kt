@@ -5,12 +5,15 @@ import android.os.Build
 import android.os.Bundle
 import android.view.View
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidViewBinding
@@ -25,6 +28,7 @@ import com.spotlight.spotlightapp.databinding.FragmentCurrentTaskBinding
 import com.spotlight.spotlightapp.databinding.RoundedButtonBinding
 import com.spotlight.spotlightapp.task.TaskPageRouter
 import com.spotlight.spotlightapp.task.services.TaskTimerService
+import com.spotlight.spotlightapp.task.viewdata.TaskCountDownData
 import com.spotlight.spotlightapp.task.viewdata.TaskTransitionName
 import com.spotlight.spotlightapp.task.viewmodels.CurrentTaskViewModel
 import com.spotlight.spotlightapp.utilities.viewmodelutils.ErrorHolder
@@ -90,7 +94,10 @@ class CurrentTaskFragment(private val taskPageRouter: TaskPageRouter) :
                     viewBinding.mainLayout.transitionName = viewBinding.mainLayout.transitionName
                         ?: (TaskTransitionName.CURRENT_TASK.getTransitionName(
                             uiState.task.id.toString()))
-                    runTaskTimer(uiState.task)
+
+                    if (uiState.taskCountDownData?.isInitialTaskTimerStart == true) {
+                        runTaskTimer(uiState.task)
+                    }
                 }
             }
         }
@@ -125,20 +132,41 @@ class CurrentTaskFragment(private val taskPageRouter: TaskPageRouter) :
 
     @Composable
     private fun CurrentTaskLayout() {
-        val currentTask = currentTaskViewModel.currentTaskUIState.observeAsState()
+        val currentTaskUiState = currentTaskViewModel.currentTaskUIState.observeAsState()
 
-        currentTask.value?.apply {
+        currentTaskUiState.value?.apply {
             Column(modifier = Modifier.padding(20.dp), verticalArrangement = Arrangement.Center) {
+                if (taskCountDownData != null && !taskCountDownData!!.isInitialTaskTimerStart) {
+                    TaskCountDownTimer(countDownData = taskCountDownData!!)
+                }
+
                 CurrentTaskView(task = task)
-                Spacer(modifier = Modifier.height(56.dp))
+                Spacer(modifier = Modifier.height(28.dp))
                 CurrentTaskButtons(task = task, willShowEditButtons = willShowEditButtons)
             }
         }
     }
 
     @Composable
+    private fun TaskCountDownTimer(countDownData: TaskCountDownData) {
+        Box(
+            modifier = Modifier.fillMaxWidth(),
+            contentAlignment = Alignment.Center) {
+            Text(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 20.dp), text = countDownData.countDownTimerString,
+                color = colorResource(id = R.color.primaryBlack), fontSize = 32.sp,
+                fontFamily = ComposeTextConfiguration.fontFamily,
+                fontWeight = FontWeight.Bold, textAlign = TextAlign.Center)
+            // TODO: Add circular indicator for time progress
+        }
+    }
+
+    @Composable
     private fun CurrentTaskView(task: Task) {
-        Column(modifier = Modifier.fillMaxWidth()) {
+        Column(
+            modifier = Modifier.fillMaxWidth()) {
             Text(
                 text = task.title, color = colorResource(id = R.color.primaryBlack),
                 fontSize = 20.sp, fontFamily = ComposeTextConfiguration.fontFamily,
@@ -178,6 +206,7 @@ class CurrentTaskFragment(private val taskPageRouter: TaskPageRouter) :
                         action = TaskTimerService.STOP_TASK
                     }
                     requireContext().startService(intent)
+                    currentTaskViewModel.toggleTaskAlertTimer(false)
                 }
             })
     }
