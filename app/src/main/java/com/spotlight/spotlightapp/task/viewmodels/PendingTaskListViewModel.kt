@@ -14,15 +14,15 @@ import javax.inject.Inject
 
 @HiltViewModel
 class PendingTaskListViewModel @Inject constructor(
-    private val errorHolder: ErrorHolder, private val tasksRepository: TasksRepository) :
-    ViewModel() {
+    private val tasksRepository: TasksRepository, private val errorHolder: ErrorHolder) :
+    ViewModel(), ErrorHolder by errorHolder {
     val pendingTaskList: LiveData<List<Task>>
         get() = tasksRepository.pendingTasks
             .asLiveData()
 
     fun selectPendingTask(task: Task) {
         viewModelScope.launch(Dispatchers.IO) {
-            errorHolder.handleRepositoryResult(tasksRepository.updateTask(task.copy(), true))
+            handleRepositoryResult(tasksRepository.updateTask(task.copy(), true))
         }
     }
 }
