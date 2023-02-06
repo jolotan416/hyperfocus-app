@@ -10,22 +10,18 @@ import com.spotlight.spotlightapp.databinding.FragmentPendingTaskListBinding
 import com.spotlight.spotlightapp.task.TaskPageRouter
 import com.spotlight.spotlightapp.task.adapters.PendingTaskListAdapter
 import com.spotlight.spotlightapp.task.viewmodels.PendingTaskListViewModel
-import com.spotlight.spotlightapp.utilities.viewmodelutils.ErrorHolder
 import com.spotlight.spotlightapp.utilities.viewmodelutils.ViewModelErrorListener
-import com.spotlight.spotlightapp.utilities.viewmodelutils.observeErrors
+import com.spotlight.spotlightapp.utilities.viewmodelutils.viewModelErrorListeners
 import com.spotlight.spotlightapp.utilities.viewutils.MarginItemDecoration
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class PendingTaskListFragment(private val taskPageRouter: TaskPageRouter)
-    : Fragment(R.layout.fragment_pending_task_list), ViewModelErrorListener,
-    PendingTaskListAdapter.Callback {
-    @Inject
-    lateinit var mErrorHolder: ErrorHolder
+    : Fragment(R.layout.fragment_pending_task_list), PendingTaskListAdapter.Callback {
 
     private lateinit var viewBinding: FragmentPendingTaskListBinding
     private val viewModel: PendingTaskListViewModel by viewModels()
+    private val viewModelErrorListener: ViewModelErrorListener by viewModelErrorListeners()
     private val pendingTaskListAdapter = PendingTaskListAdapter(this)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -34,14 +30,8 @@ class PendingTaskListFragment(private val taskPageRouter: TaskPageRouter)
         viewBinding = FragmentPendingTaskListBinding.bind(view)
         configureViews()
         initializeViewModel()
-        observeErrors()
+        viewModelErrorListener.observeErrors(viewModel, viewBinding.root)
     }
-
-    override val errorHolder: ErrorHolder
-        get() = mErrorHolder
-
-    override val snackbarLayout: View
-        get() = viewBinding.root
 
     override fun createTask(view: View) {
         taskPageRouter.openTaskForm(view)

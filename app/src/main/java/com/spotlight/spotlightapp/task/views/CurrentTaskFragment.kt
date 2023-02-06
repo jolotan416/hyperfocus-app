@@ -5,7 +5,6 @@ import android.os.Build
 import android.os.Bundle
 import android.view.View
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
@@ -31,27 +30,23 @@ import com.spotlight.spotlightapp.task.services.TaskTimerService
 import com.spotlight.spotlightapp.task.viewdata.TaskCountDownData
 import com.spotlight.spotlightapp.task.viewdata.TaskTransitionName
 import com.spotlight.spotlightapp.task.viewmodels.CurrentTaskViewModel
-import com.spotlight.spotlightapp.utilities.viewmodelutils.ErrorHolder
 import com.spotlight.spotlightapp.utilities.viewmodelutils.ViewModelErrorListener
-import com.spotlight.spotlightapp.utilities.viewmodelutils.observeErrors
+import com.spotlight.spotlightapp.utilities.viewmodelutils.viewModelErrorListeners
 import com.spotlight.spotlightapp.utilities.viewutils.ComposeTextConfiguration
 import com.spotlight.spotlightapp.utilities.viewutils.CustomAlertDialog
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class CurrentTaskFragment(private val taskPageRouter: TaskPageRouter) :
-    Fragment(R.layout.fragment_current_task), ViewModelErrorListener {
+    Fragment(R.layout.fragment_current_task) {
     companion object {
         const val TAG = "CurrentTaskFragment"
         const val TASK = "task"
         const val WILL_ALLOW_EDIT = "will_allow_edit"
     }
 
-    @Inject
-    lateinit var mErrorHolder: ErrorHolder
-
     private val currentTaskViewModel: CurrentTaskViewModel by viewModels()
+    private val viewModelErrorListener: ViewModelErrorListener by viewModelErrorListeners()
     private lateinit var viewBinding: FragmentCurrentTaskBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -69,16 +64,10 @@ class CurrentTaskFragment(private val taskPageRouter: TaskPageRouter) :
         viewBinding = FragmentCurrentTaskBinding.bind(view)
         configureViews()
         observeViewModel()
-        observeErrors()
+        viewModelErrorListener.observeErrors(currentTaskViewModel, viewBinding.mainLayout)
         setAlertIntervalResultListener()
         startPostponedEnterTransition()
     }
-
-    override val errorHolder: ErrorHolder
-        get() = mErrorHolder
-
-    override val snackbarLayout: View
-        get() = viewBinding.mainLayout
 
     private fun configureViews() {
         viewBinding.composeView.setContent {

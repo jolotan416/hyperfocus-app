@@ -22,8 +22,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CurrentTaskViewModel @Inject constructor(
-    private val errorHolder: ErrorHolder, private val tasksRepository: TasksRepository) :
-    ViewModel() {
+    private val tasksRepository: TasksRepository, private val errorHolder: ErrorHolder) :
+    ViewModel(), ErrorHolder by errorHolder {
     companion object {
         private const val TIMER_INTERVAL_IN_MILLIS = 1000L
         private const val TIME_CONVERSION_VALUE = 60
@@ -46,14 +46,14 @@ class CurrentTaskViewModel @Inject constructor(
     fun setCurrentTaskAlertInterval(taskAlertInterval: TaskAlertInterval) {
         val task = currentTaskUIState.value!!.task.copy(alertInterval = taskAlertInterval)
         viewModelScope.launch(Dispatchers.IO) {
-            errorHolder.handleRepositoryResult(tasksRepository.updateTask(task))
+            handleRepositoryResult(tasksRepository.updateTask(task))
         }
     }
 
     fun toggleTaskAlertTimer(isTimerRunning: Boolean) {
         val task = currentTaskUIState.value!!.task
         viewModelScope.launch(Dispatchers.IO) {
-            errorHolder.handleRepositoryResult(
+            handleRepositoryResult(
                 tasksRepository.toggleTaskTimer(task, isTimerRunning))
         }
     }
@@ -61,7 +61,7 @@ class CurrentTaskViewModel @Inject constructor(
     fun deleteTask() {
         val task = currentTaskUIState.value!!.task
         viewModelScope.launch(Dispatchers.IO) {
-            errorHolder.handleRepositoryResult(tasksRepository.deleteTask(task.copy())) { result ->
+            handleRepositoryResult(tasksRepository.deleteTask(task.copy())) { result ->
                 mCurrentTaskUIState.value = currentTaskUIState.value!!.copy(
                     deleteTaskResult = result)
             }
@@ -70,7 +70,7 @@ class CurrentTaskViewModel @Inject constructor(
 
     fun toggleTaskFinished() {
         viewModelScope.launch(Dispatchers.IO) {
-            errorHolder.handleRepositoryResult(
+            handleRepositoryResult(
                 tasksRepository.toggleTaskFinished(
                     currentTaskUIState.value!!.task.copy())) { result ->
                 mCurrentTaskUIState.value = currentTaskUIState.value!!.copy(

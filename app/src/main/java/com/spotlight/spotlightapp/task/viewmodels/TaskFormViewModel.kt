@@ -12,8 +12,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class TaskFormViewModel @Inject constructor(
-    private val errorHolder: ErrorHolder, private val tasksRepository: TasksRepository) :
-    ViewModel() {
+    private val tasksRepository: TasksRepository, private val errorHolder: ErrorHolder) :
+    ViewModel(), ErrorHolder by errorHolder {
     companion object {
         private const val MAX_TASK_TITLE_CHARACTERS = 140
     }
@@ -105,7 +105,7 @@ class TaskFormViewModel @Inject constructor(
                     initialTask.value!!.copy(title = title, description = description))
             }
 
-            errorHolder.handleRepositoryResult(result) {
+            handleRepositoryResult(result) {
                 mutableIsFormSubmitted.value = true
             }
         }
