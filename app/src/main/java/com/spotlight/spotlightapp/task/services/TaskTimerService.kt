@@ -34,6 +34,7 @@ class TaskTimerService : Service() {
                 startForeground(intent.getParcelableExtra(RUNNING_TASK)!!)
             }
             STOP_TASK -> {
+                stopForeground()
                 notificationModule.stopNotificationTimer()
                 stopSelf()
             }
