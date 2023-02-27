@@ -4,12 +4,15 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.view.View
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -126,7 +129,9 @@ class CurrentTaskFragment(private val taskPageRouter: TaskPageRouter) :
         currentTaskUiState.value?.apply {
             Column(modifier = Modifier.padding(20.dp), verticalArrangement = Arrangement.Center) {
                 if (taskCountDownData != null && !taskCountDownData!!.isInitialTaskTimerStart) {
-                    TaskCountDownTimer(countDownData = taskCountDownData!!)
+                    TaskCountDownTimer(
+                        modifier = Modifier.align(Alignment.CenterHorizontally),
+                        countDownData = taskCountDownData!!)
                 }
 
                 CurrentTaskView(task = task)
@@ -137,18 +142,40 @@ class CurrentTaskFragment(private val taskPageRouter: TaskPageRouter) :
     }
 
     @Composable
-    private fun TaskCountDownTimer(countDownData: TaskCountDownData) {
+    private fun TaskCountDownTimer(modifier: Modifier, countDownData: TaskCountDownData) {
         Box(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = modifier
+                .fillMaxWidth()
+                .height(IntrinsicSize.Max)
+                .padding(horizontal = 20.dp),
             contentAlignment = Alignment.Center) {
+            val progressBackgroundColor = colorResource(id = R.color.functionGrey)
+            val progressForegroundColor = colorResource(id = R.color.functionGreen)
+            val startAngle = 270f
+            val maxSweepAngle = 360f
+            val progressSweepAngle = maxSweepAngle * countDownData.countDownTimerProgress
+            Canvas(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .aspectRatio(1f)
+                    .align(Alignment.Center)
+                    .padding(20.dp)) {
+                drawArc(
+                    color = progressBackgroundColor, startAngle = startAngle,
+                    sweepAngle = maxSweepAngle, useCenter = false,
+                    style = Stroke(16.dp.toPx(), cap = StrokeCap.Round))
+                drawArc(
+                    color = progressForegroundColor, startAngle = startAngle,
+                    sweepAngle = progressSweepAngle, useCenter = false,
+                    style = Stroke(16.dp.toPx(), cap = StrokeCap.Round))
+            }
             Text(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(vertical = 20.dp), text = countDownData.countDownTimerString,
+                    .align(Alignment.Center), text = countDownData.countDownTimerString,
                 color = colorResource(id = R.color.primaryBlack), fontSize = 32.sp,
                 fontFamily = ComposeTextConfiguration.fontFamily,
                 fontWeight = FontWeight.Bold, textAlign = TextAlign.Center)
-            // TODO: Add circular indicator for time progress
         }
     }
 

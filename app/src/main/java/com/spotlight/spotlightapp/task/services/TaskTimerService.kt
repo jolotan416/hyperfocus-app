@@ -34,7 +34,7 @@ class TaskTimerService : Service() {
                 startForeground(intent.getParcelableExtra(RUNNING_TASK)!!)
             }
             STOP_TASK -> {
-                stopForeground()
+                stopForegroundNotification(true)
                 notificationModule.stopNotificationTimer()
                 stopSelf()
             }
@@ -51,7 +51,7 @@ class TaskTimerService : Service() {
             CoroutineScope(Dispatchers.IO).launch {
                 repository.toggleTaskTimer(task, false)
             }
-            stopForeground()
+            stopForegroundNotification(false)
         }
         val notification = notificationModule.createNotification(
             applicationContext, timerNotificationType)
@@ -61,11 +61,12 @@ class TaskTimerService : Service() {
                 timerNotificationType::class.java), notification)
     }
 
-    private fun stopForeground() {
+    private fun stopForegroundNotification(willRemoveNotification: Boolean) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            stopForeground(STOP_FOREGROUND_DETACH)
+            stopForeground(
+                if (willRemoveNotification) STOP_FOREGROUND_REMOVE else STOP_FOREGROUND_DETACH)
         } else {
-            stopForeground(false)
+            stopForeground(willRemoveNotification)
         }
     }
 }
