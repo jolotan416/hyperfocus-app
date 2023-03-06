@@ -5,6 +5,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.spotlight.spotlightapp.R
+import com.spotlight.spotlightapp.data.ErrorEntity
+import com.spotlight.spotlightapp.data.Result
 import com.spotlight.spotlightapp.data.task.Task
 import com.spotlight.spotlightapp.data.task.TaskAlertInterval
 import com.spotlight.spotlightapp.data.task.TaskTimerData
@@ -38,6 +41,17 @@ class CurrentTaskViewModel @Inject constructor(
     }
 
     val currentTaskUIState: LiveData<CurrentTaskUIState> = mCurrentTaskUIState
+
+    fun handleRunningTaskBackPress() {
+        if (mCurrentTaskUIState.value?.task?.taskTimerData != null) {
+            viewModelScope.launch(Dispatchers.IO) {
+                handleRepositoryResult(
+                    Result.Error<Any?>(
+                        ErrorEntity(R.string.current_task_timer_back_button_press_error)))
+            }
+
+        }
+    }
 
     fun setCurrentTask(currentTask: Task, willAllowEdit: Boolean) {
         mCurrentTaskUIState.value = CurrentTaskUIState(currentTask, willAllowEdit)
