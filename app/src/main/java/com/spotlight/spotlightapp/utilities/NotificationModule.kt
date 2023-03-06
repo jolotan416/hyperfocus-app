@@ -3,10 +3,13 @@ package com.spotlight.spotlightapp.utilities
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import com.spotlight.spotlightapp.MainActivity
 import com.spotlight.spotlightapp.R
 import com.spotlight.spotlightapp.utilities.notification.NotificationCountDownTimer
 import com.spotlight.spotlightapp.utilities.notification.NotificationType
@@ -73,6 +76,20 @@ class NotificationModule @Inject constructor() {
         currentCountDownTimer = NotificationCountDownTimer(
             context, notificationBuilder, timerNotification, timerEndTimeDifference)
         currentCountDownTimer!!.start()
+
+        val intent = Intent(context, MainActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
+        }
+        val pendingIntent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            PendingIntent.getActivity(
+                context, NotificationType.getIdFromNotificationType(timerNotification.javaClass),
+                intent, PendingIntent.FLAG_IMMUTABLE)
+        } else {
+            PendingIntent.getActivity(
+                context, NotificationType.getIdFromNotificationType(timerNotification.javaClass),
+                intent, 0)
+        }
+        notificationBuilder.setContentIntent(pendingIntent)
 
         return notificationBuilder.build()
     }

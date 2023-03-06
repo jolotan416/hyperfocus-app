@@ -6,6 +6,7 @@ import android.transition.ChangeTransform
 import android.transition.Fade
 import android.transition.TransitionSet
 import android.view.View
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentFactory
@@ -21,6 +22,8 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity(R.layout.activity_main), TaskPageRouter {
+    private val mainActivityViewModel: MainActivityViewModel by viewModels()
+
     private val fragmentFactory = object : FragmentFactory() {
         override fun instantiate(classLoader: ClassLoader, className: String): Fragment {
             return when (loadFragmentClass(classLoader, className)) {
@@ -44,6 +47,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main), TaskPageRouter {
         super.onCreate(savedInstanceState)
 
         configureSplashScreenFragment()
+        observeViewModel()
     }
 
     override fun openTaskList(view: View) {
@@ -84,10 +88,27 @@ class MainActivity : AppCompatActivity(R.layout.activity_main), TaskPageRouter {
                 if (requestKey == SplashScreenFragment.REQUEST_KEY &&
                     result.getBoolean(SplashScreenFragment.IS_FINISHED_SPLASH_ANIMATION, false)) {
                     configureDailyIntentListFragment()
+                    mainActivityViewModel.checkForRunningTask()
+
                 }
             }
 
             attachFragment(SplashScreenFragment::class.java, SplashScreenFragment.TAG)
+        }
+    }
+
+    private fun observeViewModel() {
+        mainActivityViewModel.currentRunningTask.observe(this) { currentRunningTask ->
+            if (currentRunningTask == null) return@observe
+
+            val bundle = Bundle().apply {
+                putParcelable(CurrentTaskFragment.TASK, currentRunningTask)
+                putBoolean(CurrentTaskFragment.WILL_ALLOW_EDIT, false)
+            }
+            attachFragment(
+                CurrentTaskFragment::class.java, CurrentTaskFragment.TAG, willAddToBackStack = true,
+                arguments = bundle)
+            mainActivityViewModel.notifyCurrentRunningTaskHandled()
         }
     }
 
