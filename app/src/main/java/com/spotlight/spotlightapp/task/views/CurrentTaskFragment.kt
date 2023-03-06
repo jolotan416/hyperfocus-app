@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.view.View
+import androidx.activity.OnBackPressedCallback
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
@@ -57,6 +58,13 @@ class CurrentTaskFragment(private val taskPageRouter: TaskPageRouter) :
     private val viewModelErrorListener: ViewModelErrorListener by viewModelErrorListeners()
     private lateinit var viewBinding: FragmentCurrentTaskBinding
 
+    private val onBackPressedCallback: OnBackPressedCallback = object :
+        OnBackPressedCallback(false) {
+        override fun handleOnBackPressed() {
+            currentTaskViewModel.handleRunningTaskBackPress()
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -71,6 +79,7 @@ class CurrentTaskFragment(private val taskPageRouter: TaskPageRouter) :
 
         viewBinding = FragmentCurrentTaskBinding.bind(view)
         configureViews()
+        configureBackButtonPress()
         observeViewModel()
         viewModelErrorListener.observeErrors(currentTaskViewModel, viewBinding.mainLayout)
         setAlertIntervalResultListener()
@@ -83,6 +92,11 @@ class CurrentTaskFragment(private val taskPageRouter: TaskPageRouter) :
         }
     }
 
+    private fun configureBackButtonPress() {
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner, onBackPressedCallback)
+    }
+
     private fun observeViewModel() {
         currentTaskViewModel.currentTaskUIState.observe(viewLifecycleOwner) { uiState ->
             when {
@@ -92,6 +106,7 @@ class CurrentTaskFragment(private val taskPageRouter: TaskPageRouter) :
                         ?: (TaskTransitionName.CURRENT_TASK.getTransitionName(
                             uiState.task.id.toString()))
 
+                    onBackPressedCallback.isEnabled = uiState.taskCountDownData != null && !uiState.taskCountDownData!!.isInitialTaskTimerStart
                     if (uiState.taskCountDownData?.isInitialTaskTimerStart == true) {
                         runTaskTimer(uiState.task)
                     }

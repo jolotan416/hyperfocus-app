@@ -9,6 +9,8 @@
 
     <string name="current_task_alert_interval_dialog_title">Choose a task alert interval</string>
 
+    <string name="current_task_timer_back_button_press_error">You can\'t leave just yet! You have to finish your task!</string>
+
     <plurals name="hours">
         <item quantity="one">hour</item>
         <item quantity="other">hours</item>
