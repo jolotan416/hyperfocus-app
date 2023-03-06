@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.spotlight.spotlightapp.data.task.Task
 import com.spotlight.spotlightapp.data.task.TaskAlertInterval
+import com.spotlight.spotlightapp.data.task.TaskTimerData
 import com.spotlight.spotlightapp.task.repo.TasksRepository
 import com.spotlight.spotlightapp.task.viewdata.CurrentTaskUIState
 import com.spotlight.spotlightapp.task.viewdata.TaskCountDownData
@@ -83,8 +84,8 @@ class CurrentTaskViewModel @Inject constructor(
         taskFlowObserverJob?.cancel()
         taskFlowObserverJob = viewModelScope.launch(Dispatchers.IO) {
             tasksRepository.observeTask(taskId).collect { task ->
-                val currentTimerEndDate = task?.currentTimerEndDate
-                if (currentTimerEndDate == null) {
+                val taskTimerData = task?.taskTimerData
+                if (taskTimerData == null) {
                     taskCountDownTimer?.cancel()
                 }
 
@@ -93,14 +94,16 @@ class CurrentTaskViewModel @Inject constructor(
                         task = task ?: return@withContext,
                         taskCountDownData = TaskCountDownData("", 0f, true))
                 }
-                currentTimerEndDate?.time?.let {
-                    startCountDownTimer(it - Calendar.getInstance().timeInMillis)
+                taskTimerData?.let {
+                    startCountDownTimer(it)
                 }
             }
         }
     }
 
-    private fun startCountDownTimer(timerEndTimeDifference: Long) {
+    private fun startCountDownTimer(taskTimerData: TaskTimerData) {
+        val totalTime = taskTimerData.currentTimerEndDate.time - taskTimerData.currentTimerStartDate.time
+        val timerEndTimeDifference = taskTimerData.currentTimerEndDate.time - Calendar.getInstance().timeInMillis
         viewModelScope.launch(Dispatchers.Main) {
             taskCountDownTimer =
                 object : CountDownTimer(timerEndTimeDifference, TIMER_INTERVAL_IN_MILLIS) {
@@ -116,7 +119,7 @@ class CurrentTaskViewModel @Inject constructor(
                         mCurrentTaskUIState.value = currentTaskUIState.value!!.copy(
                             taskCountDownData = TaskCountDownData(
                                 countDownTimerString,
-                                (timerEndTimeDifference - millisUntilFinished) / timerEndTimeDifference.toFloat(),
+                                (totalTime - millisUntilFinished) / totalTime.toFloat(),
                                 false))
                     }
 

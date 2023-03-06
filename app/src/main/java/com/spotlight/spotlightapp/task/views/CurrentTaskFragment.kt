@@ -4,10 +4,12 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.view.View
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -109,7 +111,7 @@ class CurrentTaskFragment(private val taskPageRouter: TaskPageRouter) :
     }
 
     private fun runTaskTimer(task: Task) {
-        if (task.currentTimerEndDate == null) return
+        if (task.taskTimerData == null) return
 
         val intent = Intent(requireContext(), TaskTimerService::class.java).apply {
             action = TaskTimerService.RUN_TASK
@@ -149,11 +151,12 @@ class CurrentTaskFragment(private val taskPageRouter: TaskPageRouter) :
                 .height(IntrinsicSize.Max)
                 .padding(horizontal = 20.dp),
             contentAlignment = Alignment.Center) {
-            val progressBackgroundColor = colorResource(id = R.color.functionGrey)
+            val progressBackgroundColor = colorResource(id = R.color.functionLightGrey)
             val progressForegroundColor = colorResource(id = R.color.functionGreen)
             val startAngle = 270f
             val maxSweepAngle = 360f
-            val progressSweepAngle = maxSweepAngle * countDownData.countDownTimerProgress
+            val progressSweepAngle: Float by animateFloatAsState(
+                targetValue = maxSweepAngle * countDownData.countDownTimerProgress)
             Canvas(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -204,7 +207,7 @@ class CurrentTaskFragment(private val taskPageRouter: TaskPageRouter) :
             update = {
                 this.willShowEditButtons = willShowEditButtons
                 this.isTaskFinished = task.isFinished
-                this.isTimerRunning = task.currentTimerEndDate != null
+                this.isTimerRunning = task.taskTimerData != null
                 configureTimeButton(timeButton, task.alertInterval)
                 configureEditButton(editButton, task)
                 configureDeleteButton(deleteButton)

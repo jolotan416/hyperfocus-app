@@ -6,7 +6,6 @@ import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import kotlinx.parcelize.Parcelize
-import java.util.*
 
 @Parcelize
 @Entity
@@ -26,10 +25,10 @@ data class Task(
     @ColumnInfo(name = "is_finished", defaultValue = "false")
     val isFinished: Boolean = false,
 
-    @ColumnInfo(name = "current_timer_end_date", defaultValue = "0")
-    val currentTimerEndDate: Date? = null,
+    @Embedded(prefix = "task_timer_data")
+    val taskTimerData: TaskTimerData? = null,
 
-    @Embedded(prefix = "alert_interval_")
+    @Embedded(prefix = "alert_interval")
     val alertInterval: TaskAlertInterval = TaskAlertInterval()
 ) : Parcelable {
     val isInDailyIntentList: Boolean

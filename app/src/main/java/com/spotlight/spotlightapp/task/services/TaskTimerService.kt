@@ -47,7 +47,7 @@ class TaskTimerService : Service() {
 
     private fun startForeground(task: Task) {
         val timerNotificationType = NotificationType.TimerNotification(
-            task.title, task.currentTimerEndDate!!.time) {
+            task.title, task.taskTimerData!!.currentTimerEndDate.time) {
             CoroutineScope(Dispatchers.IO).launch {
                 repository.toggleTaskTimer(task, false)
             }

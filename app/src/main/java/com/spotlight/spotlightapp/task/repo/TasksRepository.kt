@@ -4,6 +4,7 @@ import com.spotlight.spotlightapp.R
 import com.spotlight.spotlightapp.data.ErrorEntity
 import com.spotlight.spotlightapp.data.Result
 import com.spotlight.spotlightapp.data.task.Task
+import com.spotlight.spotlightapp.data.task.TaskTimerData
 import com.spotlight.spotlightapp.utilities.RepositoryErrorHandler
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -55,11 +56,16 @@ class TasksRepository @Inject constructor(
 
     suspend fun toggleTaskTimer(task: Task, isTimerRunning: Boolean): Result<Task> {
         return repositoryErrorHandler.handleGeneralRepositoryOperation {
-            val newCurrentTimerEndDate: Calendar? =
-                if (isTimerRunning) Calendar.getInstance().apply {
+            val newTaskTimerData: TaskTimerData? = if (isTimerRunning) {
+                val newCurrentTimerStartDate = Calendar.getInstance()
+                val newCurrentTimerEndDate = Calendar.getInstance().apply {
+                    time = newCurrentTimerStartDate.time
                     add(task.alertInterval.unit.calendarUnit, task.alertInterval.amount)
-                } else null
-            val updatedTask = task.copy(currentTimerEndDate = newCurrentTimerEndDate?.time)
+                }
+
+                TaskTimerData(newCurrentTimerStartDate.time, newCurrentTimerEndDate.time)
+            } else null
+            val updatedTask = task.copy(taskTimerData = newTaskTimerData)
             updateTask(updatedTask)
         }
     }
