@@ -133,15 +133,15 @@ class CurrentTaskFragment(private val taskPageRouter: TaskPageRouter) :
 
         currentTaskUiState.value?.apply {
             Column(modifier = Modifier.padding(20.dp), verticalArrangement = Arrangement.Center) {
+                CurrentTaskView(task = task)
+                Spacer(modifier = Modifier.height(12.dp))
                 AnimatedVisibility(
                     visible = taskCountDownData != null && !taskCountDownData!!.isInitialTaskTimerStart) {
                     TaskCountDownTimer(
                         modifier = Modifier.align(Alignment.CenterHorizontally),
                         countDownData = taskCountDownData!!)
                 }
-
-                CurrentTaskView(task = task)
-                Spacer(modifier = Modifier.height(28.dp))
+                Spacer(modifier = Modifier.height(32.dp))
                 CurrentTaskButtons(task = task, willShowEditButtons = willShowEditButtons)
             }
         }
@@ -163,10 +163,10 @@ class CurrentTaskFragment(private val taskPageRouter: TaskPageRouter) :
                 targetValue = maxSweepAngle * countDownData.countDownTimerProgress)
             Canvas(
                 modifier = Modifier
-                    .fillMaxWidth()
+                    .fillMaxWidth(0.8f)
                     .aspectRatio(1f)
-                    .align(Alignment.Center)
-                    .padding(20.dp)) {
+                    .padding(20.dp)
+                    .align(Alignment.Center)) {
                 drawArc(
                     color = progressBackgroundColor, startAngle = startAngle,
                     sweepAngle = maxSweepAngle, useCenter = false,
@@ -180,27 +180,33 @@ class CurrentTaskFragment(private val taskPageRouter: TaskPageRouter) :
                 modifier = Modifier
                     .fillMaxWidth()
                     .align(Alignment.Center), text = countDownData.countDownTimerString,
-                color = colorResource(id = R.color.primaryBlack), fontSize = 32.sp,
+                color = colorResource(id = R.color.primaryBlack), fontSize = 24.sp,
                 fontFamily = ComposeTextConfiguration.fontFamily,
                 fontWeight = FontWeight.Bold, textAlign = TextAlign.Center)
         }
     }
 
+    @OptIn(ExperimentalAnimationApi::class)
     @Composable
     private fun CurrentTaskView(task: Task) {
-        Column(
-            modifier = Modifier.fillMaxWidth()) {
-            Text(
-                text = task.title, color = colorResource(id = R.color.primaryBlack),
-                fontSize = 20.sp, fontFamily = ComposeTextConfiguration.fontFamily,
-                fontWeight = FontWeight.SemiBold,
-                lineHeight = 24.sp)
-            Spacer(modifier = Modifier.height(12.dp))
-            Text(
-                text = task.description, color = colorResource(id = R.color.primaryBlack),
-                fontSize = 16.sp, fontFamily = ComposeTextConfiguration.fontFamily,
-                fontWeight = FontWeight.Normal,
-                lineHeight = 20.sp)
+        AnimatedContent(targetState = task.taskTimerData != null) { isTimerRunning ->
+            val textAlign = if (isTimerRunning) TextAlign.Center else TextAlign.Left
+            Column(
+                modifier = Modifier.fillMaxWidth()) {
+                Text(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = task.title, color = colorResource(id = R.color.primaryBlack),
+                    fontSize = 24.sp, fontFamily = ComposeTextConfiguration.fontFamily,
+                    fontWeight = FontWeight.SemiBold,
+                    lineHeight = 28.sp, textAlign = textAlign)
+                Spacer(modifier = Modifier.height(12.dp))
+                Text(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = task.description, color = colorResource(id = R.color.primaryBlack),
+                    fontSize = 16.sp, fontFamily = ComposeTextConfiguration.fontFamily,
+                    fontWeight = FontWeight.Normal,
+                    lineHeight = 20.sp, textAlign = textAlign)
+            }
         }
     }
 
