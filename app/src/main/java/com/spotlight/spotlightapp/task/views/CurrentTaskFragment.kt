@@ -4,6 +4,9 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.view.View
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.*
@@ -130,7 +133,8 @@ class CurrentTaskFragment(private val taskPageRouter: TaskPageRouter) :
 
         currentTaskUiState.value?.apply {
             Column(modifier = Modifier.padding(20.dp), verticalArrangement = Arrangement.Center) {
-                if (taskCountDownData != null && !taskCountDownData!!.isInitialTaskTimerStart) {
+                AnimatedVisibility(
+                    visible = taskCountDownData != null && !taskCountDownData!!.isInitialTaskTimerStart) {
                     TaskCountDownTimer(
                         modifier = Modifier.align(Alignment.CenterHorizontally),
                         countDownData = taskCountDownData!!)
@@ -200,34 +204,38 @@ class CurrentTaskFragment(private val taskPageRouter: TaskPageRouter) :
         }
     }
 
+    @OptIn(ExperimentalAnimationApi::class)
     @Composable
     private fun CurrentTaskButtons(task: Task, willShowEditButtons: Boolean) {
-        AndroidViewBinding(
-            factory = CurrentTaskViewButtonsBinding::inflate, modifier = Modifier.fillMaxWidth(),
-            update = {
-                this.willShowEditButtons = willShowEditButtons
-                this.isTaskFinished = task.isFinished
-                this.isTimerRunning = task.taskTimerData != null
-                configureTimeButton(timeButton, task.alertInterval)
-                configureEditButton(editButton, task)
-                configureDeleteButton(deleteButton)
+        AnimatedContent(targetState = task.taskTimerData != null) { isTimerRunning ->
+            AndroidViewBinding(
+                factory = CurrentTaskViewButtonsBinding::inflate,
+                modifier = Modifier.fillMaxWidth(),
+                update = {
+                    this.willShowEditButtons = willShowEditButtons
+                    this.isTaskFinished = task.isFinished
+                    this.isTimerRunning = isTimerRunning
+                    configureTimeButton(timeButton, task.alertInterval)
+                    configureEditButton(editButton, task)
+                    configureDeleteButton(deleteButton)
 
-                startButton.root.setOnClickListener {
-                    currentTaskViewModel.toggleTaskAlertTimer(true)
-                }
-
-                doneButton.root.setOnClickListener {
-                    currentTaskViewModel.toggleTaskFinished()
-                }
-
-                stopButton.root.setOnClickListener {
-                    val intent = Intent(requireContext(), TaskTimerService::class.java).apply {
-                        action = TaskTimerService.STOP_TASK
+                    startButton.root.setOnClickListener {
+                        currentTaskViewModel.toggleTaskAlertTimer(true)
                     }
-                    requireContext().startService(intent)
-                    currentTaskViewModel.toggleTaskAlertTimer(false)
-                }
-            })
+
+                    doneButton.root.setOnClickListener {
+                        currentTaskViewModel.toggleTaskFinished()
+                    }
+
+                    stopButton.root.setOnClickListener {
+                        val intent = Intent(requireContext(), TaskTimerService::class.java).apply {
+                            action = TaskTimerService.STOP_TASK
+                        }
+                        requireContext().startService(intent)
+                        currentTaskViewModel.toggleTaskAlertTimer(false)
+                    }
+                })
+        }
     }
 
     private fun configureTimeButton(
