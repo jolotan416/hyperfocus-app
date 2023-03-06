@@ -137,9 +137,11 @@ class CurrentTaskFragment(private val taskPageRouter: TaskPageRouter) :
                 Spacer(modifier = Modifier.height(12.dp))
                 AnimatedVisibility(
                     visible = taskCountDownData != null && !taskCountDownData!!.isInitialTaskTimerStart) {
-                    TaskCountDownTimer(
-                        modifier = Modifier.align(Alignment.CenterHorizontally),
-                        countDownData = taskCountDownData!!)
+                    taskCountDownData?.let { taskCountDownData ->
+                        TaskCountDownTimer(
+                            modifier = Modifier.align(Alignment.CenterHorizontally),
+                            countDownData = taskCountDownData)
+                    }
                 }
                 Spacer(modifier = Modifier.height(32.dp))
                 CurrentTaskButtons(task = task, willShowEditButtons = willShowEditButtons)
