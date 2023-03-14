@@ -11,7 +11,8 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Text
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
@@ -20,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -160,6 +162,68 @@ class CurrentTaskFragment(private val taskPageRouter: TaskPageRouter) :
                 }
                 Spacer(modifier = Modifier.height(32.dp))
                 CurrentTaskButtons(task = task, willShowEditButtons = willShowEditButtons)
+            }
+
+            if (willShowTimerFinishedDialog) {
+                AlertDialog(onDismissRequest = { currentTaskViewModel.onDismissFinishedDialog() },
+                            title = {
+                                Text(
+                                    text = stringResource(
+                                        id = R.string.current_task_finished_dialog_title),
+                                    color = colorResource(
+                                        id = R.color.primaryBlack),
+                                    fontFamily = ComposeTextConfiguration.fontFamily,
+                                    fontWeight = FontWeight.SemiBold, fontSize = 20.sp)
+                            },
+                            text = {
+                                Text(
+                                    text = stringResource(
+                                        id = R.string.current_task_finished_dialog_text),
+                                    color = colorResource(
+                                        id = R.color.primaryBlack),
+                                    fontFamily = ComposeTextConfiguration.fontFamily,
+                                    fontWeight = FontWeight.Normal, fontSize = 16.sp)
+                            },
+                            buttons = {
+                                Row(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(20.dp),
+                                    horizontalArrangement = Arrangement.End) {
+                                    Button(
+                                        onClick = { currentTaskViewModel.onDismissFinishedDialog() },
+                                        shape = RoundedCornerShape(10.dp),
+                                        colors = ButtonDefaults.buttonColors(
+                                            backgroundColor = colorResource(
+                                                id = R.color.functionRed),
+                                            contentColor = colorResource(
+                                                id = R.color.primaryWhite))) {
+                                        Text(
+                                            text = stringResource(
+                                                id = R.string.current_task_finished_dialog_dismiss_label),
+                                            fontFamily = ComposeTextConfiguration.fontFamily,
+                                            fontWeight = FontWeight.SemiBold, fontSize = 16.sp)
+                                    }
+                                    Spacer(modifier = Modifier.width(8.dp))
+                                    Button(
+                                        onClick = {
+                                            currentTaskViewModel.toggleTaskFinished()
+                                            currentTaskViewModel.onDismissFinishedDialog()
+                                        },
+                                        shape = RoundedCornerShape(10.dp),
+                                        colors = ButtonDefaults.buttonColors(
+                                            backgroundColor = colorResource(
+                                                id = R.color.functionGreen),
+                                            contentColor = colorResource(
+                                                id = R.color.primaryWhite))) {
+                                        Text(
+                                            text = stringResource(
+                                                id = R.string.current_task_finished_dialog_confirm_lb),
+                                            fontFamily = ComposeTextConfiguration.fontFamily,
+                                            fontWeight = FontWeight.SemiBold, fontSize = 16.sp)
+                                    }
+                                }
+                            })
             }
         }
     }
