@@ -94,6 +94,10 @@ class CurrentTaskViewModel @Inject constructor(
         }
     }
 
+    fun onDismissFinishedDialog() {
+        mCurrentTaskUIState.value = currentTaskUIState.value!!.copy(willShowTimerFinishedDialog = false)
+    }
+
     private fun observeTask(taskId: Int) {
         taskFlowObserverJob?.cancel()
         taskFlowObserverJob = viewModelScope.launch(Dispatchers.IO) {
@@ -139,7 +143,7 @@ class CurrentTaskViewModel @Inject constructor(
 
                     override fun onFinish() {
                         mCurrentTaskUIState.value = currentTaskUIState.value!!.copy(
-                            taskCountDownData = null)
+                            taskCountDownData = null, willShowTimerFinishedDialog = true)
                     }
                 }
             taskCountDownTimer!!.start()

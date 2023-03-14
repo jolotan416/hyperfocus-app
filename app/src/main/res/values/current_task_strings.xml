@@ -9,6 +9,11 @@
 
     <string name="current_task_alert_interval_dialog_title">Choose a task alert interval</string>
 
+    <string name="current_task_finished_dialog_title">Great job!</string>
+    <string name="current_task_finished_dialog_text">Is this task completed?</string>
+    <string name="current_task_finished_dialog_dismiss_label">No</string>
+    <string name="current_task_finished_dialog_confirm_lb">Yes</string>
+
     <string name="current_task_timer_back_button_press_error">You can\'t leave just yet! You have to finish your task!</string>
 
     <plurals name="hours">
