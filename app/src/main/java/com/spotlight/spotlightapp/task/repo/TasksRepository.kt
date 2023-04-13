@@ -80,6 +80,9 @@ class TasksRepository @Inject constructor(
 
     suspend fun deleteTask(task: Task): Result<Any?> {
         return repositoryErrorHandler.handleGeneralRepositoryOperation {
+            if (task.priority != 0) {
+                toggleTaskPriority(task)
+            }
             localDataSource.deleteTask(task)
 
             Result.Success(null)
