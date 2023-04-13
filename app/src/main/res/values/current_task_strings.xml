@@ -16,6 +16,11 @@
 
     <string name="current_task_timer_back_button_press_error">You can\'t leave just yet! You have to finish your task!</string>
 
+    <string name="current_task_notification_permission_title">We need a way to alert you!</string>
+    <string name="current_task_notificaiton_permission_message">Please allow notifications in the app so we could alert you of your current task.</string>
+    <string name="current_task_notification_permission_dismiss_label">Cancel</string>
+    <string name="current_task_notification_permission_confirm_label">Allow notifications</string>
+
     <plurals name="hours">
         <item quantity="one">hour</item>
         <item quantity="other">hours</item>
