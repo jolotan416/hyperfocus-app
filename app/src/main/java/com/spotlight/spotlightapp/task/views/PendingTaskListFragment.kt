@@ -30,7 +30,7 @@ class PendingTaskListFragment(private val taskPageRouter: TaskPageRouter)
         viewBinding = FragmentPendingTaskListBinding.bind(view)
         configureViews()
         initializeViewModel()
-        viewModelErrorListener.observeErrors(viewModel, viewBinding.root)
+        viewModelErrorListener.observeErrors(viewModel, viewBinding.root, viewLifecycleOwner)
     }
 
     override fun createTask(view: View) {

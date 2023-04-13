@@ -83,7 +83,8 @@ class CurrentTaskFragment(private val taskPageRouter: TaskPageRouter) :
         configureViews()
         configureBackButtonPress()
         observeViewModel()
-        viewModelErrorListener.observeErrors(currentTaskViewModel, viewBinding.mainLayout)
+        viewModelErrorListener.observeErrors(
+            currentTaskViewModel, viewBinding.mainLayout, viewLifecycleOwner)
         setAlertIntervalResultListener()
         startPostponedEnterTransition()
     }

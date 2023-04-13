@@ -43,7 +43,7 @@ class TaskFormFragment : Fragment(R.layout.fragment_task_form) {
         }
         configureViews()
         observeViewModel()
-        viewModelErrorListener.observeErrors(taskFormViewModel, binding.root)
+        viewModelErrorListener.observeErrors(taskFormViewModel, binding.root, viewLifecycleOwner)
         startPostponedEnterTransition()
     }
 
