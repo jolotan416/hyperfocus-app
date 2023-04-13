@@ -9,8 +9,9 @@ import com.google.android.material.snackbar.Snackbar
 import com.spotlight.spotlightapp.R
 
 class ViewModelErrorListener(
-    private val context: Context, private val lifecycleOwner: LifecycleOwner) {
-    fun observeErrors(errorHolder: ErrorHolder, snackbarLayout: View) {
+    private val context: Context) {
+    fun observeErrors(
+        errorHolder: ErrorHolder, snackbarLayout: View, lifecycleOwner: LifecycleOwner) {
         errorHolder.snackbarErrorMessageRes.observe(lifecycleOwner) { errorEntity ->
             val snackbarErrorMessage = errorEntity?.let {
                 context.getString(it.errorMessageRes, *it.errorMessageArguments)
@@ -26,5 +27,5 @@ class ViewModelErrorListener(
 }
 
 fun Fragment.viewModelErrorListeners(): Lazy<ViewModelErrorListener> = lazy {
-    ViewModelErrorListener(requireContext(), viewLifecycleOwner)
+    ViewModelErrorListener(requireContext())
 }
