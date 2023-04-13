@@ -7,6 +7,7 @@ import com.spotlight.spotlightapp.data.task.Task
 import com.spotlight.spotlightapp.data.task.TaskTimerData
 import com.spotlight.spotlightapp.utilities.RepositoryErrorHandler
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
 import java.util.*
 import javax.inject.Inject
@@ -84,6 +85,14 @@ class TasksRepository @Inject constructor(
                 toggleTaskPriority(task)
             }
             localDataSource.deleteTask(task)
+
+            Result.Success(null)
+        }
+    }
+
+    suspend fun resetDailyIntentListPriority(): Result<Any?> {
+        return repositoryErrorHandler.handleGeneralRepositoryOperation {
+            dailyIntentList.firstOrNull()?.forEach { toggleTaskPriority(it) }
 
             Result.Success(null)
         }
