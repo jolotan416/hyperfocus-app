@@ -26,7 +26,6 @@ class PermissionModule(
     }
 
     fun requestPermissionWithRationale(
-        permission: String,
         permissionRationaleAlertDialogViewData: CustomAlertDialog.ViewData) {
         when {
             ContextCompat.checkSelfPermission(
