@@ -325,7 +325,6 @@ class CurrentTaskFragment(private val taskPageRouter: TaskPageRouter) :
 
                     startButton.root.setOnClickListener {
                         postNotificationsPermissionModule.requestPermissionWithRationale(
-                            Manifest.permission.POST_NOTIFICATIONS,
                             CustomAlertDialog.ViewData(
                                 title = getString(
                                     R.string.current_task_notification_permission_title),
