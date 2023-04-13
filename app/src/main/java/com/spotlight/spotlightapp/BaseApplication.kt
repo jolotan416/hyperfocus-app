@@ -41,8 +41,8 @@ class BaseApplication : Application(), Configuration.Provider {
             set(Calendar.SECOND, 0)
             set(Calendar.MILLISECOND, 0)
         }
-        val startOfDayInMillis = calendar.timeInMillis - currentTimeInMillis
-        val initialDelayInMillis = if (startOfDayInMillis >= 0) startOfDayInMillis else calendar.run {
+        val differenceFromStartOfDayInMillis = calendar.timeInMillis - currentTimeInMillis
+        val initialDelayInMillis = if (differenceFromStartOfDayInMillis >= 0) differenceFromStartOfDayInMillis else calendar.run {
             add(Calendar.DATE, 1)
             timeInMillis - currentTimeInMillis
         }

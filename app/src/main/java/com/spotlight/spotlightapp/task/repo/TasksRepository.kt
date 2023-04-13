@@ -92,7 +92,7 @@ class TasksRepository @Inject constructor(
 
     suspend fun resetDailyIntentListPriority(): Result<Any?> {
         return repositoryErrorHandler.handleGeneralRepositoryOperation {
-            dailyIntentList.firstOrNull()?.forEach { toggleTaskPriority(it) }
+            dailyIntentList.firstOrNull()?.forEach { updateTaskPriority(it, 0) }
 
             Result.Success(null)
         }
