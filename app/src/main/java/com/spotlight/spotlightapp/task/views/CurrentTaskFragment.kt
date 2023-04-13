@@ -12,7 +12,9 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -158,7 +160,12 @@ class CurrentTaskFragment(private val taskPageRouter: TaskPageRouter) :
         val currentTaskUiState = currentTaskViewModel.currentTaskUIState.observeAsState()
 
         currentTaskUiState.value?.apply {
-            Column(modifier = Modifier.padding(20.dp), verticalArrangement = Arrangement.Center) {
+            Column(
+                modifier = Modifier
+                    .padding(horizontal = 20.dp)
+                    .verticalScroll(rememberScrollState()),
+                verticalArrangement = Arrangement.Center) {
+                Spacer(modifier = Modifier.height(20.dp))
                 CurrentTaskView(task = task)
                 Spacer(modifier = Modifier.height(12.dp))
                 AnimatedVisibility(
@@ -171,6 +178,7 @@ class CurrentTaskFragment(private val taskPageRouter: TaskPageRouter) :
                 }
                 Spacer(modifier = Modifier.height(32.dp))
                 CurrentTaskButtons(task = task, willShowEditButtons = willShowEditButtons)
+                Spacer(modifier = Modifier.height(20.dp))
             }
 
             if (willShowTimerFinishedDialog) {
