@@ -1,5 +1,6 @@
 package com.spotlight.spotlightapp.task.views
 
+import android.Manifest
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
@@ -41,6 +42,8 @@ import com.spotlight.spotlightapp.task.services.TaskTimerService
 import com.spotlight.spotlightapp.task.viewdata.TaskCountDownData
 import com.spotlight.spotlightapp.task.viewdata.TaskTransitionName
 import com.spotlight.spotlightapp.task.viewmodels.CurrentTaskViewModel
+import com.spotlight.spotlightapp.utilities.permission.PermissionModule
+import com.spotlight.spotlightapp.utilities.permission.permissionModule
 import com.spotlight.spotlightapp.utilities.viewmodelutils.ViewModelErrorListener
 import com.spotlight.spotlightapp.utilities.viewmodelutils.viewModelErrorListeners
 import com.spotlight.spotlightapp.utilities.viewutils.ComposeTextConfiguration
@@ -58,6 +61,10 @@ class CurrentTaskFragment(private val taskPageRouter: TaskPageRouter) :
 
     private val currentTaskViewModel: CurrentTaskViewModel by viewModels()
     private val viewModelErrorListener: ViewModelErrorListener by viewModelErrorListeners()
+    private val postNotificationsPermissionModule: PermissionModule by permissionModule(
+        Manifest.permission.POST_NOTIFICATIONS) {
+        currentTaskViewModel.toggleTaskAlertTimer(true)
+    }
     private lateinit var viewBinding: FragmentCurrentTaskBinding
 
     private val onBackPressedCallback: OnBackPressedCallback = object :
@@ -70,6 +77,7 @@ class CurrentTaskFragment(private val taskPageRouter: TaskPageRouter) :
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        postNotificationsPermissionModule.initializeModule()
         requireArguments().let {
             currentTaskViewModel.setCurrentTask(
                 it.getParcelable(TASK)!!, it.getBoolean(WILL_ALLOW_EDIT))
@@ -308,7 +316,29 @@ class CurrentTaskFragment(private val taskPageRouter: TaskPageRouter) :
                     configureDeleteButton(deleteButton)
 
                     startButton.root.setOnClickListener {
-                        currentTaskViewModel.toggleTaskAlertTimer(true)
+                        postNotificationsPermissionModule.requestPermissionWithRationale(
+                            Manifest.permission.POST_NOTIFICATIONS,
+                            CustomAlertDialog.ViewData(
+                                title = getString(
+                                    R.string.current_task_notification_permission_title),
+                                message = getString(
+                                    R.string.current_task_notificaiton_permission_message),
+                                negativeButtonViewData = CustomAlertDialog.ButtonViewData(
+                                    getString(
+                                        R.string.current_task_notification_permission_dismiss_label),
+                                    ContextCompat.getColor(
+                                        requireContext(),
+                                        R.color.primaryBlack)) {},
+                                positiveButtonViewData = CustomAlertDialog.ButtonViewData(
+                                    getString(
+                                        R.string.current_task_notification_permission_confirm_label),
+                                    ContextCompat.getColor(
+                                        requireContext(),
+                                        R.color.functionGreen)
+                                ) {
+                                    postNotificationsPermissionModule.redirectToPermissionSettingsPage()
+                                }
+                            ))
                     }
 
                     doneButton.root.setOnClickListener {
