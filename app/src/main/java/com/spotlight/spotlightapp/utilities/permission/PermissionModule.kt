@@ -14,7 +14,7 @@ import com.spotlight.spotlightapp.utilities.viewutils.CustomAlertDialog
 class PermissionModule(
     private val context: Context, private val permission: String,
     private val permissionHolder: PermissionHolder,
-    private val onPermissionGrantedCallback: () -> Unit) {
+    private val onPermissionGrantedCallback: (Boolean) -> Unit) {
     private lateinit var requestPermissionLauncher: ActivityResultLauncher<String>
 
     /**
@@ -30,7 +30,7 @@ class PermissionModule(
         when {
             ContextCompat.checkSelfPermission(
                 context, permission) == PackageManager.PERMISSION_GRANTED -> {
-                onPermissionGrantedCallback()
+                onPermissionGrantedCallback(true)
             }
             permissionHolder.shouldShowPermissionRationale() -> {
                 CustomAlertDialog(context, permissionRationaleAlertDialogViewData).show()
@@ -50,27 +50,26 @@ class PermissionModule(
 
     interface PermissionHolder {
         fun getRequestPermissionLauncher(
-            onPermissionGrantedCallback: () -> Unit): ActivityResultLauncher<String>
+            onPermissionGrantedCallback: (Boolean) -> Unit): ActivityResultLauncher<String>
 
         fun shouldShowPermissionRationale(): Boolean
     }
 }
 
 fun Fragment.permissionModule(
-    permission: String, onPermissionGrantedCallback: () -> Unit): Lazy<PermissionModule> = lazy {
-    val permissionHolder = object : PermissionModule.PermissionHolder {
-        override fun getRequestPermissionLauncher(
-            onPermissionGrantedCallback: () -> Unit): ActivityResultLauncher<String> =
-            registerForActivityResult(
-                ActivityResultContracts.RequestPermission()) { isPermissionGranted ->
-                if (isPermissionGranted) {
-                    onPermissionGrantedCallback()
+    permission: String, onPermissionGrantedCallback: (Boolean) -> Unit): Lazy<PermissionModule> =
+    lazy {
+        val permissionHolder = object : PermissionModule.PermissionHolder {
+            override fun getRequestPermissionLauncher(
+                onPermissionGrantedCallback: (Boolean) -> Unit): ActivityResultLauncher<String> =
+                registerForActivityResult(
+                    ActivityResultContracts.RequestPermission()) { isPermissionGranted ->
+                    onPermissionGrantedCallback(isPermissionGranted)
                 }
-            }
 
-        override fun shouldShowPermissionRationale(): Boolean =
-            shouldShowRequestPermissionRationale(permission)
+            override fun shouldShowPermissionRationale(): Boolean =
+                shouldShowRequestPermissionRationale(permission)
+        }
+        PermissionModule(
+            requireContext(), permission, permissionHolder, onPermissionGrantedCallback)
     }
-    PermissionModule(
-        requireContext(), permission, permissionHolder, onPermissionGrantedCallback)
-}

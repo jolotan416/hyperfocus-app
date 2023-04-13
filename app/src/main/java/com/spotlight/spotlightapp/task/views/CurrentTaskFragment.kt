@@ -33,7 +33,10 @@ import androidx.compose.ui.viewinterop.AndroidViewBinding
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import com.spotlight.spotlightapp.R
+import com.spotlight.spotlightapp.data.ErrorEntity
+import com.spotlight.spotlightapp.data.Result
 import com.spotlight.spotlightapp.data.task.Task
 import com.spotlight.spotlightapp.data.task.TaskAlertInterval
 import com.spotlight.spotlightapp.databinding.CurrentTaskViewButtonsBinding
@@ -51,6 +54,8 @@ import com.spotlight.spotlightapp.utilities.viewmodelutils.viewModelErrorListene
 import com.spotlight.spotlightapp.utilities.viewutils.ComposeTextConfiguration
 import com.spotlight.spotlightapp.utilities.viewutils.CustomAlertDialog
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class CurrentTaskFragment(private val taskPageRouter: TaskPageRouter) :
@@ -64,8 +69,16 @@ class CurrentTaskFragment(private val taskPageRouter: TaskPageRouter) :
     private val currentTaskViewModel: CurrentTaskViewModel by viewModels()
     private val viewModelErrorListener: ViewModelErrorListener by viewModelErrorListeners()
     private val postNotificationsPermissionModule: PermissionModule by permissionModule(
-        Manifest.permission.POST_NOTIFICATIONS) {
-        currentTaskViewModel.toggleTaskAlertTimer(true)
+        Manifest.permission.POST_NOTIFICATIONS) { isPermissionGranted ->
+        if (isPermissionGranted) {
+            currentTaskViewModel.toggleTaskAlertTimer(true)
+        } else {
+            lifecycleScope.launch(Dispatchers.Main) {
+                currentTaskViewModel.handleRepositoryResult(
+                    Result.Error<Any?>(
+                        ErrorEntity(R.string.current_task_notification_permission_message)))
+            }
+        }
     }
     private lateinit var viewBinding: FragmentCurrentTaskBinding
 
@@ -329,7 +342,7 @@ class CurrentTaskFragment(private val taskPageRouter: TaskPageRouter) :
                                 title = getString(
                                     R.string.current_task_notification_permission_title),
                                 message = getString(
-                                    R.string.current_task_notificaiton_permission_message),
+                                    R.string.current_task_notification_permission_message),
                                 negativeButtonViewData = CustomAlertDialog.ButtonViewData(
                                     getString(
                                         R.string.current_task_notification_permission_dismiss_label),
