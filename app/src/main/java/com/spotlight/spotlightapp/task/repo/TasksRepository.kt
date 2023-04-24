@@ -75,7 +75,7 @@ class TasksRepository @Inject constructor(
         return repositoryErrorHandler.handleGeneralRepositoryOperation {
             val isTaskFinished = task.isFinished
             val updatedTask = task.copy(isFinished = !isTaskFinished)
-            updateTask(updatedTask, !isTaskFinished)
+            updateTask(updatedTask, updatedTask.isFinished && updatedTask.priority != 0)
         }
     }
 

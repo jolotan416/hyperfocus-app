@@ -2,7 +2,10 @@ package com.spotlight.spotlightapp
 
 import android.app.Application
 import androidx.hilt.work.HiltWorkerFactory
-import androidx.work.*
+import androidx.work.Configuration
+import androidx.work.Constraints
+import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.WorkManager
 import com.spotlight.spotlightapp.utilities.NotificationModule
 import com.spotlight.spotlightapp.worker.TaskCleanupWorker
 import dagger.hilt.android.HiltAndroidApp
@@ -47,15 +50,13 @@ class BaseApplication : Application(), Configuration.Provider {
             timeInMillis - currentTimeInMillis
         }
 
-        val taskCleanupWorkRequest = PeriodicWorkRequestBuilder<TaskCleanupWorker>(
-            1, TimeUnit.DAYS)
-            .setConstraints(Constraints(requiresDeviceIdle = true))
+        val taskCleanupWorkRequest = PeriodicWorkRequestBuilder<TaskCleanupWorker>(1, TimeUnit.DAYS)
             .setInitialDelay(initialDelayInMillis, TimeUnit.MILLISECONDS)
+            .setConstraints(Constraints.NONE)
             .addTag(TaskCleanupWorker.TAG)
             .build()
 
         WorkManager.getInstance(applicationContext)
-            .enqueueUniquePeriodicWork(
-                TaskCleanupWorker.TAG, ExistingPeriodicWorkPolicy.KEEP, taskCleanupWorkRequest)
+            .enqueue(taskCleanupWorkRequest)
     }
 }
