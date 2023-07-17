@@ -40,7 +40,7 @@ class NotificationModule @Inject constructor() {
     fun createNotification(
         context: Context, notificationType: NotificationType): Notification {
         val notificationBuilder = NotificationCompat.Builder(context, TASK_NOTIFICATION_CHANNEL_ID)
-        notificationBuilder.setSmallIcon(R.drawable.ic_launcher_foreground)
+        notificationBuilder.setSmallIcon(R.drawable.ic_check_circle)
 
         val notification = when (notificationType) {
             is NotificationType.TimerNotification -> {

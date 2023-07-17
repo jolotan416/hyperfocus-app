@@ -34,8 +34,8 @@
 
         <ImageView
             android:id="@+id/buttonImage"
-            android:layout_width="16sp"
-            android:layout_height="16sp"
+            android:layout_width="20sp"
+            android:layout_height="20sp"
             android:src="@{buttonDrawable}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/buttonTextView"
